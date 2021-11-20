@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BandClickBackend.Infrastructure.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BandClickBackend.Infrastructure
 {
@@ -6,6 +7,7 @@ namespace BandClickBackend.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
+            services.AddScoped<DbSeeder>();
             return services;
         }
     }

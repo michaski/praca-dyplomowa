@@ -1,0 +1,25 @@
+﻿{
+  "SuperAdminId": "0763161c-4fc6-4e12-a792-6b5de29c8038",
+  "SystemRoles": [
+    "Admin",
+    "User"
+  ],
+  "BandRoles": [
+    "Leader",
+    "Member"
+  ],
+  "RhythmicUnits": [
+    4,
+    8,
+    16
+  ],
+  "RhythmicUnitsNames": [
+    "Quarter-note",
+    "Eight-note",
+    "Sixteenth-note"
+  ],
+  "MetronomeSettingsTypes": [
+    "Song",
+    "Exercise"
+  ]
+}
