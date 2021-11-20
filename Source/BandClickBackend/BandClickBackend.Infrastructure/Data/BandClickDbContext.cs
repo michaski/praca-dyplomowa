@@ -1,4 +1,6 @@
-﻿using BandClickBackend.Domain.Common;
+﻿using System;
+using System.Threading.Tasks;
+using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -86,6 +88,23 @@ namespace BandClickBackend.Infrastructure.Data
             modelBuilder.Entity<Playlist>()
                 .HasOne(p => p.CreatedBy)
                 .WithMany(u => u.Playlists);
+        }
+
+        public async Task SaveChangesSignInAsync()
+        {
+            throw new NotImplementedException();
+            var auditableEntities = ChangeTracker.Entries<AuditableEntity>();
+            foreach (var auditableEntity in auditableEntities)
+            {
+                if (auditableEntity.State == EntityState.Added)
+                {
+
+                }
+                else if (auditableEntity.State == EntityState.Modified)
+                {
+
+                }
+            }
         }
     }
 }
