@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BandClickBackend.Application.Dtos.Auth;
 using BandClickBackend.Application.Dtos.User;
 using BandClickBackend.Application.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
@@ -31,6 +32,18 @@ namespace BandClickBackend.Api.Controllers
                 return BadRequest();
             }
             return Created($"/api/users/{registeredUser.Id}", registeredUser);
+        }
+
+        [HttpPost("login")]
+        [SwaggerOperation(Summary = "Authenticates user and returns Jwt token")]
+        public async Task<IActionResult> Login([FromBody] LoginDto user)
+        {
+            var token = await _service.Login(user);
+            if (String.IsNullOrEmpty(token))
+            {
+                return BadRequest("Podano zły adres email lub hasło");
+            }
+            return Ok(token);
         }
     }
 }

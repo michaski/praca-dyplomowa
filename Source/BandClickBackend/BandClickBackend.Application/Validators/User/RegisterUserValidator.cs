@@ -10,6 +10,7 @@ namespace BandClickBackend.Application.Validators.User
         public RegisterUserValidator(IUserRepository repository)
         {
             RuleFor(dto => dto.Email)
+                .NotEmpty()
                 .EmailAddress()
             .MustAsync(async (email, token) =>
                 await repository.GetUserByEmail(email) is null)

@@ -18,7 +18,9 @@ namespace BandClickBackend.Infrastructure.Repositories
 
         public async Task<User> GetUserByEmail(string email)
         {
-            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+            return await _context.Users
+                .Include(u => u.SystemRole)
+                .SingleOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User> CreateUserAsync(User user, SystemRole role)

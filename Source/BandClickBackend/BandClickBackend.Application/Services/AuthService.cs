@@ -1,30 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using BandClickBackend.Application.Dtos.Auth;
 using BandClickBackend.Application.Dtos.User;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
+using BandClickBackend.Domain.Utils;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BandClickBackend.Application.Services
 {
     public class AuthService : IAuthService
     {
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly AuthenticationSettings _authenticationSettings;
         private readonly IUserRepository _userRepository;
         private readonly ISystemRoleRepository _systemRoleRepository;
         private readonly IMapper _mapper;
 
-        public AuthService(IPasswordHasher<User> passwordHasher, IMapper mapper, ISystemRoleRepository systemRoleRepository, IUserRepository userRepository)
+        public AuthService(
+            IPasswordHasher<User> passwordHasher, 
+            IMapper mapper, 
+            ISystemRoleRepository systemRoleRepository, 
+            IUserRepository userRepository, 
+            AuthenticationSettings authenticationSettings)
         {
             _passwordHasher = passwordHasher;
             _mapper = mapper;
             _systemRoleRepository = systemRoleRepository;
             _userRepository = userRepository;
+            _authenticationSettings = authenticationSettings;
         }
 
         public async Task<SingleUserDto> RegisterUser(RegisterUserDto user)
@@ -34,6 +46,43 @@ namespace BandClickBackend.Application.Services
             newUser.PasswordHash = hashedPassword;
             var createdUser = await _userRepository.CreateUserAsync(newUser, _systemRoleRepository.User);
             return _mapper.Map<User, SingleUserDto>(createdUser);
+        }
+
+        public async Task<string> Login(LoginDto dto)
+        {
+            var user = await _userRepository.GetUserByEmail(dto.Email);
+            if (user is null)
+            {
+                return null;
+            }
+            string userBandRoles = "";
+            if (user.Bands is not null)
+            {
+                userBandRoles = String.Join(Environment.NewLine,
+                    user.Bands.Select(b => $"{b.BandId} {b.BandRole.Id}"));
+            }
+            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
+            if (result == PasswordVerificationResult.Failed)
+            {
+                return null;
+            }
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, $"{user.SystemRole.Name}"),
+                new Claim("BandRoles", userBandRoles)
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
+            var token = new JwtSecurityToken(
+                _authenticationSettings.JwtIssuer,
+                _authenticationSettings.JwtIssuer,
+                claims,
+                expires: expires,
+                signingCredentials: credentials);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            return tokenHandler.WriteToken(token);
         }
     }
 }
