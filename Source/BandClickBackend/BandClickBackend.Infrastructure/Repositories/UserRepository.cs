@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
@@ -21,6 +22,13 @@ namespace BandClickBackend.Infrastructure.Repositories
             return await _context.Users
                 .Include(u => u.SystemRole)
                 .SingleOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User> GetUserById(Guid id)
+        {
+            return await _context.Users
+                .Include(u => u.SystemRole)
+                .SingleOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User> CreateUserAsync(User user, SystemRole role)
