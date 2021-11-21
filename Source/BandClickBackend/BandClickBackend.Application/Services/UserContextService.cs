@@ -22,9 +22,9 @@ namespace BandClickBackend.Application.Services
 
         public ClaimsPrincipal User => _httpContextAccessor.HttpContext?.User;
 
-        public int? UserId => User is null
+        public Guid? UserId => User is null
             ? null
-            : (int?)int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            : (Guid?)Guid.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
         public SystemRole SystemRole => User is null
             ? null

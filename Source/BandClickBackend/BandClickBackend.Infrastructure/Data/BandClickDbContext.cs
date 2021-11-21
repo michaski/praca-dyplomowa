@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -90,21 +92,24 @@ namespace BandClickBackend.Infrastructure.Data
                 .WithMany(u => u.Playlists);
         }
 
-        public async Task SaveChangesSignInAsync()
+        public async Task<int> SaveChangesSignInAsync(IUserContextService userContextService)
         {
-            throw new NotImplementedException();
             var auditableEntities = ChangeTracker.Entries<AuditableEntity>();
             foreach (var auditableEntity in auditableEntities)
             {
                 if (auditableEntity.State == EntityState.Added)
                 {
-
+                    auditableEntity.Entity.CreatedBy = Users.SingleOrDefault(u => u.Id == userContextService.UserId);
+                    auditableEntity.Entity.Created = DateTime.Now;
                 }
                 else if (auditableEntity.State == EntityState.Modified)
                 {
-
+                    auditableEntity.Entity.LastModifiedBy = Users.SingleOrDefault(u => u.Id == userContextService.UserId);
+                    auditableEntity.Entity.LastModifiedById = (Guid)userContextService.UserId;
+                    auditableEntity.Entity.LastModified = DateTime.Now;
                 }
             }
+            return await SaveChangesAsync();
         }
     }
 }

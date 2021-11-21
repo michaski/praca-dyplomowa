@@ -11,7 +11,7 @@ namespace BandClickBackend.Application.Interfaces
     public interface IUserContextService
     {
         ClaimsPrincipal User { get; }
-        int? UserId { get; }
+        Guid? UserId { get; }
         SystemRole SystemRole { get; }
         List<(Guid BandId, Guid BandRoleId)> UserBandRoles { get; }
     }
