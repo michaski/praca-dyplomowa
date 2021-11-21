@@ -1,12 +1,13 @@
 import React from 'react';
 import Header from '../../components/header/Header';
+import { Metronome } from '../../components/metronome/Metronome';
 
 const Home = () => {
     return (
-        <>
-        <Header />
-        <h1>This is home view</h1>
-        </>
+        <div className="container-fluid">
+            <Header />
+            <Metronome />
+        </div>
     );
 }
 
