@@ -11,6 +11,7 @@ namespace BandClickBackend.Api.Installers
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BandClickBackend.Api", Version = "v1" });
+                c.EnableAnnotations();
             });
         }
     }
