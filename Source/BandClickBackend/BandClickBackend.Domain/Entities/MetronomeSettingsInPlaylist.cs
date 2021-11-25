@@ -1,10 +1,10 @@
 ﻿using System;
+using BandClickBackend.Domain.Common;
 
 namespace BandClickBackend.Domain.Entities
 {
-    public class MetronomeSettingsInPlaylist
+    public class MetronomeSettingsInPlaylist : BaseEntity
     {
-        public Guid Id { get; set; }
         public Guid MetronomeSettingsId { get; set; }
         public MetronomeSettings MetronomeSettings { get; set; }
         public Guid PlaylistId { get; set; }

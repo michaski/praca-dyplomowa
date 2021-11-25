@@ -23,7 +23,7 @@ namespace BandClickBackend.Infrastructure.Repositories
             User = _context.SystemRoles.SingleAsync(r => r.Name == "User").Result;
         }
 
-        public async Task<SystemRole> GetSystemRoleByName(string name)
+        public async Task<SystemRole> GetSystemRoleByNameAsync(string name)
         {
             return await _context.SystemRoles.SingleOrDefaultAsync(r => r.Name == name);
         }

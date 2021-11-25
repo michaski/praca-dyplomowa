@@ -1,10 +1,10 @@
 ﻿using System;
+using BandClickBackend.Domain.Common;
 
 namespace BandClickBackend.Domain.Entities
 {
-    public class AccentedBeats
+    public class AccentedBeats : BaseEntity
     {
-        public Guid Id { get; set; }
         public Metre Metre { get; set; }
         public int AccentedBeat { get; set; }
     }

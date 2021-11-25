@@ -26,7 +26,7 @@ namespace BandClickBackend.Api.Controllers
         [SwaggerOperation(Summary = "Creates new user account")]
         public async Task<IActionResult> RegisterNewUser([FromBody] RegisterUserDto user)
         {
-            var registeredUser = await _service.RegisterUser(user);
+            var registeredUser = await _service.RegisterUserAsync(user);
             if (registeredUser is null)
             {
                 return BadRequest();
@@ -38,7 +38,7 @@ namespace BandClickBackend.Api.Controllers
         [SwaggerOperation(Summary = "Authenticates user and returns Jwt token")]
         public async Task<IActionResult> Login([FromBody] LoginDto user)
         {
-            var token = await _service.Login(user);
+            var token = await _service.LoginAsync(user);
             if (String.IsNullOrEmpty(token))
             {
                 return BadRequest("Podano zły adres email lub hasło");

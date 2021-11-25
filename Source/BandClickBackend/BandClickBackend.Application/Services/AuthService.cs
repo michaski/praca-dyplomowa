@@ -39,7 +39,7 @@ namespace BandClickBackend.Application.Services
             _authenticationSettings = authenticationSettings;
         }
 
-        public async Task<SingleUserDto> RegisterUser(RegisterUserDto user)
+        public async Task<SingleUserDto> RegisterUserAsync(RegisterUserDto user)
         {
             var newUser = _mapper.Map<RegisterUserDto, User>(user);
             var hashedPassword = _passwordHasher.HashPassword(newUser, user.Password);
@@ -48,9 +48,9 @@ namespace BandClickBackend.Application.Services
             return _mapper.Map<User, SingleUserDto>(createdUser);
         }
 
-        public async Task<string> Login(LoginDto dto)
+        public async Task<string> LoginAsync(LoginDto dto)
         {
-            var user = await _userRepository.GetUserByEmail(dto.Email);
+            var user = await _userRepository.GetUserByEmailAsync(dto.Email);
             if (user is null)
             {
                 return null;

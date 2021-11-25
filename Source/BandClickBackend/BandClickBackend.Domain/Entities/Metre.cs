@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using BandClickBackend.Domain.Common;
 
 namespace BandClickBackend.Domain.Entities
 {
-    public class Metre
+    public class Metre : BaseEntity
     {
-        public Guid Id { get; set; }
         public int BeatsPerBar { get; set; }
         public RhythmicUnit RhythmicUnit { get; set; }
         public ICollection<AccentedBeats> AccentedBeats { get; set; }

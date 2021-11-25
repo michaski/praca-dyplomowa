@@ -28,7 +28,7 @@ namespace BandClickBackend.Application.Services
 
         public SystemRole SystemRole => User is null
             ? null
-            : _systemRoleRepository.GetSystemRoleByName(
+            : _systemRoleRepository.GetSystemRoleByNameAsync(
                 User.FindFirst(c => c.Type == ClaimTypes.Role).Value).Result;
 
         public List<(Guid BandId, Guid BandRoleId)> UserBandRoles => User?.FindFirst(c => c.Type.ToString() == "BandRoles")?.Value

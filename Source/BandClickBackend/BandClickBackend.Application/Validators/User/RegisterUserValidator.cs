@@ -13,7 +13,7 @@ namespace BandClickBackend.Application.Validators.User
                 .NotEmpty()
                 .EmailAddress()
             .MustAsync(async (email, token) =>
-                await repository.GetUserByEmail(email) is null)
+                await repository.GetUserByEmailAsync(email) is null)
                 .WithMessage("Email jest już zajęty.");
             RuleFor(dto => dto.Password)
                 .Equal(dto => dto.ConfirmPassword)

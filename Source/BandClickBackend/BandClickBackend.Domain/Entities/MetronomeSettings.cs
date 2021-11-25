@@ -6,7 +6,6 @@ namespace BandClickBackend.Domain.Entities
 {
     public class MetronomeSettings : ShareableEntity
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public int NumberOdMeasures { get; set; }
         public int Tempo { get; set; }

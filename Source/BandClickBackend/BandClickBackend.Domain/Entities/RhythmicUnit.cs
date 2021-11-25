@@ -1,10 +1,9 @@
-﻿using System;
+﻿using BandClickBackend.Domain.Common;
 
 namespace BandClickBackend.Domain.Entities
 {
-    public class RhythmicUnit
+    public class RhythmicUnit : BaseEntity
     {
-        public Guid Id { get; set; }
         public int NumericValue { get; set; }
         public string DisplayName { get; set; }
     }

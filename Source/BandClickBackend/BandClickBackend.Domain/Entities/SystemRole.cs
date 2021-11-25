@@ -1,10 +1,9 @@
-﻿using System;
+﻿using BandClickBackend.Domain.Common;
 
 namespace BandClickBackend.Domain.Entities
 {
-    public class SystemRole
+    public class SystemRole : BaseEntity
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System;
+using BandClickBackend.Domain.Common;
 
 namespace BandClickBackend.Domain.Entities
 {
-    public class UserInBands
+    public class UserInBands : BaseEntity
     {
-        public Guid Id { get; set; }
         public Guid BandId { get; set; }
         public Band Band { get; set; }
         public Guid MemberId { get; set; }

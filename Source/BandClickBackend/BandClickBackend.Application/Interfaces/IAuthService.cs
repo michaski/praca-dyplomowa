@@ -6,7 +6,7 @@ namespace BandClickBackend.Application.Interfaces
 {
     public interface IAuthService
     {
-        Task<SingleUserDto> RegisterUser(RegisterUserDto user);
-        Task<string> Login(LoginDto dto);
+        Task<SingleUserDto> RegisterUserAsync(RegisterUserDto user);
+        Task<string> LoginAsync(LoginDto dto);
     }
 }
