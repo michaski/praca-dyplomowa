@@ -12,5 +12,6 @@ namespace BandClickBackend.Domain.Interfaces
         SystemRole Admin { get; }
         SystemRole User { get; }
         Task<SystemRole> GetSystemRoleByNameAsync(string name);
+        Task<SystemRole> GetSystemRoleByIdAsync(Guid id);
     }
 }
