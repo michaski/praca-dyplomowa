@@ -28,6 +28,7 @@ namespace BandClickBackend.Application
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IMetronomeSettingsService, MetronomeSettingsService>();
 
             return services;
         }

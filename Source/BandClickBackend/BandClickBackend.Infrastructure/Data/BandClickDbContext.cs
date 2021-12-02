@@ -102,12 +102,12 @@ namespace BandClickBackend.Infrastructure.Data
                     auditableEntity.Entity.CreatedBy = Users.SingleOrDefault(u => u.Id == userContextService.UserId);
                     auditableEntity.Entity.Created = DateTime.Now;
                 }
-                else if (auditableEntity.State == EntityState.Modified)
-                {
+                //else if (auditableEntity.State == EntityState.Modified)
+                //{
                     auditableEntity.Entity.LastModifiedBy = Users.SingleOrDefault(u => u.Id == userContextService.UserId);
                     auditableEntity.Entity.LastModifiedById = (Guid)userContextService.UserId;
                     auditableEntity.Entity.LastModified = DateTime.Now;
-                }
+                //}
             }
             return await SaveChangesAsync();
         }

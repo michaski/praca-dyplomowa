@@ -10,20 +10,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BandClickBackend.Infrastructure.Repositories
 {
-    public class MetronomeSettingsRepository : IMetronomeSettingsRepository
+    public class MetronomeSettingsRepository
+        : RepositoryBase<MetronomeSettings>,
+          IMetronomeSettingsRepository
     {
         private readonly BandClickDbContext _context;
         private readonly IUserContextService _userContextService;
 
         public MetronomeSettingsRepository(BandClickDbContext context, IUserContextService userContextService)
+            : base(context, userContextService)
         {
             _context = context;
             _userContextService = userContextService;
-        }
-
-        public async Task<IEnumerable<MetronomeSettings>> GetAllAsync()
-        {
-            return await _context.MetronomeSettings.ToListAsync();
         }
 
         public async Task<IEnumerable<MetronomeSettings>> GetAllSharedAsync()
@@ -33,9 +31,12 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<MetronomeSettings> GetByIdAsync(Guid id)
+        public async Task<IEnumerable<MetronomeSettings>> GetAllSettingsForUserAsync()
         {
-            return await _context.MetronomeSettings.SingleOrDefaultAsync(x => x.Id == id);
+            var user = await _context.Users
+                .Include(u => u.MetronomeSettings)
+                .SingleOrDefaultAsync(u => u.Id == _userContextService.UserId);
+            return user.MetronomeSettings;
         }
 
         public async Task<MetronomeSettings> CreateAsync(MetronomeSettings metronomeSettings)
@@ -43,18 +44,6 @@ namespace BandClickBackend.Infrastructure.Repositories
             _context.MetronomeSettings.Add(metronomeSettings);
             await _context.SaveChangesSignInAsync(_userContextService);
             return metronomeSettings;
-        }
-
-        public async Task UpdateAsync(MetronomeSettings metronomeSettings)
-        {
-            _context.MetronomeSettings.Update(metronomeSettings);
-            await _context.SaveChangesSignInAsync(_userContextService);
-        }
-
-        public async Task DeleteAsync(MetronomeSettings metronomeSettings)
-        {
-            _context.MetronomeSettings.Remove(metronomeSettings);
-            await _context.SaveChangesAsync();
         }
     }
 }

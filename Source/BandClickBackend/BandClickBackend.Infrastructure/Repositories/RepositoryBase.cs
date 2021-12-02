@@ -51,13 +51,18 @@ namespace BandClickBackend.Infrastructure.Repositories
 
         public async Task UpdateAsync(T entity)
         {
-            _context.Set<T>(typeof(T).ToString()).Update(entity);
-            if (entity is AuditableEntity)
+            var dbSet = _context.Set<T>(typeof(T).ToString());
+            if (entity is AuditableEntity updatedEntity)
             {
+                var beforeUpdate = await dbSet.AsNoTracking().SingleOrDefaultAsync(x => x.Id == updatedEntity.Id) as AuditableEntity;
+                updatedEntity.CreatedById = beforeUpdate.CreatedById;
+                updatedEntity.Created = beforeUpdate.Created;
+                dbSet.Update(updatedEntity as T);
                 await _context.SaveChangesSignInAsync(_userContextService);
             }
             else
             {
+                dbSet.Update(entity);
                 await _context.SaveChangesAsync();
             }
         }
