@@ -13,6 +13,7 @@ namespace BandClickBackend.Domain.Interfaces
         Task<IEnumerable<MetronomeSettings>> GetAllSharedAsync();
         Task<IEnumerable<MetronomeSettings>> GetAllSettingsForUserAsync();
         Task<MetronomeSettings> GetByIdAsync(Guid id);
+        Task<MetronomeSettings> GetByIdNoTrackingAsync(Guid id);
         Task<MetronomeSettings> CreateAsync(MetronomeSettings metronomeSettings);
         Task UpdateAsync(MetronomeSettings metronomeSettings);
         Task DeleteAsync(MetronomeSettings metronomeSettings);

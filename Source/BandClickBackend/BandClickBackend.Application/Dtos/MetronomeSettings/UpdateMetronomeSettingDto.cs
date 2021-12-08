@@ -5,22 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BandClickBackend.Application.Dtos.Metre;
+using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
 using BandClickBackend.Application.Mappings;
 using BandClickBackend.Domain.Entities;
 
 namespace BandClickBackend.Application.Dtos.MetronomeSettings
 {
-    public class MetronomeSettingsListDto : IMap
+    public class UpdateMetronomeSettingDto : IMap
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public int NumberOdMeasures { get; set; }
         public int Tempo { get; set; }
-        public MetreViewDto Metre { get; set; }
-        public MetronomeSettingsType Type { get; set; }
+        public Guid TypeId { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Domain.Entities.MetronomeSettings, MetronomeSettingsListDto>();
+            profile.CreateMap<UpdateMetronomeSettingDto, Domain.Entities.MetronomeSettings>();
         }
     }
 }

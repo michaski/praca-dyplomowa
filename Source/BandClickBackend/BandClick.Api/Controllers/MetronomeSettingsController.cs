@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BandClickBackend.Application.Dtos.Metre;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -85,7 +86,7 @@ namespace BandClickBackend.Api.Controllers
 
         [HttpPut]
         [SwaggerOperation(Summary = "Updates metronome setting's data")]
-        public async Task<IActionResult> Update(SingleMetronomeSettingDto dto)
+        public async Task<IActionResult> Update(UpdateMetronomeSettingDto dto)
         {
             await _metronomeSettingsService.UpdateAsync(dto);
             return NoContent();

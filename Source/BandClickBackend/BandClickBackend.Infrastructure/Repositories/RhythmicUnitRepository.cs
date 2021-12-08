@@ -16,17 +16,17 @@ namespace BandClickBackend.Infrastructure.Repositories
         public RhythmicUnitRepository(BandClickDbContext context)
         {
             _context = context;
-            QuarterNote = _context.RhythmicUnits.SingleOrDefaultAsync(ru => ru.NumericValue == 4).Result;
-            EightNote = _context.RhythmicUnits.SingleOrDefaultAsync(ru => ru.NumericValue == 8).Result;
-            SixteenthNote = _context.RhythmicUnits.SingleOrDefaultAsync(ru => ru.NumericValue == 16).Result;
+            QuarterNote = _context.RhythmicUnits.AsNoTracking().SingleOrDefaultAsync(ru => ru.NumericValue == 4).Result;
+            EightNote = _context.RhythmicUnits.AsNoTracking().SingleOrDefaultAsync(ru => ru.NumericValue == 8).Result;
+            SixteenthNote = _context.RhythmicUnits.AsNoTracking().SingleOrDefaultAsync(ru => ru.NumericValue == 16).Result;
         }
         
-        public async Task<RhythmicUnit> GetRhythmicUnitByNumber(int number)
+        public async Task<RhythmicUnit> GetRhythmicUnitByNumberAsync(int number)
         {
             return await _context.RhythmicUnits.SingleOrDefaultAsync(ru => ru.NumericValue == number);
         }
 
-        public async Task<RhythmicUnit> GetRhythmicUnitByName(string name)
+        public async Task<RhythmicUnit> GetRhythmicUnitByNameAsync(string name)
         {
             return await _context.RhythmicUnits.SingleOrDefaultAsync(ru => ru.DisplayName == name);
         }

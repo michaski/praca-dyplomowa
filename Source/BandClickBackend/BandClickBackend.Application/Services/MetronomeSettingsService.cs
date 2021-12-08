@@ -14,12 +14,18 @@ namespace BandClickBackend.Application.Services
     public class MetronomeSettingsService : IMetronomeSettingsService
     {
         private readonly IMetronomeSettingsRepository _repository;
+        private readonly IMetronomeSettingsTypeRepository _metronomeSettingsTypeRepository;
+        private readonly IMetreService _metreService;
+        private readonly IMetreRepository _metreRepository;
         private readonly IMapper _mapper;
 
-        public MetronomeSettingsService(IMetronomeSettingsRepository repository, IMapper mapper)
+        public MetronomeSettingsService(IMetronomeSettingsRepository repository, IMapper mapper, IMetreService metreService, IMetronomeSettingsTypeRepository metronomeSettingsTypeRepository, IMetreRepository metreRepository)
         {
             _repository = repository;
             _mapper = mapper;
+            _metreService = metreService;
+            _metronomeSettingsTypeRepository = metronomeSettingsTypeRepository;
+            _metreRepository = metreRepository;
         }
 
         public async Task<IEnumerable<MetronomeSettingsListDto>> GetAllAsync()
@@ -30,8 +36,9 @@ namespace BandClickBackend.Application.Services
 
         public async Task<SingleMetronomeSettingDto> GetByIdAsync(Guid id)
         {
-            return _mapper.Map<MetronomeSettings, SingleMetronomeSettingDto>(
-                await _repository.GetByIdAsync(id));
+            var entity = await _repository.GetByIdAsync(id);
+            var mappedResult = _mapper.Map<MetronomeSettings, SingleMetronomeSettingDto>(entity);
+            return mappedResult;
         }
 
         public async Task<IEnumerable<MetronomeSettingsListDto>> GetAllSharedAsync()
@@ -49,15 +56,24 @@ namespace BandClickBackend.Application.Services
         public async Task<SingleMetronomeSettingDto> AddAsync(AddMetronomeSettingsDto entity)
         {
             var mappedEntity = _mapper.Map<AddMetronomeSettingsDto, MetronomeSettings>(entity);
+            mappedEntity.Metre = await _metreService.MapMetreDtoToMetreAsync(entity.Metre);
+            mappedEntity.Type = await _metronomeSettingsTypeRepository.GetMetronomeSettingsTypeById(entity.TypeId);
             var result = await _repository.CreateAsync(mappedEntity);
             return _mapper.Map<MetronomeSettings, SingleMetronomeSettingDto>(
                 result);
         }
 
-        public async Task UpdateAsync(SingleMetronomeSettingDto entity)
+        public async Task UpdateAsync(UpdateMetronomeSettingDto dto)
         {
-            var mappedEntity = _mapper.Map<SingleMetronomeSettingDto, MetronomeSettings>(entity);
-            await _repository.UpdateAsync(mappedEntity);
+            var entity = await _repository.GetByIdAsync(dto.Id);
+            entity.Name = dto.Name;
+            entity.NumberOdMeasures = dto.NumberOdMeasures;
+            entity.Tempo = dto.Tempo;
+            if (entity.Type.Id != dto.TypeId)
+            {
+                entity.Type = await _metronomeSettingsTypeRepository.GetMetronomeSettingsTypeById(dto.Id);
+            }
+            await _repository.UpdateAsync(entity);
         }
 
         public async Task DeleteAsync(Guid id)

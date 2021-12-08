@@ -16,18 +16,26 @@ namespace BandClickBackend.Infrastructure.Repositories
         public MetronomeSettingsTypeRepository(BandClickDbContext context)
         {
             _context = context;
-            Song = _context.MetronomeSettingsTypes.SingleOrDefaultAsync(mst => mst.Name == "Song").Result;
-            Song = _context.MetronomeSettingsTypes.SingleOrDefaultAsync(mst => mst.Name == "Song").Result;
+            Song = _context.MetronomeSettingsTypes
+                .AsNoTracking()
+                .SingleOrDefaultAsync(mst => mst.Name == "Song").Result;
+            Exercise = _context.MetronomeSettingsTypes
+                .AsNoTracking()
+                .SingleOrDefaultAsync(mst => mst.Name == "Exercise").Result;
         }
 
         public async Task<MetronomeSettingsType> GetMetronomeSettingsTypeByName(string name)
         {
-            return await _context.MetronomeSettingsTypes.SingleOrDefaultAsync(mst => mst.Name == name);
+            return await _context.MetronomeSettingsTypes
+                .AsNoTracking()
+                .SingleOrDefaultAsync(mst => mst.Name == name);
         }
 
         public async Task<MetronomeSettingsType> GetMetronomeSettingsTypeById(Guid id)
         {
-            return await _context.MetronomeSettingsTypes.SingleOrDefaultAsync(mst => mst.Id == id);
+            return await _context.MetronomeSettingsTypes
+                .AsNoTracking()
+                .SingleOrDefaultAsync(mst => mst.Id == id);
         }
     }
 }
