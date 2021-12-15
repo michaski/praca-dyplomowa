@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BandClickBackend.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BandClickBackend.Infrastructure.Data
@@ -11,15 +12,18 @@ namespace BandClickBackend.Infrastructure.Data
     public class DbSeeder
     {
         private readonly BandClickDbContext _context;
+        private IPasswordHasher<User> _passwordHasher;
 
-        public DbSeeder(BandClickDbContext context)
+        public DbSeeder(BandClickDbContext context, IPasswordHasher<User> passwordHasher)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
         }
 
         public void SeedDb()
         {
             var config = ConfigProvider.GetConfig();
+            var createdSuperAdmin = false;
             _context.Database.EnsureCreated();
             foreach (var systemRole in config.SystemRoles)
             {
@@ -27,21 +31,22 @@ namespace BandClickBackend.Infrastructure.Data
                 {
                     _context.SystemRoles.Add(new SystemRole()
                     {
-                        Id = Guid.NewGuid(),
                         Name = systemRole
                     });
                 }
             }
-            if (_context.Users.SingleOrDefault(u => u.Id == config.SuperAdminId) is null)
+            if (_context.Users.SingleOrDefault(u => u.Id == config.SuperAdmin.Id) is null)
             {
                 User superAdmin = new User()
                 {
-                    Id = config.SuperAdminId,
-                    Name = "Admin",
+                    Name = "Super Admin",
                     Email = "admin@bandclick.com",
                     SystemRole = _context.SystemRoles.SingleOrDefault(r => r.Name == "Admin")
                 };
+                var hashedPassword = _passwordHasher.HashPassword(superAdmin, config.SuperAdmin.Password);
+                superAdmin.PasswordHash = hashedPassword;
                 _context.Users.Add(superAdmin);
+                createdSuperAdmin = true;
             }
             foreach (var bandRole in config.BandRoles)
             {
@@ -49,7 +54,6 @@ namespace BandClickBackend.Infrastructure.Data
                 {
                     _context.BandRoles.Add(new BandRole()
                     {
-                        Id = Guid.NewGuid(),
                         Name = bandRole
                     });
                 }
@@ -60,7 +64,6 @@ namespace BandClickBackend.Infrastructure.Data
                 {
                     _context.MetronomeSettingsTypes.Add(new MetronomeSettingsType()
                     {
-                        Id = Guid.NewGuid(),
                         Name = metronomeSettingsType
                     });
                 }
@@ -71,13 +74,16 @@ namespace BandClickBackend.Infrastructure.Data
                 {
                     _context.RhythmicUnits.Add(new RhythmicUnit()
                     {
-                        Id = Guid.NewGuid(),
                         NumericValue = config.RhythmicUnits[i],
                         DisplayName = config.RhythmicUnitsNames[i]
                     });
                 }
             }
             _context.SaveChanges();
+            if (createdSuperAdmin)
+            {
+                ConfigProvider.SaveSuperAdminId(_context.Users.SingleOrDefault(u => u.Name == "Super Admin").Id);
+            }
         }
     }
 }

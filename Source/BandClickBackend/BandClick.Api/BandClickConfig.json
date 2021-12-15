@@ -1,5 +1,8 @@
-﻿{
-  "SuperAdminId": "0763161c-4fc6-4e12-a792-6b5de29c8038",
+{
+  "SuperAdmin": {
+    "Id": "e2ea6563-5ae7-4af5-b929-e3145042c293",
+    "Password": "Admin123!"
+  },
   "SystemRoles": [
     "Admin",
     "User"
