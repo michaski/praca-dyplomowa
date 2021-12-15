@@ -15,6 +15,7 @@ namespace BandClickBackend.Application.Interfaces
         Task<IEnumerable<MetronomeSettingsListDto>> GetAllSettingsForUserAsync();
         Task<SingleMetronomeSettingDto> AddAsync(AddMetronomeSettingsDto entity);
         Task UpdateAsync(UpdateMetronomeSettingDto dto);
+        Task ShareInAppToggleAsync(Guid id);
         Task DeleteAsync(Guid id);
     }
 }

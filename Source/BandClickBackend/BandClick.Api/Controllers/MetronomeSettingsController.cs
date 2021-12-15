@@ -92,6 +92,14 @@ namespace BandClickBackend.Api.Controllers
             return NoContent();
         }
 
+        [HttpPut("shareInApp/{id}")]
+        [SwaggerOperation(Summary = "Changes in app sharing for metronome setting with given id")]
+        public async Task<IActionResult> ToggleInAppSharingAsync([FromRoute] Guid id)
+        {
+            await _metronomeSettingsService.ShareInAppToggleAsync(id);
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deletes metronome setting")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)

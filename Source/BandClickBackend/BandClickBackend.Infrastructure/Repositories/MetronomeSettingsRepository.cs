@@ -91,6 +91,12 @@ namespace BandClickBackend.Infrastructure.Repositories
             await _context.SaveChangesSignInAsync(_userContextService);
         }
 
+        public async Task ShareInAppToggleAsync(MetronomeSettings metronomeSettings)
+        {
+            metronomeSettings.IsShared = !metronomeSettings.IsShared;
+            await UpdateAsync(metronomeSettings);
+        }
+
         public async Task DeleteAsync(MetronomeSettings metronomeSettings)
         {
             _context.MetronomeSettings.Remove(metronomeSettings);

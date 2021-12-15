@@ -16,6 +16,7 @@ namespace BandClickBackend.Domain.Interfaces
         Task<MetronomeSettings> GetByIdNoTrackingAsync(Guid id);
         Task<MetronomeSettings> CreateAsync(MetronomeSettings metronomeSettings);
         Task UpdateAsync(MetronomeSettings metronomeSettings);
+        Task ShareInAppToggleAsync(MetronomeSettings metronomeSettings);
         Task DeleteAsync(MetronomeSettings metronomeSettings);
     }
 }

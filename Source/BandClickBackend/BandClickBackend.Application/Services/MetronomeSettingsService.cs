@@ -76,6 +76,12 @@ namespace BandClickBackend.Application.Services
             await _repository.UpdateAsync(entity);
         }
 
+        public async Task ShareInAppToggleAsync(Guid id)
+        {
+            await _repository.ShareInAppToggleAsync(
+                await _repository.GetByIdAsync(id));
+        }
+
         public async Task DeleteAsync(Guid id)
         {
             var entity = await _repository.GetByIdAsync(id);
