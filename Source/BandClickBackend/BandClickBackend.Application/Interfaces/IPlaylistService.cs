@@ -9,11 +9,12 @@ namespace BandClickBackend.Application.Interfaces
 {
     public interface IPlaylistService
     {
-        Task<IEnumerable<PlaylistListDto>> GetAllPlaylistsForUser();
-        Task<IEnumerable<PlaylistListDto>> GetAllSharedPlaylists();
-        Task<SinglePlaylistDto> GetPlaylistById(Guid id);
-        Task<SinglePlaylistDto> AddPlaylist(CreatePlaylistDto playlist);
-        Task UpdatePlaylist(EditPlaylistDto playlist);
-        Task DeletePlaylist(Guid id);
+        Task<IEnumerable<PlaylistListDto>> GetAllPlaylistsForUserAsync();
+        Task<IEnumerable<PlaylistListDto>> GetAllSharedPlaylistsAsync();
+        Task<SinglePlaylistDto> GetPlaylistByIdAsync(Guid id);
+        Task<SinglePlaylistDto> AddPlaylistAsync(CreatePlaylistDto playlist);
+        Task UpdatePlaylistAsync(EditPlaylistDto playlist);
+        Task ShareInAppToggleAsync(Guid id);
+        Task DeletePlaylistAsync(Guid id);
     }
 }

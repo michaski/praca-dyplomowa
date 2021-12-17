@@ -27,42 +27,48 @@ namespace BandClickBackend.Application.Services
             _metronomeSettingsRepository = metronomeSettingsRepository;
         }
 
-        public async Task<IEnumerable<PlaylistListDto>> GetAllPlaylistsForUser()
+        public async Task<IEnumerable<PlaylistListDto>> GetAllPlaylistsForUserAsync()
         {
             return _mapper.Map<IEnumerable<Playlist>, IEnumerable<PlaylistListDto>>(
-                await _repository.GetAllPlaylistsForUser());
+                await _repository.GetAllPlaylistsForUserAsync());
         }
 
-        public async Task<IEnumerable<PlaylistListDto>> GetAllSharedPlaylists()
+        public async Task<IEnumerable<PlaylistListDto>> GetAllSharedPlaylistsAsync()
         {
             return _mapper.Map<IEnumerable<Playlist>, IEnumerable<PlaylistListDto>>(
-                await _repository.GetAllSharedPlaylists());
+                await _repository.GetAllSharedPlaylistsAsync());
         }
 
-        public async Task<SinglePlaylistDto> GetPlaylistById(Guid id)
+        public async Task<SinglePlaylistDto> GetPlaylistByIdAsync(Guid id)
         {
-            var entity = await _repository.GetPlaylistById(id);
+            var entity = await _repository.GetPlaylistByIdAsync(id);
             return await MapPlaylistEntityToSinglePlaylistDto(entity);
         }
 
-        public async Task<SinglePlaylistDto> AddPlaylist(CreatePlaylistDto playlist)
+        public async Task<SinglePlaylistDto> AddPlaylistAsync(CreatePlaylistDto playlist)
         {
             var mappedPlaylist = _mapper.Map<CreatePlaylistDto, Playlist>(playlist);
-            var result = await _repository.AddPlaylist(mappedPlaylist);
+            var result = await _repository.AddPlaylistAsync(mappedPlaylist);
             return await MapPlaylistEntityToSinglePlaylistDto(result);
         }
 
-        public async Task UpdatePlaylist(EditPlaylistDto playlist)
+        public async Task UpdatePlaylistAsync(EditPlaylistDto playlist)
         {
-            var entity = await _repository.GetPlaylistById(playlist.Id);
+            var entity = await _repository.GetPlaylistByIdAsync(playlist.Id);
             entity.Name = playlist.Name;
-            await _repository.UpdatePlaylist(entity);
+            await _repository.UpdatePlaylistAsync(entity);
         }
 
-        public async Task DeletePlaylist(Guid id)
+        public async Task ShareInAppToggleAsync(Guid id)
         {
-            var entity = await _repository.GetPlaylistById(id);
-            await _repository.DeletePlaylist(entity);
+            await _repository.ShareInAppToggleAsync(
+                await _repository.GetPlaylistByIdAsync(id));
+        }
+
+        public async Task DeletePlaylistAsync(Guid id)
+        {
+            var entity = await _repository.GetPlaylistByIdAsync(id);
+            await _repository.DeletePlaylistAsync(entity);
         }
 
         private async Task<SinglePlaylistDto> MapPlaylistEntityToSinglePlaylistDto(Playlist entity)
