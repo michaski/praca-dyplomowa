@@ -14,13 +14,15 @@ namespace BandClickBackend.Application.Services
     {
         private readonly IMetreRepository _repository;
         private readonly IRhythmicUnitRepository _rhythmicUnitRepository;
+        private readonly IAccentedBeatsRepository _accentedBeatsRepository;
 
-        public MetreService(IMetreRepository repository, IRhythmicUnitRepository rhythmicUnitRepository)
+        public MetreService(IMetreRepository repository, IRhythmicUnitRepository rhythmicUnitRepository, IAccentedBeatsRepository accentedBeatsRepository)
         {
             _repository = repository;
             _rhythmicUnitRepository = rhythmicUnitRepository;
+            _accentedBeatsRepository = accentedBeatsRepository;
         }
-        
+
         public async Task UpdateAsync(UpdateMetreDto dto)
         {
             var mappedEntity = await MapMetreDtoToMetreAsync(dto);
@@ -58,15 +60,25 @@ namespace BandClickBackend.Application.Services
             {
                 original.BeatsPerBar = dto.BeatsPerBar;
             }
-            var accentedBeats = dto.AccentedBeats
+            var newAccentedBeats = dto.AccentedBeats
                 .Where(b => original.AccentedBeats.SingleOrDefault(ab => ab.AccentedBeat == b) is null);
-            foreach (var accentedBeat in accentedBeats)
+            foreach (var accentedBeat in newAccentedBeats)
             {
-                original.AccentedBeats.Add(new AccentedBeats()
+                if (accentedBeat > 0 && accentedBeat <= original.BeatsPerBar)
                 {
-                    AccentedBeat = accentedBeat,
-                    MetreId = original.Id
-                });
+                    original.AccentedBeats.Add(new AccentedBeats()
+                    {
+                        AccentedBeat = accentedBeat,
+                        MetreId = original.Id
+                    });
+                }
+            }
+            var accentedBeatsToDelete = original.AccentedBeats
+                .Where(b => dto.AccentedBeats.SingleOrDefault(x => x == b.AccentedBeat) == 0)
+                .ToList();
+            foreach (var accentedBeat in accentedBeatsToDelete)
+            {
+                await _accentedBeatsRepository.DeleteAsync(accentedBeatsToDelete[0]);
             }
             return original;
         }

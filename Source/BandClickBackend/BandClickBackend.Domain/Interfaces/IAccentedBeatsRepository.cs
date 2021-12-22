@@ -11,8 +11,8 @@ namespace BandClickBackend.Domain.Interfaces
     {
         Task<IEnumerable<AccentedBeats>> GetAllAsync();
         Task<AccentedBeats> GetByIdAsync(Guid id);
-        Task<AccentedBeats> AddAsync(AccentedBeats metronomeSettings);
-        Task UpdateAsync(AccentedBeats metronomeSettings);
-        Task DeleteAsync(AccentedBeats metronomeSettings);
+        Task<AccentedBeats> AddAsync(AccentedBeats accentedBeat);
+        Task UpdateAsync(AccentedBeats accentedBeat);
+        Task DeleteAsync(AccentedBeats accentedBeat);
     }
 }
