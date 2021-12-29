@@ -1,9 +1,15 @@
 ﻿using System.Reflection;
 using BandClickBackend.Application.Dtos.Auth;
+using BandClickBackend.Application.Dtos.Metre;
+using BandClickBackend.Application.Dtos.MetronomeSettings;
+using BandClickBackend.Application.Dtos.Playlist;
 using BandClickBackend.Application.Dtos.User;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Application.Services;
 using BandClickBackend.Application.Validators.Auth;
+using BandClickBackend.Application.Validators.Metre;
+using BandClickBackend.Application.Validators.MetronomeSettings;
+using BandClickBackend.Application.Validators.Playlist;
 using BandClickBackend.Application.Validators.User;
 using BandClickBackend.Domain.Entities;
 using FluentValidation;
@@ -22,15 +28,22 @@ namespace BandClickBackend.Application
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddHttpContextAccessor();
 
-            services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
             services.AddScoped<IValidator<LoginDto>, LoginValidator>();
+            services.AddScoped<IValidator<MetreViewDto>, MetreViewValidator>();
+            services.AddScoped<IValidator<UpdateMetreDto>, UpdateMetreValidator>();
+            services.AddScoped<IValidator<AddMetronomeSettingsDto>, AddMetronomeSettingValidator>();
+            services.AddScoped<IValidator<UpdateMetronomeSettingDto>, UpdateMetronomeSettingsValidator>();
+            services.AddScoped<IValidator<CreatePlaylistDto>, CreatePlaylistValidator>();
+            services.AddScoped<IValidator<EditPlaylistDto>, EditPlaylistValidator>();
+            services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
 
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IMetreService, MetreService>();
+            services.AddScoped<IMetronomeSettingsInPlaylistService, MetronomeSettingsInPlaylistService>();
+            services.AddScoped<IMetronomeSettingsService, MetronomeSettingsService>();
+            services.AddScoped<IPlaylistService, PlaylistService>();
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IMetronomeSettingsService, MetronomeSettingsService>();
-            services.AddScoped<IMetreService, MetreService>();
-            services.AddScoped<IPlaylistService, PlaylistService>();
 
             return services;
         }

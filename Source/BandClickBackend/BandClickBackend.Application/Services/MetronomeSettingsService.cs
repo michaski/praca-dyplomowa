@@ -15,17 +15,25 @@ namespace BandClickBackend.Application.Services
     {
         private readonly IMetronomeSettingsRepository _repository;
         private readonly IMetronomeSettingsTypeRepository _metronomeSettingsTypeRepository;
+        private readonly IMetronomeSettingsInPlaylistService _metronomeSettingsInPlaylistService;
         private readonly IMetreService _metreService;
         private readonly IMetreRepository _metreRepository;
         private readonly IMapper _mapper;
 
-        public MetronomeSettingsService(IMetronomeSettingsRepository repository, IMapper mapper, IMetreService metreService, IMetronomeSettingsTypeRepository metronomeSettingsTypeRepository, IMetreRepository metreRepository)
+        public MetronomeSettingsService(
+            IMetronomeSettingsRepository repository, 
+            IMapper mapper, 
+            IMetreService metreService, 
+            IMetronomeSettingsTypeRepository metronomeSettingsTypeRepository, 
+            IMetreRepository metreRepository, 
+            IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService)
         {
             _repository = repository;
             _mapper = mapper;
             _metreService = metreService;
             _metronomeSettingsTypeRepository = metronomeSettingsTypeRepository;
             _metreRepository = metreRepository;
+            _metronomeSettingsInPlaylistService = metronomeSettingsInPlaylistService;
         }
 
         public async Task<IEnumerable<MetronomeSettingsListDto>> GetAllAsync()
@@ -59,8 +67,31 @@ namespace BandClickBackend.Application.Services
             mappedEntity.Metre = await _metreService.MapMetreDtoToMetreAsync(entity.Metre);
             mappedEntity.Type = await _metronomeSettingsTypeRepository.GetMetronomeSettingsTypeById(entity.TypeId);
             var result = await _repository.CreateAsync(mappedEntity);
+            if (entity.PlaylistId != Guid.Empty)
+            {
+                await _metronomeSettingsInPlaylistService.AddMetronomeSettingToPlaylistAsync(
+                    result.Id, entity.PlaylistId);
+            }
             return _mapper.Map<MetronomeSettings, SingleMetronomeSettingDto>(
                 result);
+        }
+
+        public async Task AddToPlaylistAsync(Guid metronomeSettingId, Guid playlistId)
+        {
+            await _metronomeSettingsInPlaylistService.AddMetronomeSettingToPlaylistAsync(
+                metronomeSettingId, playlistId);
+        }
+
+        public async Task RemoveFromPlaylistAsync(Guid metronomeSettingId, Guid playlistId)
+        {
+            await _metronomeSettingsInPlaylistService.RemoveMetronomeSettingFromPlaylistAsync(
+                metronomeSettingId, playlistId);
+        }
+
+        public async Task ChangePositionInPlaylistAsync(Guid metronomeSettingId, Guid playlistId, int newPosition)
+        {
+            await _metronomeSettingsInPlaylistService.ChangePositionInPlaylistAsync(
+                metronomeSettingId, playlistId, newPosition);
         }
 
         public async Task UpdateAsync(UpdateMetronomeSettingDto dto)

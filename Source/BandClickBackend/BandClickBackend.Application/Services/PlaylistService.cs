@@ -18,13 +18,19 @@ namespace BandClickBackend.Application.Services
     {
         private readonly IPlaylistRepository _repository;
         private readonly IMetronomeSettingsRepository _metronomeSettingsRepository;
+        private readonly IMetronomeSettingsInPlaylistService _metronomeSettingsInPlaylistService;
         private readonly IMapper _mapper;
 
-        public PlaylistService(IPlaylistRepository repository, IMapper mapper, IMetronomeSettingsRepository metronomeSettingsRepository)
+        public PlaylistService(
+            IPlaylistRepository repository, 
+            IMapper mapper, 
+            IMetronomeSettingsRepository metronomeSettingsRepository, 
+            IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService)
         {
             _repository = repository;
             _mapper = mapper;
             _metronomeSettingsRepository = metronomeSettingsRepository;
+            _metronomeSettingsInPlaylistService = metronomeSettingsInPlaylistService;
         }
 
         public async Task<IEnumerable<PlaylistListDto>> GetAllPlaylistsForUserAsync()
@@ -75,17 +81,19 @@ namespace BandClickBackend.Application.Services
         {
             var mappedComments =
                 _mapper.Map<IEnumerable<PlaylistComment>, IEnumerable<PlaylistCommentDto>>(entity.Comments);
-            var mappedMetronomeSettings = new List<MetronomeSettingsListDto>();
-            if (entity.MetronomeSettings is not null)
-            {
-                foreach (var metronomeSettingsInPlaylist in entity.MetronomeSettings)
-                {
-                    var metronomeSetting = await
-                        _metronomeSettingsRepository.GetByIdAsync((metronomeSettingsInPlaylist.MetronomeSettingsId));
-                    mappedMetronomeSettings.Add(
-                        _mapper.Map<MetronomeSettings, MetronomeSettingsListDto>(metronomeSetting));
-                }
-            }
+            var mappedMetronomeSettings = await _metronomeSettingsInPlaylistService.GetAllSettingsInPlaylistAsync(entity.Id);
+                
+            //    new List<MetronomeSettingsListDto>();
+            //if (entity.MetronomeSettings is not null)
+            //{
+            //    foreach (var metronomeSettingsInPlaylist in entity.MetronomeSettings)
+            //    {
+            //        var metronomeSetting = await
+            //            _metronomeSettingsRepository.GetByIdAsync((metronomeSettingsInPlaylist.MetronomeSettingsId));
+            //        mappedMetronomeSettings.Add(
+            //            _mapper.Map<MetronomeSettings, MetronomeSettingsListDto>(metronomeSetting));
+            //    }
+            //}
 
             var dto = new SinglePlaylistDto()
             {

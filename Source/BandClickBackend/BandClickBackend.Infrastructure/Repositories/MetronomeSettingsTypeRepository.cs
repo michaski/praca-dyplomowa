@@ -34,7 +34,6 @@ namespace BandClickBackend.Infrastructure.Repositories
         public async Task<MetronomeSettingsType> GetMetronomeSettingsTypeById(Guid id)
         {
             return await _context.MetronomeSettingsTypes
-                .AsNoTracking()
                 .SingleOrDefaultAsync(mst => mst.Id == id);
         }
     }
