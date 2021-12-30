@@ -12,6 +12,8 @@ namespace BandClickBackend.Application.Validators.User
             RuleFor(dto => dto.Email)
                 .NotEmpty()
                 .EmailAddress()
+                .MinimumLength(5)
+                .MaximumLength(64)
             .MustAsync(async (email, token) =>
                 await repository.GetUserByEmailAsync(email) is null)
                 .WithMessage("Email jest już zajęty.");

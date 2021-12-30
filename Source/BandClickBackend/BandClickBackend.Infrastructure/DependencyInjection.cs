@@ -12,6 +12,7 @@ namespace BandClickBackend.Infrastructure
             services.AddScoped<DbSeeder>();
 
             services.AddScoped<IAccentedBeatsRepository, AccentedBeatsRepository>();
+            services.AddScoped<IBandRepository, BandRepository>();
             services.AddScoped<IBandRoleRepository, BandRoleRepository>();
             services.AddScoped<IMetreRepository, MetreRepository>();
             services.AddScoped<IMetronomeSettingsInPlaylistRepository, MetronomeSettingsInPlaylistRepository>();
@@ -20,6 +21,7 @@ namespace BandClickBackend.Infrastructure
             services.AddScoped<IPlaylistRepository, PlaylistRepository>();
             services.AddScoped<IRhythmicUnitRepository, RhythmicUnitRepository>();
             services.AddScoped<ISystemRoleRepository, SystemRoleRepository>();
+            services.AddScoped<IUserInBandsRepository, UserInBandsRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             return services;

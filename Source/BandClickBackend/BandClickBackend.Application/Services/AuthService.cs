@@ -55,12 +55,6 @@ namespace BandClickBackend.Application.Services
             {
                 return null;
             }
-            string userBandRoles = "";
-            if (user.Bands is not null)
-            {
-                userBandRoles = String.Join(Environment.NewLine,
-                    user.Bands.Select(b => $"{b.BandId} {b.BandRole.Id}"));
-            }
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             if (result == PasswordVerificationResult.Failed)
             {
@@ -69,8 +63,7 @@ namespace BandClickBackend.Application.Services
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, $"{user.SystemRole.Name}"),
-                new Claim("BandRoles", userBandRoles)
+                new Claim(ClaimTypes.Role, $"{user.SystemRole.Name}")
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
