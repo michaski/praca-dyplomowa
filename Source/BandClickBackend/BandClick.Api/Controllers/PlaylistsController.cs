@@ -16,10 +16,12 @@ namespace BandClickBackend.Api.Controllers
     public class PlaylistsController : ControllerBase
     {
         private readonly IPlaylistService _service;
+        private readonly IBandService _bandService;
 
-        public PlaylistsController(IPlaylistService service)
+        public PlaylistsController(IPlaylistService service, IBandService bandService)
         {
             _service = service;
+            _bandService = bandService;
         }
 
         [HttpGet]
@@ -82,6 +84,10 @@ namespace BandClickBackend.Api.Controllers
         [SwaggerOperation(Summary = "Shares playlist in band")]
         public async Task<IActionResult> SharePlaylistInBandAsync([FromRoute] Guid playlistId, [FromRoute] Guid bandId)
         {
+            if (!await _bandService.IsUserBandLeaderAsync(bandId))
+            {
+                return Forbid();
+            }
             await _service.ShareInBandAsync(playlistId, bandId);
             return NoContent();
         }
@@ -90,6 +96,10 @@ namespace BandClickBackend.Api.Controllers
         [SwaggerOperation(Summary = "Removes playlist from band")]
         public async Task<IActionResult> RemovePlaylistFromBandAsync([FromRoute] Guid playlistId, [FromRoute] Guid bandId)
         {
+            if (!await _bandService.IsUserBandLeaderAsync(bandId))
+            {
+                return Forbid();
+            }
             await _service.RemoveFromBandAsync(playlistId, bandId);
             return NoContent();
         }

@@ -90,6 +90,12 @@ namespace BandClickBackend.Application.Services
             await _repository.DeletePlaylistAsync(entity);
         }
 
+        public async Task<bool> IsUserPlaylistCreatorAsync(Guid playlistId)
+        {
+            var playlist = await _repository.GetPlaylistByIdAsync(playlistId);
+            return playlist.CreatedById == playlistId;
+        }
+
         private async Task<SinglePlaylistDto> MapPlaylistEntityToSinglePlaylistDto(Playlist entity)
         {
             var mappedComments =

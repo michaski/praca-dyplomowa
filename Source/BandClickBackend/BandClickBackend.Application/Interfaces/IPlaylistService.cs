@@ -18,5 +18,6 @@ namespace BandClickBackend.Application.Interfaces
         Task ShareInBandAsync(Guid playlistId, Guid bandId);
         Task RemoveFromBandAsync(Guid playlistId, Guid bandId);
         Task DeletePlaylistAsync(Guid id);
+        Task<bool> IsUserPlaylistCreatorAsync(Guid playlistId);
     }
 }
