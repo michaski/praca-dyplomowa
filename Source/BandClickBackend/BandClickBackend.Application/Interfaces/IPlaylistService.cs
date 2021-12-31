@@ -15,6 +15,8 @@ namespace BandClickBackend.Application.Interfaces
         Task<SinglePlaylistDto> AddPlaylistAsync(CreatePlaylistDto playlist);
         Task UpdatePlaylistAsync(EditPlaylistDto playlist);
         Task ShareInAppToggleAsync(Guid id);
+        Task ShareInBandAsync(Guid playlistId, Guid bandId);
+        Task RemoveFromBandAsync(Guid playlistId, Guid bandId);
         Task DeletePlaylistAsync(Guid id);
     }
 }

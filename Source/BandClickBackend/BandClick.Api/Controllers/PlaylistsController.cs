@@ -71,18 +71,34 @@ namespace BandClickBackend.Api.Controllers
         }
 
         [HttpPut]
-        [SwaggerOperation(Summary = "Edit playlist's data")]
+        [SwaggerOperation(Summary = "Edits playlist's data")]
         public async Task<IActionResult> EditPlaylistAsync([FromBody] EditPlaylistDto dto)
         {
             await _service.UpdatePlaylistAsync(dto);
             return NoContent();
         }
 
-        [HttpPut("shareInApp/{id}")]
-        [SwaggerOperation(Summary = "Toggle playlist in app share status")]
-        public async Task<IActionResult> TogglePlaylistInAppSharingAsync([FromRoute] Guid id)
+        [HttpPut("{playlistId}/shareInBand/{bandId}")]
+        [SwaggerOperation(Summary = "Shares playlist in band")]
+        public async Task<IActionResult> SharePlaylistInBandAsync([FromRoute] Guid playlistId, [FromRoute] Guid bandId)
         {
-            await _service.ShareInAppToggleAsync(id);
+            await _service.ShareInBandAsync(playlistId, bandId);
+            return NoContent();
+        }
+
+        [HttpPut("{playlistId}/removeFromBand/{bandId}")]
+        [SwaggerOperation(Summary = "Removes playlist from band")]
+        public async Task<IActionResult> RemovePlaylistFromBandAsync([FromRoute] Guid playlistId, [FromRoute] Guid bandId)
+        {
+            await _service.RemoveFromBandAsync(playlistId, bandId);
+            return NoContent();
+        }
+
+        [HttpPut("{playlistId}/shareInApp")]
+        [SwaggerOperation(Summary = "Toggles playlist in app share status")]
+        public async Task<IActionResult> TogglePlaylistInAppSharingAsync([FromRoute] Guid playlistId)
+        {
+            await _service.ShareInAppToggleAsync(playlistId);
             return NoContent();
         }
 

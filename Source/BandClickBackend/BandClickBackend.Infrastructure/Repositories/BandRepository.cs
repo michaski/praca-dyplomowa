@@ -28,6 +28,7 @@ namespace BandClickBackend.Infrastructure.Repositories
         {
             return await _context.Bands
                 .Include(b => b.Playlists)
+                .ThenInclude(p => p.Playlist)
                 .Include(b => b.Members)
                 .SingleOrDefaultAsync(b => b.Id == id);
         }

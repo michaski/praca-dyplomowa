@@ -19,18 +19,21 @@ namespace BandClickBackend.Application.Services
         private readonly IPlaylistRepository _repository;
         private readonly IMetronomeSettingsRepository _metronomeSettingsRepository;
         private readonly IMetronomeSettingsInPlaylistService _metronomeSettingsInPlaylistService;
+        private readonly IPlaylistSharedInBandRepository _playlistSharedInBandRepository;
         private readonly IMapper _mapper;
 
         public PlaylistService(
             IPlaylistRepository repository, 
-            IMapper mapper, 
             IMetronomeSettingsRepository metronomeSettingsRepository, 
-            IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService)
+            IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService, 
+            IPlaylistSharedInBandRepository playlistSharedInBandRepository,
+            IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
             _metronomeSettingsRepository = metronomeSettingsRepository;
             _metronomeSettingsInPlaylistService = metronomeSettingsInPlaylistService;
+            _playlistSharedInBandRepository = playlistSharedInBandRepository;
         }
 
         public async Task<IEnumerable<PlaylistListDto>> GetAllPlaylistsForUserAsync()
@@ -71,6 +74,16 @@ namespace BandClickBackend.Application.Services
                 await _repository.GetPlaylistByIdAsync(id));
         }
 
+        public async Task ShareInBandAsync(Guid playlistId, Guid bandId)
+        {
+            await _playlistSharedInBandRepository.SharePlaylistInBandAsync(bandId, playlistId);
+        }
+
+        public async Task RemoveFromBandAsync(Guid playlistId, Guid bandId)
+        {
+            await _playlistSharedInBandRepository.RemovePlaylistFromBandAsync(bandId, playlistId);
+        }
+
         public async Task DeletePlaylistAsync(Guid id)
         {
             var entity = await _repository.GetPlaylistByIdAsync(id);
@@ -82,18 +95,6 @@ namespace BandClickBackend.Application.Services
             var mappedComments =
                 _mapper.Map<IEnumerable<PlaylistComment>, IEnumerable<PlaylistCommentDto>>(entity.Comments);
             var mappedMetronomeSettings = await _metronomeSettingsInPlaylistService.GetAllSettingsInPlaylistAsync(entity.Id);
-                
-            //    new List<MetronomeSettingsListDto>();
-            //if (entity.MetronomeSettings is not null)
-            //{
-            //    foreach (var metronomeSettingsInPlaylist in entity.MetronomeSettings)
-            //    {
-            //        var metronomeSetting = await
-            //            _metronomeSettingsRepository.GetByIdAsync((metronomeSettingsInPlaylist.MetronomeSettingsId));
-            //        mappedMetronomeSettings.Add(
-            //            _mapper.Map<MetronomeSettings, MetronomeSettingsListDto>(metronomeSetting));
-            //    }
-            //}
 
             var dto = new SinglePlaylistDto()
             {

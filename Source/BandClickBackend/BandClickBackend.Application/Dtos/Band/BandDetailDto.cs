@@ -20,7 +20,9 @@ namespace BandClickBackend.Application.Dtos.Band
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Domain.Entities.Band, BandDetailDto>();
+            profile.CreateMap<Domain.Entities.Band, BandDetailDto>()
+                .ForMember(dto => dto.Playlists, memberOptions => 
+                    memberOptions.MapFrom(e => e.Playlists.Select(p => p.Playlist)));
         }
     }
 }

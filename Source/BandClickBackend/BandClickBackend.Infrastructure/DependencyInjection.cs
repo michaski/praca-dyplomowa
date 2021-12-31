@@ -19,6 +19,7 @@ namespace BandClickBackend.Infrastructure
             services.AddScoped<IMetronomeSettingsRepository, MetronomeSettingsRepository>();
             services.AddScoped<IMetronomeSettingsTypeRepository, MetronomeSettingsTypeRepository>();
             services.AddScoped<IPlaylistRepository, PlaylistRepository>();
+            services.AddScoped<IPlaylistSharedInBandRepository, PlaylistSharedInBandRepository>();
             services.AddScoped<IRhythmicUnitRepository, RhythmicUnitRepository>();
             services.AddScoped<ISystemRoleRepository, SystemRoleRepository>();
             services.AddScoped<IUserInBandsRepository, UserInBandsRepository>();
