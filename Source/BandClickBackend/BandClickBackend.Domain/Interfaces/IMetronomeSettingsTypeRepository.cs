@@ -11,6 +11,7 @@ namespace BandClickBackend.Domain.Interfaces
     {
         MetronomeSettingsType Song { get; }
         MetronomeSettingsType Exercise { get; }
+        Task<IEnumerable<MetronomeSettingsType>> GetAllMetronomeSettingsTypesAsync();
         Task<MetronomeSettingsType> GetMetronomeSettingsTypeByName(string name);
         Task<MetronomeSettingsType> GetMetronomeSettingsTypeById(Guid id);
     }

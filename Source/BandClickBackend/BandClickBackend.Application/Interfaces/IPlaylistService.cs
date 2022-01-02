@@ -20,6 +20,7 @@ namespace BandClickBackend.Application.Interfaces
         Task RemovePositiveRaitingAsync(Guid id);
         Task RemoveNegativeRaitingAsync(Guid id);
         Task ShareInAppToggleAsync(Guid id);
+        Task RemoveFromSharedInAppAsync(Guid id);
         Task ShareInBandAsync(Guid playlistId, Guid bandId);
         Task RemoveFromBandAsync(Guid playlistId, Guid bandId);
         Task DeletePlaylistAsync(Guid id);

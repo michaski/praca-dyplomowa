@@ -26,10 +26,10 @@ namespace BandClickBackend.Api.Controllers
         }
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Gets all metronome settings")]
-        public async Task<IActionResult> GetAll()
+        [SwaggerOperation(Summary = "Gets metronome settings created by logged user")]
+        public async Task<IActionResult> GetAllForUser()
         {
-            var result = await _metronomeSettingsService.GetAllAsync();
+            var result = await _metronomeSettingsService.GetAllSettingsForUserAsync();
             if (!result.Any())
             {
                 return NotFound();
@@ -61,16 +61,11 @@ namespace BandClickBackend.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("userCreated")]
-        [SwaggerOperation(Summary = "Gets metronome settings created by logged user")]
-        public async Task<IActionResult> GetAllForUser()
+        [HttpGet("types")]
+        [SwaggerOperation(Summary = "Gets available types for metronome settings")]
+        public async Task<IActionResult> GetSettingTypes()
         {
-            var result = await _metronomeSettingsService.GetAllSettingsForUserAsync();
-            if (!result.Any())
-            {
-                return NotFound();
-            }
-            return Ok(result);
+            return Ok(await _metronomeSettingsService.GetAvailableSettingTypesAsync());
         }
 
         [HttpPost]
@@ -102,6 +97,15 @@ namespace BandClickBackend.Api.Controllers
         public async Task<IActionResult> Update(UpdateMetronomeSettingDto dto)
         {
             await _metronomeSettingsService.UpdateAsync(dto);
+            return NoContent();
+        }
+
+        [HttpPut("{settingId}/changeType/{typeId}")]
+        [Authorize(Roles = "Admin")]
+        [SwaggerOperation(Summary = "Changes metronome setting's type")]
+        public async Task<IActionResult> ChangeSettingType(Guid settingId, Guid typeId)
+        {
+            await _metronomeSettingsService.ChangeTypeAsync(settingId, typeId);
             return NoContent();
         }
 
@@ -169,6 +173,15 @@ namespace BandClickBackend.Api.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}/removeFromSharedInApp")]
+        [Authorize(Roles = "Admin")]
+        [SwaggerOperation(Summary = "Removes setting from shared in app")]
+        public async Task<IActionResult> RemoveFromSharedInAppAsync([FromRoute] Guid id)
+        {
+            await _metronomeSettingsService.RemoveFromSharedInAppAsync(id);
+            return NoContent();
+        }
+
         [HttpPut("comments/edit")]
         [SwaggerOperation(Summary = "Edits existing comment")]
         public async Task<IActionResult> EditComment(UpdateMetronomeSettingsCommentDto dto)
@@ -186,6 +199,7 @@ namespace BandClickBackend.Api.Controllers
         }
 
         [HttpDelete("comments/delete/{id}")]
+        [Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Deletes existing comment")]
         public async Task<IActionResult> DeleteComment(Guid id)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
@@ -22,6 +23,12 @@ namespace BandClickBackend.Infrastructure.Repositories
             Exercise = _context.MetronomeSettingsTypes
                 .AsNoTracking()
                 .SingleOrDefaultAsync(mst => mst.Name == "Exercise").Result;
+        }
+
+        public async Task<IEnumerable<MetronomeSettingsType>> GetAllMetronomeSettingsTypesAsync()
+        {
+            return await _context.MetronomeSettingsTypes
+                .ToListAsync();
         }
 
         public async Task<MetronomeSettingsType> GetMetronomeSettingsTypeByName(string name)

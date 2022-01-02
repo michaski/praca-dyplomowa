@@ -65,6 +65,11 @@ namespace BandClickBackend.Application.Services
                 await _repository.GetAllSettingsForUserAsync());
         }
 
+        public async Task<IEnumerable<MetronomeSettingsType>> GetAvailableSettingTypesAsync()
+        {
+            return await _metronomeSettingsTypeRepository.GetAllMetronomeSettingsTypesAsync();
+        }
+
         public async Task<SingleMetronomeSettingDto> AddAsync(AddMetronomeSettingsDto entity)
         {
             var mappedEntity = _mapper.Map<AddMetronomeSettingsDto, MetronomeSettings>(entity);
@@ -78,6 +83,13 @@ namespace BandClickBackend.Application.Services
             }
             return _mapper.Map<MetronomeSettings, SingleMetronomeSettingDto>(
                 result);
+        }
+
+        public async Task ChangeTypeAsync(Guid settingId, Guid typeId)
+        {
+            var entity = await _repository.GetByIdAsync(settingId);
+            entity.Type = await _metronomeSettingsTypeRepository.GetMetronomeSettingsTypeById(typeId);
+            await _repository.UpdateAsync(entity);
         }
 
         public async Task AddToPlaylistAsync(Guid metronomeSettingId, Guid playlistId)
@@ -187,6 +199,13 @@ namespace BandClickBackend.Application.Services
         {
             await _repository.ShareInAppToggleAsync(
                 await _repository.GetByIdAsync(id));
+        }
+
+        public async Task RemoveFromSharedInAppAsync(Guid id)
+        {
+            var entity = await _repository.GetByIdAsync(id);
+            entity.IsShared = false;
+            await _repository.UpdateAsync(entity);
         }
 
         public async Task DeleteAsync(Guid id)

@@ -149,6 +149,13 @@ namespace BandClickBackend.Application.Services
                 await _repository.GetPlaylistByIdAsync(id));
         }
 
+        public async Task RemoveFromSharedInAppAsync(Guid id)
+        {
+            var entity = await _repository.GetPlaylistByIdAsync(id);
+            entity.IsShared = false;
+            await _repository.UpdatePlaylistAsync(entity);
+        }
+
         public async Task ShareInBandAsync(Guid playlistId, Guid bandId)
         {
             await _playlistSharedInBandRepository.SharePlaylistInBandAsync(bandId, playlistId);

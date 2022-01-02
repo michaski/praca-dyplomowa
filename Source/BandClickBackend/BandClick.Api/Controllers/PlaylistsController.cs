@@ -157,6 +157,15 @@ namespace BandClickBackend.Api.Controllers
             return NoContent();
         }
 
+        [HttpPut("{playlistId}/removeFromSharedInApp")]
+        [Authorize(Roles = "Admin")]
+        [SwaggerOperation(Summary = "Removes playlist from shared in app")]
+        public async Task<IActionResult> RemoveFromSharedInAppAsync([FromRoute] Guid playlistId)
+        {
+            await _service.RemoveFromSharedInAppAsync(playlistId);
+            return NoContent();
+        }
+
         [HttpPut("comments/edit")]
         [SwaggerOperation(Summary = "Edits existing comment")]
         public async Task<IActionResult> EditComment(UpdatePlaylistCommentDto dto)
@@ -174,6 +183,7 @@ namespace BandClickBackend.Api.Controllers
         }
 
         [HttpDelete("comments/delete/{id}")]
+        [Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Deletes existing comment")]
         public async Task<IActionResult> DeleteComment(Guid id)
         {
