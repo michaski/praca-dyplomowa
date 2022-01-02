@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BandClickBackend.Api.Installers;
+using BandClickBackend.Application.Middleware;
 using BandClickBackend.Infrastructure.Data;
 
 namespace BandClick.Api
@@ -44,6 +45,8 @@ namespace BandClick.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BandClick.Api v1"));
             }
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseAuthentication();
 

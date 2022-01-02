@@ -16,8 +16,4 @@
     <ProjectReference Include="..\BandClickBackend.Domain\BandClickBackend.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Middleware\" />
-  </ItemGroup>
-
 </Project>

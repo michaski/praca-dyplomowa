@@ -20,7 +20,7 @@ namespace BandClickBackend.Infrastructure.Repositories
             var filePath = $"{BASE_PATH}{fileName}";
             if (!File.Exists(filePath))
             {
-                throw new ArgumentException($"Plik nie istnieje: \"{filePath}\".");
+                throw new FileNotFoundException($"Plik nie istnieje: \"{filePath}\".");
             }
             var fileData = new FileData()
             {
@@ -36,7 +36,7 @@ namespace BandClickBackend.Infrastructure.Repositories
             var filePath = $"{BASE_PATH}{fileName}";
             if (!File.Exists(filePath))
             {
-                throw new ArgumentException($"Plik nie istnieje: \"{filePath}\".");
+                throw new FileNotFoundException($"Plik nie istnieje: \"{filePath}\".");
             }
             var fileData = new FileData()
             {

@@ -9,6 +9,7 @@ using BandClickBackend.Application.Dtos.PlaylistComment;
 using BandClickBackend.Application.Dtos.User;
 using BandClickBackend.Application.Dtos.UserInBands;
 using BandClickBackend.Application.Interfaces;
+using BandClickBackend.Application.Middleware;
 using BandClickBackend.Application.Services;
 using BandClickBackend.Application.Validators.Auth;
 using BandClickBackend.Application.Validators.Band;
@@ -35,6 +36,7 @@ namespace BandClickBackend.Application
             services.AddFluentValidation();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddHttpContextAccessor();
+            services.AddScoped<ErrorHandlingMiddleware>();
 
             services.AddScoped<IValidator<LoginDto>, LoginValidator>();
             services.AddScoped<IValidator<UpdateBandDto>, UpdateBandValidator>();

@@ -9,6 +9,7 @@ using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
+using FluentValidation;
 
 namespace BandClickBackend.Application.Services
 {
@@ -128,7 +129,7 @@ namespace BandClickBackend.Application.Services
             var entity = await _repository.GetByIdAsync(id);
             if (!entity.IsShared)
             {
-                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+                throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
             }
             if (entity.PositiveRaitingCount is not null)
             {
@@ -146,7 +147,7 @@ namespace BandClickBackend.Application.Services
             var entity = await _repository.GetByIdAsync(id);
             if (!entity.IsShared)
             {
-                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+                throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
             }
             if (entity.NegativeRaitingCount is not null)
             {
@@ -164,7 +165,7 @@ namespace BandClickBackend.Application.Services
             var entity = await _repository.GetByIdAsync(id);
             if (!entity.IsShared)
             {
-                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+                throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
             }
             if (entity.PositiveRaitingCount is not null && entity.PositiveRaitingCount > 0)
             {
@@ -182,7 +183,7 @@ namespace BandClickBackend.Application.Services
             var entity = await _repository.GetByIdAsync(id);
             if (!entity.IsShared)
             {
-                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+                throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
             }
             if (entity.NegativeRaitingCount is not null && entity.NegativeRaitingCount > 0)
             {

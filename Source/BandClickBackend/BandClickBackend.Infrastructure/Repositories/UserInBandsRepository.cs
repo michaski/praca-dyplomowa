@@ -7,6 +7,7 @@ using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
 using BandClickBackend.Infrastructure.Data;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace BandClickBackend.Infrastructure.Repositories
@@ -95,7 +96,7 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .SingleOrDefaultAsync(e => e.BandId == bandId && e.MemberId == memberId);
             if (entry.BandRole == _bandRoleRepository.Leader)
             {
-                throw new ArgumentException("Nie można usunąć lidera zespołu.");
+                throw new ValidationException("Nie można usunąć lidera zespołu.");
             }
             _context.UsersInBands.Remove(entry);
             await _context.SaveChangesAsync();
