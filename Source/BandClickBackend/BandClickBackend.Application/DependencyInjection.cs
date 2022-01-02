@@ -56,6 +56,7 @@ namespace BandClickBackend.Application
             services.AddScoped<IMetreService, MetreService>();
             services.AddScoped<IMetronomeSettingsInPlaylistService, MetronomeSettingsInPlaylistService>();
             services.AddScoped<IMetronomeSettingsService, MetronomeSettingsService>();
+            services.AddScoped<IMetronomeSoundService, MetronomeSoundService>();
             services.AddScoped<IPlaylistService, PlaylistService>();
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddScoped<IUserService, UserService>();
