@@ -15,16 +15,19 @@ namespace BandClickBackend.Application.Services
     {
         private readonly IMetronomeSettingsInPlaylistRepository _metronomeSettingsInPlaylistRepository;
         private readonly IPlaylistRepository _playlistRepository;
+        private readonly IMetronomeSettingsRepository _metronomeSettingsRepository;
         private readonly IMapper _mapper;
 
         public MetronomeSettingsInPlaylistService(
             IMetronomeSettingsInPlaylistRepository metronomeSettingsInPlaylistRepository, 
             IMapper mapper, 
-            IPlaylistRepository playlistRepository)
+            IPlaylistRepository playlistRepository,
+            IMetronomeSettingsRepository metronomeSettingsRepository)
         {
             _metronomeSettingsInPlaylistRepository = metronomeSettingsInPlaylistRepository;
             _mapper = mapper;
             _playlistRepository = playlistRepository;
+            _metronomeSettingsRepository = metronomeSettingsRepository;
         }
 
         public async Task<IEnumerable<MetronomeSettingsListDto>> GetAllSettingsInPlaylistAsync(Guid playlistId)

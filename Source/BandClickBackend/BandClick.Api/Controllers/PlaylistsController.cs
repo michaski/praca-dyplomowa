@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BandClickBackend.Application.Dtos.Playlist;
+using BandClickBackend.Application.Dtos.PlaylistComment;
 using BandClickBackend.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -72,11 +73,55 @@ namespace BandClickBackend.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("comments/add")]
+        [SwaggerOperation(Summary = "Adds comment to shared playlist")]
+        public async Task<IActionResult> AddComment(AddPlaylistCommentDto dto)
+        {
+            var comment = await _service.AddCommentAsync(dto);
+            if (comment is null)
+            {
+                return BadRequest();
+            }
+            return Created($"comments/{comment.Id}", comment);
+        }
+
         [HttpPut]
         [SwaggerOperation(Summary = "Edits playlist's data")]
         public async Task<IActionResult> EditPlaylistAsync([FromBody] EditPlaylistDto dto)
         {
             await _service.UpdatePlaylistAsync(dto);
+            return NoContent();
+        }
+
+        [HttpPut("{id}/raitings/positive/add")]
+        [SwaggerOperation(Summary = "Adds positive raiting to shared setting")]
+        public async Task<IActionResult> AddPositiveRaiting(Guid id)
+        {
+            await _service.AddPositiveRaitingAsync(id);
+            return NoContent();
+        }
+
+        [HttpPut("{id}/raitings/positive/subtract")]
+        [SwaggerOperation(Summary = "Subtracts positive raiting from shared setting")]
+        public async Task<IActionResult> SubtractPositiveRaiting(Guid id)
+        {
+            await _service.RemovePositiveRaitingAsync(id);
+            return NoContent();
+        }
+
+        [HttpPut("{id}/raitings/negative/add")]
+        [SwaggerOperation(Summary = "Adds negative raiting to shared setting")]
+        public async Task<IActionResult> AddNegativeRaiting(Guid id)
+        {
+            await _service.AddNegativeRaitingAsync(id);
+            return NoContent();
+        }
+
+        [HttpPut("{id}/raitings/negative/subtract")]
+        [SwaggerOperation(Summary = "Subtracts negative raiting from shared setting")]
+        public async Task<IActionResult> SubtractNegativeRaiting(Guid id)
+        {
+            await _service.RemoveNegativeRaitingAsync(id);
             return NoContent();
         }
 
@@ -112,11 +157,27 @@ namespace BandClickBackend.Api.Controllers
             return NoContent();
         }
 
+        [HttpPut("comments/edit")]
+        [SwaggerOperation(Summary = "Edits existing comment")]
+        public async Task<IActionResult> EditComment(UpdatePlaylistCommentDto dto)
+        {
+            await _service.EditCommentAsync(dto);
+            return NoContent();
+        }
+
         [HttpDelete]
         [SwaggerOperation(Summary = "Deletes playlist with given id")]
         public async Task<IActionResult> DeletePlaylistAsync(Guid id)
         {
             await _service.DeletePlaylistAsync(id);
+            return NoContent();
+        }
+
+        [HttpDelete("comments/delete/{id}")]
+        [SwaggerOperation(Summary = "Deletes existing comment")]
+        public async Task<IActionResult> DeleteComment(Guid id)
+        {
+            await _service.DeleteCommentAsync(id);
             return NoContent();
         }
     }

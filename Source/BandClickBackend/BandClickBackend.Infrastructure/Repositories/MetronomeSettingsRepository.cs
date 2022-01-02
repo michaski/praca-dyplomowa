@@ -64,6 +64,7 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .ThenInclude(m => m.AccentedBeats)
                 .Include(ms => ms.Metre.RhythmicUnit)
                 .Include(ms => ms.Type)
+                .Include(ms => ms.Comments)
                 .SingleOrDefaultAsync(ms => ms.Id == id);
         }
 

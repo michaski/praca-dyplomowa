@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BandClickBackend.Application.Dtos.Metre;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
+using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
 using BandClickBackend.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
@@ -84,11 +85,55 @@ namespace BandClickBackend.Api.Controllers
             return Created($"{result.Id}", result);
         }
 
+        [HttpPost("comments/add")]
+        [SwaggerOperation(Summary = "Adds comment to shared metronome setting")]
+        public async Task<IActionResult> AddComment(AddMetronomeSettingsCommentDto dto)
+        {
+            var comment = await _metronomeSettingsService.AddCommentAsync(dto);
+            if (comment is null)
+            {
+                return BadRequest();
+            }
+            return Created($"comments/{comment.Id}", comment);
+        }
+
         [HttpPut]
         [SwaggerOperation(Summary = "Updates metronome setting's data")]
         public async Task<IActionResult> Update(UpdateMetronomeSettingDto dto)
         {
             await _metronomeSettingsService.UpdateAsync(dto);
+            return NoContent();
+        }
+
+        [HttpPut("{id}/raitings/positive/add")]
+        [SwaggerOperation(Summary = "Adds positive raiting to shared setting")]
+        public async Task<IActionResult> AddPositiveRaiting(Guid id)
+        {
+            await _metronomeSettingsService.AddPositiveRaitingAsync(id);
+            return NoContent();
+        }
+            
+        [HttpPut("{id}/raitings/positive/subtract")]
+        [SwaggerOperation(Summary = "Subtracts positive raiting from shared setting")]
+        public async Task<IActionResult> SubtractPositiveRaiting(Guid id)
+        {
+            await _metronomeSettingsService.RemovePositiveRaitingAsync(id);
+            return NoContent();
+        }
+
+        [HttpPut("{id}/raitings/negative/add")]
+        [SwaggerOperation(Summary = "Adds negative raiting to shared setting")]
+        public async Task<IActionResult> AddNegativeRaiting(Guid id)
+        {
+            await _metronomeSettingsService.AddNegativeRaitingAsync(id);
+            return NoContent();
+        }
+
+        [HttpPut("{id}/raitings/negative/subtract")]
+        [SwaggerOperation(Summary = "Subtracts negative raiting from shared setting")]
+        public async Task<IActionResult> SubtractNegativeRaiting(Guid id)
+        {
+            await _metronomeSettingsService.RemoveNegativeRaitingAsync(id);
             return NoContent();
         }
 
@@ -124,11 +169,27 @@ namespace BandClickBackend.Api.Controllers
             return NoContent();
         }
 
+        [HttpPut("comments/edit")]
+        [SwaggerOperation(Summary = "Edits existing comment")]
+        public async Task<IActionResult> EditComment(UpdateMetronomeSettingsCommentDto dto)
+        {
+            await _metronomeSettingsService.EditCommentAsync(dto);
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deletes metronome setting")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             await _metronomeSettingsService.DeleteAsync(id);
+            return NoContent();
+        }
+
+        [HttpDelete("comments/delete/{id}")]
+        [SwaggerOperation(Summary = "Deletes existing comment")]
+        public async Task<IActionResult> DeleteComment(Guid id)
+        {
+            await _metronomeSettingsService.DeleteCommentAsync(id);
             return NoContent();
         }
     }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
+using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
@@ -16,17 +17,19 @@ namespace BandClickBackend.Application.Services
         private readonly IMetronomeSettingsRepository _repository;
         private readonly IMetronomeSettingsTypeRepository _metronomeSettingsTypeRepository;
         private readonly IMetronomeSettingsInPlaylistService _metronomeSettingsInPlaylistService;
+        private readonly IMetronomeSettingsCommentRepository _metronomeSettingsCommentRepository;
         private readonly IMetreService _metreService;
         private readonly IMetreRepository _metreRepository;
         private readonly IMapper _mapper;
 
         public MetronomeSettingsService(
             IMetronomeSettingsRepository repository, 
-            IMapper mapper, 
             IMetreService metreService, 
             IMetronomeSettingsTypeRepository metronomeSettingsTypeRepository, 
             IMetreRepository metreRepository, 
-            IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService)
+            IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService, 
+            IMetronomeSettingsCommentRepository metronomeSettingsCommentRepository,
+            IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -34,6 +37,7 @@ namespace BandClickBackend.Application.Services
             _metronomeSettingsTypeRepository = metronomeSettingsTypeRepository;
             _metreRepository = metreRepository;
             _metronomeSettingsInPlaylistService = metronomeSettingsInPlaylistService;
+            _metronomeSettingsCommentRepository = metronomeSettingsCommentRepository;
         }
 
         public async Task<IEnumerable<MetronomeSettingsListDto>> GetAllAsync()
@@ -107,6 +111,78 @@ namespace BandClickBackend.Application.Services
             await _repository.UpdateAsync(entity);
         }
 
+        public async Task AddPositiveRaitingAsync(Guid id)
+        {
+            var entity = await _repository.GetByIdAsync(id);
+            if (!entity.IsShared)
+            {
+                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+            }
+            if (entity.PositiveRaitingCount is not null)
+            {
+                entity.PositiveRaitingCount++;
+            }
+            else
+            {
+                entity.PositiveRaitingCount = 1;
+            }
+            await _repository.UpdateAsync(entity);
+        }
+
+        public async Task AddNegativeRaitingAsync(Guid id)
+        {
+            var entity = await _repository.GetByIdAsync(id);
+            if (!entity.IsShared)
+            {
+                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+            }
+            if (entity.NegativeRaitingCount is not null)
+            {
+                entity.NegativeRaitingCount++;
+            }
+            else
+            {
+                entity.NegativeRaitingCount = 1;
+            }
+            await _repository.UpdateAsync(entity);
+        }
+
+        public async Task RemovePositiveRaitingAsync(Guid id)
+        {
+            var entity = await _repository.GetByIdAsync(id);
+            if (!entity.IsShared)
+            {
+                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+            }
+            if (entity.PositiveRaitingCount is not null && entity.PositiveRaitingCount > 0)
+            {
+                entity.PositiveRaitingCount--;
+            }
+            else
+            {
+                entity.PositiveRaitingCount = 0;
+            }
+            await _repository.UpdateAsync(entity);
+        }
+
+        public async Task RemoveNegativeRaitingAsync(Guid id)
+        {
+            var entity = await _repository.GetByIdAsync(id);
+            if (!entity.IsShared)
+            {
+                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+            }
+            if (entity.NegativeRaitingCount is not null && entity.NegativeRaitingCount > 0)
+            {
+                entity.NegativeRaitingCount--;
+            }
+            else
+            {
+                entity.NegativeRaitingCount = 0;
+            }
+            await _repository.UpdateAsync(entity);
+        }
+
         public async Task ShareInAppToggleAsync(Guid id)
         {
             await _repository.ShareInAppToggleAsync(
@@ -117,6 +193,31 @@ namespace BandClickBackend.Application.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             await _repository.DeleteAsync(entity);
+        }
+
+        public async Task<IEnumerable<MetronomeSettingsCommentDetailsDto>> GetAllCommentsAsync(Guid id)
+        {
+            return _mapper.Map<IEnumerable<MetronomeSettingsComment>, IEnumerable<MetronomeSettingsCommentDetailsDto>>(
+                await _metronomeSettingsCommentRepository.GetSettingsCommentsAsync(id));
+        }
+
+        public async Task<MetronomeSettingsCommentDetailsDto> AddCommentAsync(AddMetronomeSettingsCommentDto comment)
+        {
+            var mappedComment = _mapper.Map<AddMetronomeSettingsCommentDto, MetronomeSettingsComment>(comment);
+            return _mapper.Map<MetronomeSettingsComment, MetronomeSettingsCommentDetailsDto>(
+                await _metronomeSettingsCommentRepository.AddCommentAsync(mappedComment));
+        }
+
+        public async Task EditCommentAsync(UpdateMetronomeSettingsCommentDto comment)
+        {
+            var entity = await _metronomeSettingsCommentRepository.GetByIdAsync(comment.Id);
+            entity.Text = comment.Text;
+            await _metronomeSettingsCommentRepository.EditCommentAsync(entity);
+        }
+
+        public async Task DeleteCommentAsync(Guid id)
+        {
+            await _metronomeSettingsCommentRepository.DeleteCommentAsync(id);
         }
     }
 }

@@ -42,6 +42,7 @@ namespace BandClickBackend.Infrastructure.Repositories
         public async Task<Playlist> GetPlaylistByIdAsync(Guid id)
         {
             return await _context.Playlists
+                .Include(p => p.Comments)
                 .SingleOrDefaultAsync(p => p.Id == id);
         }
 

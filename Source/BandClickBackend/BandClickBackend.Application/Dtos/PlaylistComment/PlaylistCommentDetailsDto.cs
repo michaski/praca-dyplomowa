@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using BandClickBackend.Application.Mappings;
 
-namespace BandClickBackend.Application.Dtos.MetronomeSettingsComment
+namespace BandClickBackend.Application.Dtos.PlaylistComment
 {
-    public class MetronomeSettingsCommentDto : IMap
+    public class PlaylistCommentDetailsDto : IMap
     {
+        public Guid Id { get; set; }
         public string Text { get; set; }
         public DateTime Created { get; set; }
         public Guid CreatedById { get; set; }
@@ -14,7 +19,7 @@ namespace BandClickBackend.Application.Dtos.MetronomeSettingsComment
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Domain.Entities.MetronomeSettingsComment, MetronomeSettingsCommentDto>();
+            profile.CreateMap<Domain.Entities.PlaylistComment, PlaylistCommentDetailsDto>();
         }
     }
 }

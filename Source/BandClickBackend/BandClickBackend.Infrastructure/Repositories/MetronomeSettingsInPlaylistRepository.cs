@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
 using BandClickBackend.Infrastructure.Data;
@@ -13,10 +14,12 @@ namespace BandClickBackend.Infrastructure.Repositories
     public class MetronomeSettingsInPlaylistRepository : IMetronomeSettingsInPlaylistRepository
     {
         private readonly BandClickDbContext _context;
+        private readonly IUserContextService _userContextService;
 
-        public MetronomeSettingsInPlaylistRepository(BandClickDbContext context)
+        public MetronomeSettingsInPlaylistRepository(BandClickDbContext context, IUserContextService userContextService)
         {
             _context = context;
+            _userContextService = userContextService;
         }
 
         public async Task<IEnumerable<MetronomeSettings>> GetAllSettingsInPlaylistAsync(Playlist playlist)
@@ -73,6 +76,15 @@ namespace BandClickBackend.Infrastructure.Repositories
             _context.Update(entryToMove);
             _context.UpdateRange(entriesToShift);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task TogglePlaylistSettingsInAppSharingAsync(Guid playlistId)
+        {
+            await _context.MetronomeSettingsInPlaylists
+                .Include(e => e.MetronomeSettings)
+                .Where(e => e.PlaylistId == playlistId)
+                .ToListAsync();
+            await _context.SaveChangesSignInAsync(_userContextService);
         }
 
         public async Task RemoveMetronomeSettingFromPlaylistAsync(MetronomeSettingsInPlaylist entry)

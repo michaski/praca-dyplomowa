@@ -20,17 +20,20 @@ namespace BandClickBackend.Application.Services
         private readonly IMetronomeSettingsRepository _metronomeSettingsRepository;
         private readonly IMetronomeSettingsInPlaylistService _metronomeSettingsInPlaylistService;
         private readonly IPlaylistSharedInBandRepository _playlistSharedInBandRepository;
+        private readonly IPlaylistCommentRepository _playlistCommentRepository;
         private readonly IMapper _mapper;
 
         public PlaylistService(
             IPlaylistRepository repository, 
             IMetronomeSettingsRepository metronomeSettingsRepository, 
             IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService, 
-            IPlaylistSharedInBandRepository playlistSharedInBandRepository,
+            IPlaylistSharedInBandRepository playlistSharedInBandRepository, 
+            IPlaylistCommentRepository playlistCommentRepository,
             IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
+            _playlistCommentRepository = playlistCommentRepository;
             _metronomeSettingsRepository = metronomeSettingsRepository;
             _metronomeSettingsInPlaylistService = metronomeSettingsInPlaylistService;
             _playlistSharedInBandRepository = playlistSharedInBandRepository;
@@ -68,6 +71,78 @@ namespace BandClickBackend.Application.Services
             await _repository.UpdatePlaylistAsync(entity);
         }
 
+        public async Task AddPositiveRaitingAsync(Guid id)
+        {
+            var entity = await _repository.GetPlaylistByIdAsync(id);
+            if (!entity.IsShared)
+            {
+                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+            }
+            if (entity.PositiveRaitingCount is not null)
+            {
+                entity.PositiveRaitingCount++;
+            }
+            else
+            {
+                entity.PositiveRaitingCount = 1;
+            }
+            await _repository.UpdatePlaylistAsync(entity);
+        }
+
+        public async Task AddNegativeRaitingAsync(Guid id)
+        {
+            var entity = await _repository.GetPlaylistByIdAsync(id);
+            if (!entity.IsShared)
+            {
+                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+            }
+            if (entity.NegativeRaitingCount is not null)
+            {
+                entity.NegativeRaitingCount++;
+            }
+            else
+            {
+                entity.NegativeRaitingCount = 1;
+            }
+            await _repository.UpdatePlaylistAsync(entity);
+        }
+
+        public async Task RemovePositiveRaitingAsync(Guid id)
+        {
+            var entity = await _repository.GetPlaylistByIdAsync(id);
+            if (!entity.IsShared)
+            {
+                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+            }
+            if (entity.PositiveRaitingCount is not null && entity.PositiveRaitingCount > 0)
+            {
+                entity.PositiveRaitingCount--;
+            }
+            else
+            {
+                entity.PositiveRaitingCount = 0;
+            }
+            await _repository.UpdatePlaylistAsync(entity);
+        }
+
+        public async Task RemoveNegativeRaitingAsync(Guid id)
+        {
+            var entity = await _repository.GetPlaylistByIdAsync(id);
+            if (!entity.IsShared)
+            {
+                throw new ArgumentException("Nie można ocenić nieudostępnionej pozycji.");
+            }
+            if (entity.NegativeRaitingCount is not null && entity.NegativeRaitingCount > 0)
+            {
+                entity.NegativeRaitingCount--;
+            }
+            else
+            {
+                entity.NegativeRaitingCount = 0;
+            }
+            await _repository.UpdatePlaylistAsync(entity);
+        }
+
         public async Task ShareInAppToggleAsync(Guid id)
         {
             await _repository.ShareInAppToggleAsync(
@@ -90,16 +165,35 @@ namespace BandClickBackend.Application.Services
             await _repository.DeletePlaylistAsync(entity);
         }
 
-        public async Task<bool> IsUserPlaylistCreatorAsync(Guid playlistId)
+        public async Task<IEnumerable<PlaylistCommentDetailsDto>> GetPlaylistsCommentsAsync(Guid playlistId)
         {
-            var playlist = await _repository.GetPlaylistByIdAsync(playlistId);
-            return playlist.CreatedById == playlistId;
+            return _mapper.Map<IEnumerable<PlaylistComment>, IEnumerable<PlaylistCommentDetailsDto>>(
+                await _playlistCommentRepository.GetPlaylistsCommentsAsync(playlistId));
+        }
+
+        public async Task<PlaylistCommentDetailsDto> AddCommentAsync(AddPlaylistCommentDto comment)
+        {
+            var mappedComment = _mapper.Map<AddPlaylistCommentDto, PlaylistComment>(comment);
+            return _mapper.Map<PlaylistComment, PlaylistCommentDetailsDto>(
+                await _playlistCommentRepository.AddCommentAsync(mappedComment));
+        }
+
+        public async Task EditCommentAsync(UpdatePlaylistCommentDto comment)
+        {
+            var entity = await _playlistCommentRepository.GetByIdAsync(comment.Id);
+            entity.Text = comment.Text;
+            await _playlistCommentRepository.EditCommentAsync(entity);
+        }
+
+        public async Task DeleteCommentAsync(Guid commentId)
+        {
+            await _playlistCommentRepository.DeleteCommentAsync(commentId);
         }
 
         private async Task<SinglePlaylistDto> MapPlaylistEntityToSinglePlaylistDto(Playlist entity)
         {
             var mappedComments =
-                _mapper.Map<IEnumerable<PlaylistComment>, IEnumerable<PlaylistCommentDto>>(entity.Comments);
+                _mapper.Map<IEnumerable<PlaylistComment>, IEnumerable<PlaylistCommentDetailsDto>>(entity.Comments);
             var mappedMetronomeSettings = await _metronomeSettingsInPlaylistService.GetAllSettingsInPlaylistAsync(entity.Id);
 
             var dto = new SinglePlaylistDto()
@@ -107,7 +201,9 @@ namespace BandClickBackend.Application.Services
                 Id = entity.Id,
                 Name = entity.Name,
                 MetronomeSettings = mappedMetronomeSettings,
-                Comments = mappedComments
+                Comments = mappedComments,
+                PositiveRaitingCount = entity.PositiveRaitingCount,
+                NegativeRaitingCount = entity.NegativeRaitingCount
             };
             return dto;
         }

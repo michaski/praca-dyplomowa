@@ -19,7 +19,7 @@ namespace BandClickBackend.Application.Dtos.MetronomeSettings
         public int Tempo { get; set; }
         public UpdateMetreDto Metre { get; set; }
         public MetronomeSettingsType Type { get; set; }
-        public ICollection<MetronomeSettingsCommentDto> Comments { get; set; }
+        public ICollection<MetronomeSettingsCommentDetailsDto> Comments { get; set; }
         public bool IsShared { get; set; }
         public int? PositiveRaitingCount { get; set; }
         public int? NegativeRaitingCount { get; set; }
