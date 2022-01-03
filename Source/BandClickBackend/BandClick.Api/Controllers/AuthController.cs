@@ -22,6 +22,18 @@ namespace BandClickBackend.Api.Controllers
             _service = service;
         }
 
+        [HttpGet("login")]
+        [SwaggerOperation(Summary = "Authenticates user and returns Jwt token")]
+        public async Task<IActionResult> Login([FromBody] LoginDto user)
+        {
+            var token = await _service.LoginAsync(user);
+            if (String.IsNullOrEmpty(token))
+            {
+                return BadRequest("Podano zły adres email lub hasło");
+            }
+            return Ok(token);
+        }
+
         [HttpPost("register")]
         [SwaggerOperation(Summary = "Creates new user account")]
         public async Task<IActionResult> RegisterNewUser([FromBody] RegisterUserDto user)
@@ -32,18 +44,6 @@ namespace BandClickBackend.Api.Controllers
                 return BadRequest();
             }
             return Created($"/api/users/{registeredUser.Id}", registeredUser);
-        }
-
-        [HttpPost("login")]
-        [SwaggerOperation(Summary = "Authenticates user and returns Jwt token")]
-        public async Task<IActionResult> Login([FromBody] LoginDto user)
-        {
-            var token = await _service.LoginAsync(user);
-            if (String.IsNullOrEmpty(token))
-            {
-                return BadRequest("Podano zły adres email lub hasło");
-            }
-            return Ok(token);
         }
     }
 }
