@@ -22,16 +22,16 @@ namespace BandClickBackend.Api.Controllers
             _service = service;
         }
 
-        [HttpGet("login")]
+        [HttpPost("login")]
         [SwaggerOperation(Summary = "Authenticates user and returns Jwt token")]
         public async Task<IActionResult> Login([FromBody] LoginDto user)
         {
-            var token = await _service.LoginAsync(user);
-            if (String.IsNullOrEmpty(token))
+            var tokenDto = await _service.LoginAsync(user);
+            if (String.IsNullOrEmpty(tokenDto.Token))
             {
                 return BadRequest("Podano zły adres email lub hasło");
             }
-            return Ok(token);
+            return Ok(tokenDto);
         }
 
         [HttpPost("register")]

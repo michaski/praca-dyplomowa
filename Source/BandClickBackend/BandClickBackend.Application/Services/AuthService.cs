@@ -48,7 +48,7 @@ namespace BandClickBackend.Application.Services
             return _mapper.Map<User, SingleUserDto>(createdUser);
         }
 
-        public async Task<string> LoginAsync(LoginDto dto)
+        public async Task<TokenDto> LoginAsync(LoginDto dto)
         {
             var user = await _userRepository.GetUserByEmailAsync(dto.Email);
             if (user is null)
@@ -75,7 +75,10 @@ namespace BandClickBackend.Application.Services
                 expires: expires,
                 signingCredentials: credentials);
             var tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.WriteToken(token);
+            return new TokenDto()
+            {
+                Token = tokenHandler.WriteToken(token)
+            };
         }
     }
 }
