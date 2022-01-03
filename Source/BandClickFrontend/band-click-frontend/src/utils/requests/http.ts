@@ -1,4 +1,5 @@
-import { RequestError } from "./requestError";
+import RequestError from "./requestError";
+import { SuccessStatusCodes } from "./statusCodes";
 
 enum MethodType {
     POST = 'POST',
@@ -26,12 +27,10 @@ const requestFunction = <R>(url: string,
     };
     let parsedUrl = url;
     if (
-        method === MethodType.POST ||
-        method === MethodType.PUT &&
+        (method === MethodType.POST || method === MethodType.PUT) &&
         payload
     ) {
         options.body = JSON.stringify(payload);
-        console.log(options.body);
     } else if (payload) {
         const query = Object
             .keys(payload)
@@ -39,11 +38,12 @@ const requestFunction = <R>(url: string,
             .join('&');
         parsedUrl = `${url}?${query}`;
     }
-    console.log(options);
     return new Promise((resolve, reject) => {
         fetch(parsedUrl, options)
         .then(res => res.json().then(data => {
-            if (res.status === 200 || res.status === 203 || res.status === 204) {
+            if (res.status === SuccessStatusCodes.OK || 
+                res.status === SuccessStatusCodes.CREATED || 
+                res.status === SuccessStatusCodes.NO_CONTENT) {
                 return data;
             } else {
                 reject(new RequestError(res.status, data));

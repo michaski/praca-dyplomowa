@@ -1,21 +1,15 @@
-import { AUTH_LOGIN, METRONOME_SOUND_ACCENT } from "../../utils/apiUrls";
-import http from "../../utils/requests/http";
-import useGet from "../../utils/requests/useGet";
-import useRequestErrorHandler from "../../utils/requests/useRequestErrorHandler";
+import { Token } from "../../models/Auth/Token";
+import { AUTH_LOGIN } from "../../utils/apiUrls";
+import Requests from "../../utils/requests/requests";
 
 const LoginService = {
     login: async (email: string, password: string) => {
-        try {
-            const response = await http.post(AUTH_LOGIN, {email: email, password: password});
-            if (response) {
-                console.log(response);
-            }
-        } catch (error) {
-            console.error(error);
-        }
+        const requests = new Requests();
+        const response = await requests.post(AUTH_LOGIN, {email: email, password: password}) as Token;
+        localStorage.setItem('jwt', response.token);
     },
     logout: () => {
-
+        localStorage.removeItem('jwt');
     }
 }
 
