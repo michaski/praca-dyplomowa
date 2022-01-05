@@ -53,14 +53,13 @@ namespace BandClickBackend.Application.Validators.User
                         validationContext.AddFailure("Hasło musi się składać z przynajmniej 6 znaków, w tym conajmniej 1 wielkiej, 1 małej litery, 1 znaku i cyfry");
                     }
                 });
-            RuleFor(dto => dto.Name)
+            RuleFor(dto => dto.Username)
                 .NotEmpty()
                 .MinimumLength(1)
-                .MaximumLength(64);
-            RuleFor(dto => dto.Surname)
-                .NotEmpty()
-                .MinimumLength(1)
-                .MaximumLength(64);
+                .MaximumLength(64)
+                .MustAsync(async (username, token) => 
+                    await repository.GetUserByUsernameAsync(username) is null)
+                .WithMessage("Nazwa użytkownika jest już zajęta.");
         }
     }
 }

@@ -23,8 +23,7 @@ namespace BandClickBackend.UnitTests.UserService
 
         private User TestUserData = new User()
         {
-            Name = "User",
-            Surname = "Resu",
+            Username = "User Resu",
             Email = "user@mail.com"
         };
 
@@ -39,8 +38,7 @@ namespace BandClickBackend.UnitTests.UserService
             User createdUser = new User()
             {
                 Id = Guid.NewGuid(),
-                Name = TestUserData.Name,
-                Surname = TestUserData.Surname,
+                Username = TestUserData.Username,
                 Email = TestUserData.Email
             };
             _userRepositoryMock

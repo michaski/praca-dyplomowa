@@ -10,6 +10,7 @@ namespace BandClickBackend.Domain.Interfaces
     public interface IUserRepository
     {
         Task<User> GetUserByEmailAsync(string email);
+        Task<User> GetUserByUsernameAsync(string username);
         Task<User> GetUserByIdAsync(Guid id);
         Task<User> CreateUserAsync(User user, SystemRole role);
     }

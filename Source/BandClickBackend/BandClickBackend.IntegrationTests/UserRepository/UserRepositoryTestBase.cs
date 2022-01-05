@@ -33,14 +33,14 @@ namespace BandClickBackend.IntegrationTests.UserRepository
                 new User()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Admin",
+                    Username = "Admin",
                     SystemRole = Context.SystemRoles.SingleOrDefault(r => r.Name == "Admin"),
                     Email = "admin@bandclick.com"
                 },
                 new User()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "User",
+                    Username = "User",
                     SystemRole = Context.SystemRoles.SingleOrDefault(r => r.Name == "User"),
                     Email = "user@mail.com"
                 },

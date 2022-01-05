@@ -39,7 +39,7 @@ namespace BandClickBackend.Infrastructure.Data
             {
                 User superAdmin = new User()
                 {
-                    Name = "Super Admin",
+                    Username = "Super Admin",
                     Email = "admin@bandclick.com",
                     SystemRole = _context.SystemRoles.SingleOrDefault(r => r.Name == "Admin")
                 };
@@ -82,7 +82,7 @@ namespace BandClickBackend.Infrastructure.Data
             _context.SaveChanges();
             if (createdSuperAdmin)
             {
-                ConfigProvider.SaveSuperAdminId(_context.Users.SingleOrDefault(u => u.Name == "Super Admin").Id);
+                ConfigProvider.SaveSuperAdminId(_context.Users.SingleOrDefault(u => u.Username == "Super Admin").Id);
             }
         }
     }

@@ -28,8 +28,7 @@ namespace BandClickBackend.IntegrationTests.UserRepository
             User newUser = new User()
             {
                 Id = Guid.NewGuid(),
-                Name = "New",
-                Surname = "User",
+                Username = "New User",
                 Email = "newUser@mail.com",
                 PasswordHash = ""
             };

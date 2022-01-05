@@ -28,6 +28,13 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .SingleOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            return await _context.Users
+                .Include(u => u.SystemRole)
+                .SingleOrDefaultAsync(u => u.Username == username);
+        }
+
         public async Task<User> GetUserByIdAsync(Guid id)
         {
             return await _context.Users
