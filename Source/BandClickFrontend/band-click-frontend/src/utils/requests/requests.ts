@@ -14,7 +14,7 @@ class Requests {
     get = async (url: string, payload: any, authToken: string = '') => {
         try {
             this.isLoading = true;
-            const response = await http.get(url, payload) as any;
+            const response = await http.get(url, payload, authToken) as any;
             this.isLoading = false;
             if (response) {
                 this.data = response;
@@ -29,7 +29,7 @@ class Requests {
     post = async (url: string, payload: any, authToken: string = '') => {
         try {
             this.isLoading = true;
-            const response = await http.post(url, payload) as any;
+            const response = await http.post(url, payload, authToken) as any;
             this.isLoading = false;
             if (response) {
                 this.data = response;
@@ -44,7 +44,7 @@ class Requests {
     put = async (url: string, payload: any, authToken: string = '') => {
         try {
             this.isLoading = true;
-            const response = await http.put(url, payload) as any;
+            const response = await http.put(url, payload, authToken) as any;
             this.isLoading = false;
             if (response) {
                 this.data = response;
@@ -59,7 +59,7 @@ class Requests {
     delete = async (url: string, payload: any, authToken: string = '') => {
         try {
             this.isLoading = true;
-            const response = await http.delete(url, payload) as any;
+            const response = await http.delete(url, payload, authToken) as any;
             this.isLoading = false;
             if (response) {
                 this.data = response;
