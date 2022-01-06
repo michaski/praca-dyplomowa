@@ -14,7 +14,7 @@ namespace BandClickBackend.Application.Interfaces
         Task<IEnumerable<PlaylistListDto>> GetAllSharedPlaylistsAsync();
         Task<SinglePlaylistDto> GetPlaylistByIdAsync(Guid id);
         Task<SinglePlaylistDto> AddPlaylistAsync(CreatePlaylistDto playlist);
-        Task UpdatePlaylistAsync(EditPlaylistDto playlist);
+        Task UpdatePlaylistAsync(EditPlaylistDto playlist, Guid? bandId);
         Task AddPositiveRaitingAsync(Guid id);
         Task AddNegativeRaitingAsync(Guid id);
         Task RemovePositiveRaitingAsync(Guid id);

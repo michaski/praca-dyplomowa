@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using BandClickBackend.Application.Interfaces;
+using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -35,5 +36,8 @@ namespace BandClickBackend.Application.Services
                 .Split(Environment.NewLine)
                 .Select(br => (Guid.Parse(br.Split(' ')[0]), Guid.Parse(br.Split(' ')[1])))
                 .ToList();
+
+        public bool IsAdmin => User is not null && (SystemRole == _systemRoleRepository.Admin);
+        public bool IsEntityCreator(AuditableEntity entity) => entity.CreatedById == UserId;
     }
 }

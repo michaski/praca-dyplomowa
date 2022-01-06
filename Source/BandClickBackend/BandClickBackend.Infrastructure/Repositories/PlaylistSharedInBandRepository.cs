@@ -46,5 +46,22 @@ namespace BandClickBackend.Infrastructure.Repositories
             _context.PlaylistsSharedInBands.Remove(entry);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> MetronomeSettingIsSharedInBandAsync(Guid settingId, Guid bandId)
+        {
+            return await _context.PlaylistsSharedInBands
+                    .Include(e => e.Playlist)
+                    .ThenInclude(p => p.MetronomeSettings)
+                    .Where(e => e.BandId == bandId)
+                    .Select(e => e.Playlist.MetronomeSettings.Where(ms => ms.MetronomeSettingsId == settingId))
+                    .CountAsync() > 0;
+        }
+
+        public async Task<bool> IsPlaylistSharedInBandAsync(Guid playlistId, Guid bandId)
+        {
+            return await _context.PlaylistsSharedInBands
+                    .SingleOrDefaultAsync(e => e.BandId == bandId && e.PlaylistId == playlistId)
+                is not null;
+        }
     }
 }

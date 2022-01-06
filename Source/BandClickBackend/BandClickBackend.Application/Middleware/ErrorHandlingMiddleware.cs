@@ -21,25 +21,25 @@ namespace BandClickBackend.Application.Middleware
             catch (ValidationException e)
             {
                 context.Response.StatusCode = 400;
-                await context.Response.WriteAsync(e.Message);
+                await context.Response.WriteAsJsonAsync(new ExceptionAsJson(e));
             }
             catch (UserNotAllowedException e)
             {
                 context.Response.StatusCode = 403;
-                await context.Response.WriteAsync(e.Message);
+                await context.Response.WriteAsJsonAsync(new ExceptionAsJson(e));
             }
             catch (FileNotFoundException e)
             {
                 context.Response.StatusCode = 404;
-                await context.Response.WriteAsync(e.Message);
+                await context.Response.WriteAsJsonAsync(new ExceptionAsJson(e));
             }
             catch (Exception e)
             {
                 context.Response.StatusCode = 500;
-                await context.Response.WriteAsync($"Coś poszło nie tak...\n" +
-                                                  $"Kod błędu: {context.Response.StatusCode}\n" +
-                                                  "Treść:\n" +
-                                                  $"{e.Message}");
+                await context.Response.WriteAsJsonAsync(new ExceptionAsJson($"Coś poszło nie tak...\n" +
+                                                            $"Kod błędu: {context.Response.StatusCode}\n" +
+                                                            "Treść:\n" +
+                                                            $"{e.Message}"));
             }
         }
     }

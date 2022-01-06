@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using BandClickBackend.Application.Dtos.Metre;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
@@ -94,9 +95,9 @@ namespace BandClickBackend.Api.Controllers
 
         [HttpPut]
         [SwaggerOperation(Summary = "Updates metronome setting's data")]
-        public async Task<IActionResult> Update(UpdateMetronomeSettingDto dto)
+        public async Task<IActionResult> Update(UpdateMetronomeSettingDto dto, [FromQuery] Guid? bandId)
         {
-            await _metronomeSettingsService.UpdateAsync(dto);
+            await _metronomeSettingsService.UpdateAsync(dto, bandId);
             return NoContent();
         }
 

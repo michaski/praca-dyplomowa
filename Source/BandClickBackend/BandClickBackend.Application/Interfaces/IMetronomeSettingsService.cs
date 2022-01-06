@@ -17,7 +17,7 @@ namespace BandClickBackend.Application.Interfaces
         Task<IEnumerable<MetronomeSettingsListDto>> GetAllSettingsForUserAsync();
         Task<IEnumerable<MetronomeSettingsType>> GetAvailableSettingTypesAsync();
         Task<SingleMetronomeSettingDto> AddAsync(AddMetronomeSettingsDto entity);
-        Task UpdateAsync(UpdateMetronomeSettingDto dto);
+        Task UpdateAsync(UpdateMetronomeSettingDto dto, Guid? bandId);
         Task ChangeTypeAsync(Guid settingId, Guid typeId);
         Task AddToPlaylistAsync(Guid metronomeSettingId, Guid playlistId);
         Task RemoveFromPlaylistAsync(Guid metronomeSettingId, Guid playlistId);

@@ -17,5 +17,7 @@ namespace BandClickBackend.Domain.Interfaces
         Task PromoteMemberAsync(Guid bandId, Guid memberId);
         Task RemoveUserFromBandAsync(Guid bandId, Guid memberId);
         Task<bool> IsUserBandLeaderAsync(Guid bandId);
+        Task<bool> IsUserInBandAsync(Guid bandId);
+        Task<bool> UserIsInBandWithAsync(Guid entityCreatedBy, Guid bandId);
     }
 }

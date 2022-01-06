@@ -8,6 +8,7 @@ using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
+using BandClickBackend.Domain.Exceptions;
 using BandClickBackend.Domain.Interfaces;
 using FluentValidation;
 
@@ -21,19 +22,24 @@ namespace BandClickBackend.Application.Services
         private readonly IMetronomeSettingsCommentRepository _metronomeSettingsCommentRepository;
         private readonly IMetreService _metreService;
         private readonly IMetreRepository _metreRepository;
+        private readonly IUserContextService _userContextService;
+        private readonly IBandService _bandService;
         private readonly IMapper _mapper;
 
         public MetronomeSettingsService(
-            IMetronomeSettingsRepository repository, 
-            IMetreService metreService, 
-            IMetronomeSettingsTypeRepository metronomeSettingsTypeRepository, 
-            IMetreRepository metreRepository, 
-            IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService, 
+            IMetronomeSettingsRepository repository,
+            IMetreService metreService,
+            IMetronomeSettingsTypeRepository metronomeSettingsTypeRepository,
+            IMetreRepository metreRepository,
+            IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService,
             IMetronomeSettingsCommentRepository metronomeSettingsCommentRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IUserContextService userContextService, IBandService bandService)
         {
             _repository = repository;
             _mapper = mapper;
+            _userContextService = userContextService;
+            _bandService = bandService;
             _metreService = metreService;
             _metronomeSettingsTypeRepository = metronomeSettingsTypeRepository;
             _metreRepository = metreRepository;
@@ -111,9 +117,21 @@ namespace BandClickBackend.Application.Services
                 metronomeSettingId, playlistId, newPosition);
         }
 
-        public async Task UpdateAsync(UpdateMetronomeSettingDto dto)
+        public async Task UpdateAsync(UpdateMetronomeSettingDto dto, Guid? bandId)
         {
             var entity = await _repository.GetByIdAsync(dto.Id);
+
+            if (!_userContextService.IsEntityCreator(entity))
+            {
+                if (bandId is null || !(
+                        await _bandService.IsUserInBandWithAsync(entity.CreatedById, (Guid)bandId) &&
+                        await _bandService.MetronomeSettingIsSharedInBandAsync(dto.Id, (Guid)bandId)
+                        )
+                    )
+                {
+                    throw new UserNotAllowedException("Pozycję może edytować tylko jej twórca lub członek zespołu, w którym została udostępniona.");
+                }
+            }
             entity.Name = dto.Name;
             entity.NumberOdMeasures = dto.NumberOdMeasures;
             entity.Tempo = dto.Tempo;
@@ -130,6 +148,10 @@ namespace BandClickBackend.Application.Services
             if (!entity.IsShared)
             {
                 throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
+            }
+            if (_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Nie można oceniać swoich pozycji");
             }
             if (entity.PositiveRaitingCount is not null)
             {
@@ -149,6 +171,10 @@ namespace BandClickBackend.Application.Services
             {
                 throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
             }
+            if (_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Nie można oceniać swoich pozycji");
+            }
             if (entity.NegativeRaitingCount is not null)
             {
                 entity.NegativeRaitingCount++;
@@ -166,6 +192,10 @@ namespace BandClickBackend.Application.Services
             if (!entity.IsShared)
             {
                 throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
+            }
+            if (_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Nie można oceniać swoich pozycji");
             }
             if (entity.PositiveRaitingCount is not null && entity.PositiveRaitingCount > 0)
             {
@@ -185,6 +215,10 @@ namespace BandClickBackend.Application.Services
             {
                 throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
             }
+            if (_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Nie można oceniać swoich pozycji");
+            }
             if (entity.NegativeRaitingCount is not null && entity.NegativeRaitingCount > 0)
             {
                 entity.NegativeRaitingCount--;
@@ -198,6 +232,11 @@ namespace BandClickBackend.Application.Services
 
         public async Task ShareInAppToggleAsync(Guid id)
         {
+            var entity = await _repository.GetByIdNoTrackingAsync(id);
+            if (!_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Pozycję może edytować tylko jej twórca.");
+            }
             await _repository.ShareInAppToggleAsync(
                 await _repository.GetByIdAsync(id));
         }
@@ -212,6 +251,10 @@ namespace BandClickBackend.Application.Services
         public async Task DeleteAsync(Guid id)
         {
             var entity = await _repository.GetByIdAsync(id);
+            if (!_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Pozycję może usunąć tylko jej twórca.");
+            }
             await _repository.DeleteAsync(entity);
         }
 
@@ -231,12 +274,21 @@ namespace BandClickBackend.Application.Services
         public async Task EditCommentAsync(UpdateMetronomeSettingsCommentDto comment)
         {
             var entity = await _metronomeSettingsCommentRepository.GetByIdAsync(comment.Id);
+            if (!_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Komentarz może edytować tylko jego twórca.");
+            }
             entity.Text = comment.Text;
             await _metronomeSettingsCommentRepository.EditCommentAsync(entity);
         }
 
         public async Task DeleteCommentAsync(Guid id)
         {
+            var entity = await _metronomeSettingsCommentRepository.GetByIdAsync(id);
+            if (!_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Komentarz może usunąć tylko jego twórca.");
+            }
             await _metronomeSettingsCommentRepository.DeleteCommentAsync(id);
         }
     }

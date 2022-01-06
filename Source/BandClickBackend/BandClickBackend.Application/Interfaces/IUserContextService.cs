@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 
 namespace BandClickBackend.Application.Interfaces
@@ -14,5 +15,7 @@ namespace BandClickBackend.Application.Interfaces
         Guid? UserId { get; }
         SystemRole SystemRole { get; }
         List<(Guid BandId, Guid BandRoleId)> UserBandRoles { get; }
+        public bool IsAdmin { get; }
+        public bool IsEntityCreator(AuditableEntity entity);
     }
 }

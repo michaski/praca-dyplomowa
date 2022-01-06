@@ -18,17 +18,19 @@ namespace BandClickBackend.Application.Services
         private readonly IBandRepository _bandRepository;
         private readonly IUserInBandsRepository _userInBandsRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IPlaylistSharedInBandRepository _playlistSharedInBandRepository;
         private readonly IMapper _mapper;
 
         public BandService(
             IBandRepository bandRepository, 
             IUserInBandsRepository userInBandsRepository,
             IUserRepository userRepository,
-            IMapper mapper)
+            IMapper mapper, IPlaylistSharedInBandRepository playlistSharedInBandRepository)
         {
             _bandRepository = bandRepository;
             _userInBandsRepository = userInBandsRepository;
             _mapper = mapper;
+            _playlistSharedInBandRepository = playlistSharedInBandRepository;
             _userRepository = userRepository;
         }
 
@@ -105,6 +107,21 @@ namespace BandClickBackend.Application.Services
         public async Task<bool> IsUserBandLeaderAsync(Guid bandId)
         {
             return await _userInBandsRepository.IsUserBandLeaderAsync(bandId);
+        }
+
+        public async Task<bool> IsUserInBandAsync(Guid bandId)
+        {
+            return await _userInBandsRepository.IsUserInBandAsync(bandId);
+        }
+
+        public async Task<bool> IsUserInBandWithAsync(Guid entityCreatedBy, Guid bandId)
+        {
+            return await _userInBandsRepository.UserIsInBandWithAsync(entityCreatedBy, bandId);
+        }
+
+        public async Task<bool> MetronomeSettingIsSharedInBandAsync(Guid settingId, Guid bandId)
+        {
+            return await _playlistSharedInBandRepository.MetronomeSettingIsSharedInBandAsync(settingId, bandId);
         }
     }
 }

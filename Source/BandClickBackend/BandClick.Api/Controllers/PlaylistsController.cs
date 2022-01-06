@@ -87,9 +87,9 @@ namespace BandClickBackend.Api.Controllers
 
         [HttpPut]
         [SwaggerOperation(Summary = "Edits playlist's data")]
-        public async Task<IActionResult> EditPlaylistAsync([FromBody] EditPlaylistDto dto)
+        public async Task<IActionResult> EditPlaylistAsync([FromBody] EditPlaylistDto dto, [FromQuery] Guid? bandId)
         {
-            await _service.UpdatePlaylistAsync(dto);
+            await _service.UpdatePlaylistAsync(dto, bandId);
             return NoContent();
         }
 

@@ -7,6 +7,7 @@ using AutoMapper;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
+using BandClickBackend.Domain.Exceptions;
 using BandClickBackend.Domain.Interfaces;
 
 namespace BandClickBackend.Application.Services
@@ -16,18 +17,21 @@ namespace BandClickBackend.Application.Services
         private readonly IMetronomeSettingsInPlaylistRepository _metronomeSettingsInPlaylistRepository;
         private readonly IPlaylistRepository _playlistRepository;
         private readonly IMetronomeSettingsRepository _metronomeSettingsRepository;
+        private readonly IUserContextService _userContextService;
         private readonly IMapper _mapper;
 
         public MetronomeSettingsInPlaylistService(
             IMetronomeSettingsInPlaylistRepository metronomeSettingsInPlaylistRepository, 
             IMapper mapper, 
             IPlaylistRepository playlistRepository,
-            IMetronomeSettingsRepository metronomeSettingsRepository)
+            IMetronomeSettingsRepository metronomeSettingsRepository, 
+            IUserContextService userContextService)
         {
             _metronomeSettingsInPlaylistRepository = metronomeSettingsInPlaylistRepository;
             _mapper = mapper;
             _playlistRepository = playlistRepository;
             _metronomeSettingsRepository = metronomeSettingsRepository;
+            _userContextService = userContextService;
         }
 
         public async Task<IEnumerable<MetronomeSettingsListDto>> GetAllSettingsInPlaylistAsync(Guid playlistId)
@@ -50,6 +54,10 @@ namespace BandClickBackend.Application.Services
         public async Task AddMetronomeSettingToPlaylistAsync(Guid metronomeSettingId, Guid playlistId)
         {
             var playlist = await _playlistRepository.GetPlaylistByIdAsync(playlistId);
+            if (!_userContextService.IsEntityCreator(playlist))
+            {
+                throw new UserNotAllowedException("Tylko twórca playlisty może nią zarządzać.");
+            }
             var playlistLength = await _metronomeSettingsInPlaylistRepository.GetPlaylistLengthAsync(playlist);
             var newEntity = new MetronomeSettingsInPlaylist()
             {
@@ -62,6 +70,11 @@ namespace BandClickBackend.Application.Services
 
         public async Task ChangePositionInPlaylistAsync(Guid metronomeSettingId, Guid playlistId, int newPosition)
         {
+            var playlist = await _playlistRepository.GetPlaylistByIdAsync(playlistId);
+            if (!_userContextService.IsEntityCreator(playlist))
+            {
+                throw new UserNotAllowedException("Tylko twórca playlisty może nią zarządzać.");
+            }
             var entryToMove = await _metronomeSettingsInPlaylistRepository
                 .GetEntryBySettingAndPlaylistIdAsync(metronomeSettingId, playlistId);
             var entriesToShift = new List<MetronomeSettingsInPlaylist>();
@@ -93,6 +106,11 @@ namespace BandClickBackend.Application.Services
 
         public async Task RemoveMetronomeSettingFromPlaylistAsync(Guid metronomeSettingId, Guid playlistId)
         {
+            var playlist = await _playlistRepository.GetPlaylistByIdAsync(playlistId);
+            if (!_userContextService.IsEntityCreator(playlist))
+            {
+                throw new UserNotAllowedException("Tylko twórca playlisty może nią zarządzać.");
+            }
             await _metronomeSettingsInPlaylistRepository.RemoveMetronomeSettingFromPlaylistAsync(
                 await _metronomeSettingsInPlaylistRepository.GetEntryBySettingAndPlaylistIdAsync(
                     metronomeSettingId, playlistId));

@@ -109,5 +109,20 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .SingleOrDefaultAsync(e => e.MemberId == _userContextService.UserId && e.BandId == bandId);
             return entry != null && entry.BandRole == _bandRoleRepository.Leader;
         }
+
+        public async Task<bool> IsUserInBandAsync(Guid bandId)
+        {
+            var entry = await _context.UsersInBands
+                .SingleOrDefaultAsync(e => e.MemberId == _userContextService.UserId && e.BandId == bandId);
+            return entry != null;
+        }
+
+        public async Task<bool> UserIsInBandWithAsync(Guid entityCreatedBy, Guid bandId)
+        {
+            return await _context.UsersInBands
+                .Where(e => e.BandId == bandId)
+                .Select(e => e.MemberId == entityCreatedBy || e.MemberId == _userContextService.UserId)
+                .CountAsync() == 2;
+        }
     }
 }

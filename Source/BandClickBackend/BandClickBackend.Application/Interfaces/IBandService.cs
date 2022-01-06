@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BandClickBackend.Application.Dtos.Band;
 using BandClickBackend.Application.Dtos.UserInBands;
+using BandClickBackend.Domain.Entities;
 
 namespace BandClickBackend.Application.Interfaces
 {
@@ -21,5 +22,8 @@ namespace BandClickBackend.Application.Interfaces
         Task PromoteMemberAsync(UserBandRelationDto dto);
         Task RemoveUserFromBandAsync(UserBandRelationDto dto);
         Task<bool> IsUserBandLeaderAsync(Guid bandId);
+        Task<bool> IsUserInBandAsync(Guid bandId);
+        Task<bool> IsUserInBandWithAsync(Guid entityCreatedBy, Guid bandId);
+        Task<bool> MetronomeSettingIsSharedInBandAsync(Guid settingId, Guid bandId);
     }
 }

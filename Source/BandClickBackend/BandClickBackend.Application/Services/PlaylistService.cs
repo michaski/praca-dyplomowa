@@ -10,6 +10,7 @@ using BandClickBackend.Application.Dtos.Playlist;
 using BandClickBackend.Application.Dtos.PlaylistComment;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
+using BandClickBackend.Domain.Exceptions;
 using BandClickBackend.Domain.Interfaces;
 using FluentValidation;
 
@@ -22,18 +23,23 @@ namespace BandClickBackend.Application.Services
         private readonly IMetronomeSettingsInPlaylistService _metronomeSettingsInPlaylistService;
         private readonly IPlaylistSharedInBandRepository _playlistSharedInBandRepository;
         private readonly IPlaylistCommentRepository _playlistCommentRepository;
+        private readonly IUserContextService _userContextService;
+        private readonly IBandService _bandService;
         private readonly IMapper _mapper;
 
         public PlaylistService(
-            IPlaylistRepository repository, 
-            IMetronomeSettingsRepository metronomeSettingsRepository, 
-            IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService, 
-            IPlaylistSharedInBandRepository playlistSharedInBandRepository, 
+            IPlaylistRepository repository,
+            IMetronomeSettingsRepository metronomeSettingsRepository,
+            IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService,
+            IPlaylistSharedInBandRepository playlistSharedInBandRepository,
             IPlaylistCommentRepository playlistCommentRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IUserContextService userContextService, IBandService bandService)
         {
             _repository = repository;
             _mapper = mapper;
+            _userContextService = userContextService;
+            _bandService = bandService;
             _playlistCommentRepository = playlistCommentRepository;
             _metronomeSettingsRepository = metronomeSettingsRepository;
             _metronomeSettingsInPlaylistService = metronomeSettingsInPlaylistService;
@@ -65,9 +71,20 @@ namespace BandClickBackend.Application.Services
             return await MapPlaylistEntityToSinglePlaylistDto(result);
         }
 
-        public async Task UpdatePlaylistAsync(EditPlaylistDto playlist)
+        public async Task UpdatePlaylistAsync(EditPlaylistDto playlist, Guid? bandId)
         {
             var entity = await _repository.GetPlaylistByIdAsync(playlist.Id);
+            if (!_userContextService.IsEntityCreator(entity))
+            {
+                if (bandId is null || !(
+                        await _bandService.IsUserInBandWithAsync(entity.CreatedById, (Guid)bandId) &&
+                        await _playlistSharedInBandRepository.IsPlaylistSharedInBandAsync(playlist.Id, (Guid)bandId)
+                    )
+                   )
+                {
+                    throw new UserNotAllowedException("Playlistę może edytować tylko jej twórca lub członek zespołu, w którym została udostępniona.");
+                }
+            }
             entity.Name = playlist.Name;
             await _repository.UpdatePlaylistAsync(entity);
         }
@@ -77,7 +94,11 @@ namespace BandClickBackend.Application.Services
             var entity = await _repository.GetPlaylistByIdAsync(id);
             if (!entity.IsShared)
             {
-                throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
+                throw new ValidationException("Nie można ocenić nieudostępnionej playlisty.");
+            }
+            if (_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Nie można oceniać swoich playlist");
             }
             if (entity.PositiveRaitingCount is not null)
             {
@@ -95,7 +116,11 @@ namespace BandClickBackend.Application.Services
             var entity = await _repository.GetPlaylistByIdAsync(id);
             if (!entity.IsShared)
             {
-                throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
+                throw new ValidationException("Nie można ocenić nieudostępnionej playlisty.");
+            }
+            if (_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Nie można oceniać swoich playlist");
             }
             if (entity.NegativeRaitingCount is not null)
             {
@@ -113,7 +138,11 @@ namespace BandClickBackend.Application.Services
             var entity = await _repository.GetPlaylistByIdAsync(id);
             if (!entity.IsShared)
             {
-                throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
+                throw new ValidationException("Nie można ocenić nieudostępnionej playlisty.");
+            }
+            if (_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Nie można oceniać swoich playlist");
             }
             if (entity.PositiveRaitingCount is not null && entity.PositiveRaitingCount > 0)
             {
@@ -131,7 +160,11 @@ namespace BandClickBackend.Application.Services
             var entity = await _repository.GetPlaylistByIdAsync(id);
             if (!entity.IsShared)
             {
-                throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
+                throw new ValidationException("Nie można ocenić nieudostępnionej playlisty.");
+            }
+            if (_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Nie można oceniać swoich playlist");
             }
             if (entity.NegativeRaitingCount is not null && entity.NegativeRaitingCount > 0)
             {
@@ -146,8 +179,12 @@ namespace BandClickBackend.Application.Services
 
         public async Task ShareInAppToggleAsync(Guid id)
         {
-            await _repository.ShareInAppToggleAsync(
-                await _repository.GetPlaylistByIdAsync(id));
+            var entity = await _repository.GetPlaylistByIdAsync(id);
+            if (!_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Playlistę może edytować tylko jej twórca.");
+            }
+            await _repository.ShareInAppToggleAsync(entity);
         }
 
         public async Task RemoveFromSharedInAppAsync(Guid id)
@@ -170,6 +207,10 @@ namespace BandClickBackend.Application.Services
         public async Task DeletePlaylistAsync(Guid id)
         {
             var entity = await _repository.GetPlaylistByIdAsync(id);
+            if (!_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Playlistę może usunąć tylko jej twórca.");
+            }
             await _repository.DeletePlaylistAsync(entity);
         }
 
@@ -189,12 +230,21 @@ namespace BandClickBackend.Application.Services
         public async Task EditCommentAsync(UpdatePlaylistCommentDto comment)
         {
             var entity = await _playlistCommentRepository.GetByIdAsync(comment.Id);
+            if (!_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Komentarz może edytować tylko jego twórca.");
+            }
             entity.Text = comment.Text;
             await _playlistCommentRepository.EditCommentAsync(entity);
         }
 
         public async Task DeleteCommentAsync(Guid commentId)
         {
+            var entity = await _playlistCommentRepository.GetByIdAsync(commentId);
+            if (!_userContextService.IsEntityCreator(entity))
+            {
+                throw new UserNotAllowedException("Komentarz może usunąć tylko jego twórca.");
+            }
             await _playlistCommentRepository.DeleteCommentAsync(commentId);
         }
 
