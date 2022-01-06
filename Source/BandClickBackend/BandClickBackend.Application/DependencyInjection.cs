@@ -51,6 +51,7 @@ namespace BandClickBackend.Application
             services.AddScoped<IValidator<AddPlaylistCommentDto>, AddPlaylistCommentValidator>();
             services.AddScoped<IValidator<UpdatePlaylistCommentDto>, UpdatePlaylistCommentValidator>();
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
+            services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();
             services.AddScoped<IValidator<UserBandRelationDto>, UserBandRelationValidator>();
 
             services.AddScoped<IAuthService, AuthService>();

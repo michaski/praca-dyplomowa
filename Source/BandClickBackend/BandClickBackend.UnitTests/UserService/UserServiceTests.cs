@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BandClickBackend.Application.Dtos.User;
+using BandClickBackend.Application.Services;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
 using BandClickBackend.Infrastructure.Repositories;
@@ -19,6 +20,7 @@ namespace BandClickBackend.UnitTests.UserService
         private readonly Application.Services.UserService _sut;
         private Mock<UserRepository> _userRepositoryMock = new Mock<UserRepository>();
         private Mock<SystemRoleRepository> _systemRoleRepositoryMock = new Mock<SystemRoleRepository>();
+        private Mock<UserContextService> _userContextServiceMock = new Mock<UserContextService>();
         private Mock<Mapper> _mapperMock = new Mock<Mapper>();
 
         private User TestUserData = new User()
@@ -46,7 +48,7 @@ namespace BandClickBackend.UnitTests.UserService
                 .ReturnsAsync(createdUser);
             _mapperMock.Setup(x => x.Map<RegisterUserDto, User>(It.IsAny<RegisterUserDto>()))
                 .Returns(TestUserData);
-            _sut = new Application.Services.UserService(_userRepositoryMock.Object, _mapperMock.Object, _systemRoleRepositoryMock.Object);
+            _sut = new Application.Services.UserService(_userRepositoryMock.Object, _mapperMock.Object, _systemRoleRepositoryMock.Object, _userContextServiceMock.Object);
         }
     }
 }

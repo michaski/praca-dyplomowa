@@ -13,5 +13,6 @@ namespace BandClickBackend.Domain.Interfaces
         Task<User> GetUserByUsernameAsync(string username);
         Task<User> GetUserByIdAsync(Guid id);
         Task<User> CreateUserAsync(User user, SystemRole role);
+        Task UpdateUserAsync(User user);
     }
 }

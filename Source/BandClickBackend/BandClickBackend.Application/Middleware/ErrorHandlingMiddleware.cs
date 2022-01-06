@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BandClickBackend.Domain.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 
@@ -20,6 +21,11 @@ namespace BandClickBackend.Application.Middleware
             catch (ValidationException e)
             {
                 context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(e.Message);
+            }
+            catch (UserNotAllowedException e)
+            {
+                context.Response.StatusCode = 403;
                 await context.Response.WriteAsync(e.Message);
             }
             catch (FileNotFoundException e)
