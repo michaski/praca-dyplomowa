@@ -21,14 +21,17 @@ namespace BandClickBackend.Application.Dtos.MetronomeSettings
         public MetronomeSettingsType Type { get; set; }
         public ICollection<MetronomeSettingsCommentDetailsDto> Comments { get; set; }
         public bool IsShared { get; set; }
-        public int? PositiveRaitingCount { get; set; }
-        public int? NegativeRaitingCount { get; set; }
+        public int PositiveRaitingCount { get; set; }
+        public int NegativeRaitingCount { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Entities.MetronomeSettings, SingleMetronomeSettingDto>()
+                .ForMember(ms => ms.PositiveRaitingCount, e => e.Ignore())
+                .ForMember(ms => ms.NegativeRaitingCount, e => e.Ignore())
                 .ReverseMap()
-                .ForMember(ms => ms.Metre, e => e.Ignore());
+                .ForMember(ms => ms.Metre, e => e.Ignore())
+                .ForMember(ms => ms.Raitings, e => e.Ignore());
         }
     }
 }

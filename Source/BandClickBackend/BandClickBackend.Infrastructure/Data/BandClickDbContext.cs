@@ -16,10 +16,12 @@ namespace BandClickBackend.Infrastructure.Data
         public DbSet<Metre> Metres { get; set; }
         public DbSet<MetronomeSettings> MetronomeSettings { get; set; }
         public DbSet<MetronomeSettingsComment> MetronomeSettingsComments { get; set; }
+        public DbSet<MetronomeSettingsRaiting> MetronomeSettingsRaitings { get; set; }
         public DbSet<MetronomeSettingsInPlaylist> MetronomeSettingsInPlaylists { get; set; }
         public DbSet<MetronomeSettingsType> MetronomeSettingsTypes { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<PlaylistComment> PlaylistsComments { get; set; }
+        public DbSet<PlaylistRaiting> PlaylistRaitings { get; set; }
         public DbSet<PlaylistsSharedInBand> PlaylistsSharedInBands { get; set; }
         public DbSet<RhythmicUnit> RhythmicUnits { get; set; }
         public DbSet<SystemRole> SystemRoles { get; set; }
@@ -90,6 +92,34 @@ namespace BandClickBackend.Infrastructure.Data
             modelBuilder.Entity<Playlist>()
                 .HasOne(p => p.CreatedBy)
                 .WithMany(u => u.Playlists);
+
+            modelBuilder.Entity<Playlist>()
+                .HasMany(p => p.Raitings)
+                .WithOne(r => r.Playlist);
+            modelBuilder.Entity<PlaylistRaiting>()
+                .HasOne(r => r.Playlist)
+                .WithMany(p => p.Raitings);
+
+            modelBuilder.Entity<MetronomeSettings>()
+                .HasMany(ms => ms.Raitings)
+                .WithOne(r => r.MetronomeSettings);
+            modelBuilder.Entity<MetronomeSettingsRaiting>()
+                .HasOne(r => r.MetronomeSettings)
+                .WithMany(ms => ms.Raitings);
+
+            modelBuilder.Entity<PlaylistRaiting>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.PlaylistRaitings);
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.PlaylistRaitings)
+                .WithOne(r => r.User);
+
+            modelBuilder.Entity<MetronomeSettingsRaiting>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.MetronomeSettingsRaitings);
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.MetronomeSettingsRaitings)
+                .WithOne(r => r.User);
         }
 
         public async Task<int> SaveChangesSignInAsync(IUserContextService userContextService)

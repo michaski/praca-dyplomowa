@@ -4,7 +4,7 @@ using BandClickBackend.Domain.Common;
 
 namespace BandClickBackend.Domain.Entities
 {
-    public class MetronomeSettings : ShareableEntity
+    public class MetronomeSettings : ShareableEntity<MetronomeSettingsRaiting>
     {
         public string Name { get; set; }
         public int NumberOdMeasures { get; set; }

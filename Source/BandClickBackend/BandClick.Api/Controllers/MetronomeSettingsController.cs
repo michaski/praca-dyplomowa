@@ -69,6 +69,19 @@ namespace BandClickBackend.Api.Controllers
             return Ok(await _metronomeSettingsService.GetAvailableSettingTypesAsync());
         }
 
+        [HttpGet("{id}/raitings/user")]
+        [SwaggerOperation(Summary =
+            "Returns true if user has given positive raiting, false otherwise. If user hasn't given raiting, returns 404")]
+        public async Task<IActionResult> GetUserRaitingTypeAsync(Guid id)
+        {
+            var result = await _metronomeSettingsService.IsUserRaitingPositiveAsync(id);
+            if (result.IsPositive is null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Creates new metronome setting")]
         public async Task<IActionResult> Create(AddMetronomeSettingsDto dto)
@@ -118,13 +131,13 @@ namespace BandClickBackend.Api.Controllers
             return NoContent();
         }
             
-        [HttpPut("{id}/raitings/positive/subtract")]
-        [SwaggerOperation(Summary = "Subtracts positive raiting from shared setting")]
-        public async Task<IActionResult> SubtractPositiveRaiting(Guid id)
-        {
-            await _metronomeSettingsService.RemovePositiveRaitingAsync(id);
-            return NoContent();
-        }
+        //[HttpPut("{id}/raitings/positive/subtract")]
+        //[SwaggerOperation(Summary = "Subtracts positive raiting from shared setting")]
+        //public async Task<IActionResult> SubtractPositiveRaiting(Guid id)
+        //{
+        //    await _metronomeSettingsService.RemoveUserRaitingAsync(id);
+        //    return NoContent();
+        //}
 
         [HttpPut("{id}/raitings/negative/add")]
         [SwaggerOperation(Summary = "Adds negative raiting to shared setting")]
@@ -134,13 +147,21 @@ namespace BandClickBackend.Api.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}/raitings/negative/subtract")]
-        [SwaggerOperation(Summary = "Subtracts negative raiting from shared setting")]
-        public async Task<IActionResult> SubtractNegativeRaiting(Guid id)
+        [HttpPut("{id}/raitings/remove")]
+        [SwaggerOperation(Summary = "Removes user's raiting from shared setting")]
+        public async Task<IActionResult> RemoveUserRaiting(Guid id)
         {
-            await _metronomeSettingsService.RemoveNegativeRaitingAsync(id);
+            await _metronomeSettingsService.RemoveUserRaitingAsync(id);
             return NoContent();
         }
+
+        //[HttpPut("{id}/raitings/negative/subtract")]
+        //[SwaggerOperation(Summary = "Subtracts negative raiting from shared setting")]
+        //public async Task<IActionResult> SubtractNegativeRaiting(Guid id)
+        //{
+        //    await _metronomeSettingsService.RemoveNegativeRaitingAsync(id);
+        //    return NoContent();
+        //}
 
         [HttpPut("{metronomeSettingId}/addToPlaylist/{playlistId}")]
         [SwaggerOperation(Summary = "Adds metronome setting to playlist")]

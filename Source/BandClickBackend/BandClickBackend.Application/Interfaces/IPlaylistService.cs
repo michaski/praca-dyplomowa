@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BandClickBackend.Application.Dtos.Playlist;
 using BandClickBackend.Application.Dtos.PlaylistComment;
+using BandClickBackend.Application.Dtos.Raitings;
 
 namespace BandClickBackend.Application.Interfaces
 {
@@ -13,12 +14,14 @@ namespace BandClickBackend.Application.Interfaces
         Task<IEnumerable<PlaylistListDto>> GetAllPlaylistsForUserAsync();
         Task<IEnumerable<PlaylistListDto>> GetAllSharedPlaylistsAsync();
         Task<SinglePlaylistDto> GetPlaylistByIdAsync(Guid id);
+        Task<RaitingTypeDto> GetIsUserRaitingPositiveAsync(Guid playlistId);
         Task<SinglePlaylistDto> AddPlaylistAsync(CreatePlaylistDto playlist);
         Task UpdatePlaylistAsync(EditPlaylistDto playlist, Guid? bandId);
         Task AddPositiveRaitingAsync(Guid id);
         Task AddNegativeRaitingAsync(Guid id);
-        Task RemovePositiveRaitingAsync(Guid id);
-        Task RemoveNegativeRaitingAsync(Guid id);
+        Task RemoveRaitingAsync(Guid id);
+        //Task RemovePositiveRaitingAsync(Guid id);
+        //Task RemoveNegativeRaitingAsync(Guid id);
         Task ShareInAppToggleAsync(Guid id);
         Task RemoveFromSharedInAppAsync(Guid id);
         Task ShareInBandAsync(Guid playlistId, Guid bandId);

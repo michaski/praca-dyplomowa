@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
+using BandClickBackend.Application.Dtos.Raitings;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Exceptions;
@@ -20,6 +21,7 @@ namespace BandClickBackend.Application.Services
         private readonly IMetronomeSettingsTypeRepository _metronomeSettingsTypeRepository;
         private readonly IMetronomeSettingsInPlaylistService _metronomeSettingsInPlaylistService;
         private readonly IMetronomeSettingsCommentRepository _metronomeSettingsCommentRepository;
+        private readonly IMetronomeSettingsRaitingsRepository _metronomeSettingsRaitingsRepository;
         private readonly IMetreService _metreService;
         private readonly IMetreRepository _metreRepository;
         private readonly IUserContextService _userContextService;
@@ -34,12 +36,15 @@ namespace BandClickBackend.Application.Services
             IMetronomeSettingsInPlaylistService metronomeSettingsInPlaylistService,
             IMetronomeSettingsCommentRepository metronomeSettingsCommentRepository,
             IMapper mapper,
-            IUserContextService userContextService, IBandService bandService)
+            IUserContextService userContextService,
+            IBandService bandService, 
+            IMetronomeSettingsRaitingsRepository metronomeSettingsRaitingsRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _userContextService = userContextService;
             _bandService = bandService;
+            _metronomeSettingsRaitingsRepository = metronomeSettingsRaitingsRepository;
             _metreService = metreService;
             _metronomeSettingsTypeRepository = metronomeSettingsTypeRepository;
             _metreRepository = metreRepository;
@@ -57,6 +62,8 @@ namespace BandClickBackend.Application.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             var mappedResult = _mapper.Map<MetronomeSettings, SingleMetronomeSettingDto>(entity);
+            mappedResult.PositiveRaitingCount = await _metronomeSettingsRaitingsRepository.GetPositiveRaitingsCountAsync(id);
+            mappedResult.NegativeRaitingCount = await _metronomeSettingsRaitingsRepository.GetNegativeRaitingsCountAsync(id);
             return mappedResult;
         }
 
@@ -77,6 +84,20 @@ namespace BandClickBackend.Application.Services
             return await _metronomeSettingsTypeRepository.GetAllMetronomeSettingsTypesAsync();
         }
 
+        public async Task<RaitingTypeDto> IsUserRaitingPositiveAsync(Guid settingId)
+        {
+            bool? result;
+            if (!await _metronomeSettingsRaitingsRepository.HasUserGivenRaitingAsync(settingId))
+            {
+                result = null;
+            }
+            else
+            {
+                result = await _metronomeSettingsRaitingsRepository.IsUserRaitingPositiveAsync(settingId);
+            }
+            return new RaitingTypeDto() { IsPositive = result };
+        }
+
         public async Task<SingleMetronomeSettingDto> AddAsync(AddMetronomeSettingsDto entity)
         {
             var mappedEntity = _mapper.Map<AddMetronomeSettingsDto, MetronomeSettings>(entity);
@@ -88,8 +109,11 @@ namespace BandClickBackend.Application.Services
                 await _metronomeSettingsInPlaylistService.AddMetronomeSettingToPlaylistAsync(
                     result.Id, entity.PlaylistId);
             }
-            return _mapper.Map<MetronomeSettings, SingleMetronomeSettingDto>(
+            var mappedResult = _mapper.Map<MetronomeSettings, SingleMetronomeSettingDto>(
                 result);
+            mappedResult.PositiveRaitingCount = 0;
+            mappedResult.NegativeRaitingCount = 0;
+            return mappedResult;
         }
 
         public async Task ChangeTypeAsync(Guid settingId, Guid typeId)
@@ -153,15 +177,17 @@ namespace BandClickBackend.Application.Services
             {
                 throw new UserNotAllowedException("Nie można oceniać swoich pozycji");
             }
-            if (entity.PositiveRaitingCount is not null)
+            if (await _metronomeSettingsRaitingsRepository.HasUserGivenRaitingAsync(id))
             {
-                entity.PositiveRaitingCount++;
+                throw new UserNotAllowedException("Można oceniać tylko raz");
             }
-            else
+            var raiting = new MetronomeSettingsRaiting()
             {
-                entity.PositiveRaitingCount = 1;
-            }
-            await _repository.UpdateAsync(entity);
+                UserId = (Guid)_userContextService.UserId,
+                MetronomeSettingsId = id,
+                IsPositive = true
+            };
+            await _metronomeSettingsRaitingsRepository.AddRaitingAsync(raiting);
         }
 
         public async Task AddNegativeRaitingAsync(Guid id)
@@ -175,18 +201,20 @@ namespace BandClickBackend.Application.Services
             {
                 throw new UserNotAllowedException("Nie można oceniać swoich pozycji");
             }
-            if (entity.NegativeRaitingCount is not null)
+            if (await _metronomeSettingsRaitingsRepository.HasUserGivenRaitingAsync(id))
             {
-                entity.NegativeRaitingCount++;
+                throw new UserNotAllowedException("Można oceniać tylko raz");
             }
-            else
+            var raiting = new MetronomeSettingsRaiting()
             {
-                entity.NegativeRaitingCount = 1;
-            }
-            await _repository.UpdateAsync(entity);
+                UserId = (Guid)_userContextService.UserId,
+                MetronomeSettingsId = id,
+                IsPositive = false
+            };
+            await _metronomeSettingsRaitingsRepository.AddRaitingAsync(raiting);
         }
 
-        public async Task RemovePositiveRaitingAsync(Guid id)
+        public async Task RemoveUserRaitingAsync(Guid id)
         {
             var entity = await _repository.GetByIdAsync(id);
             if (!entity.IsShared)
@@ -197,37 +225,12 @@ namespace BandClickBackend.Application.Services
             {
                 throw new UserNotAllowedException("Nie można oceniać swoich pozycji");
             }
-            if (entity.PositiveRaitingCount is not null && entity.PositiveRaitingCount > 0)
+            if (!await _metronomeSettingsRaitingsRepository.HasUserGivenRaitingAsync(id))
             {
-                entity.PositiveRaitingCount--;
+                throw new UserNotAllowedException("Pozycja nie została jeszcze oceniona");
             }
-            else
-            {
-                entity.PositiveRaitingCount = 0;
-            }
-            await _repository.UpdateAsync(entity);
-        }
-
-        public async Task RemoveNegativeRaitingAsync(Guid id)
-        {
-            var entity = await _repository.GetByIdAsync(id);
-            if (!entity.IsShared)
-            {
-                throw new ValidationException("Nie można ocenić nieudostępnionej pozycji.");
-            }
-            if (_userContextService.IsEntityCreator(entity))
-            {
-                throw new UserNotAllowedException("Nie można oceniać swoich pozycji");
-            }
-            if (entity.NegativeRaitingCount is not null && entity.NegativeRaitingCount > 0)
-            {
-                entity.NegativeRaitingCount--;
-            }
-            else
-            {
-                entity.NegativeRaitingCount = 0;
-            }
-            await _repository.UpdateAsync(entity);
+            await _metronomeSettingsRaitingsRepository.RemoveRaitingAsync(
+                await _metronomeSettingsRaitingsRepository.GetUserRaitingAsync(id));
         }
 
         public async Task ShareInAppToggleAsync(Guid id)

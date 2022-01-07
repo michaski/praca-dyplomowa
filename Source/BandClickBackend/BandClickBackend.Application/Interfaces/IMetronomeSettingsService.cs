@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
+using BandClickBackend.Application.Dtos.Raitings;
 using BandClickBackend.Domain.Entities;
 
 namespace BandClickBackend.Application.Interfaces
@@ -16,6 +17,7 @@ namespace BandClickBackend.Application.Interfaces
         Task<IEnumerable<MetronomeSettingsListDto>> GetAllSharedAsync();
         Task<IEnumerable<MetronomeSettingsListDto>> GetAllSettingsForUserAsync();
         Task<IEnumerable<MetronomeSettingsType>> GetAvailableSettingTypesAsync();
+        Task<RaitingTypeDto> IsUserRaitingPositiveAsync(Guid settingId);
         Task<SingleMetronomeSettingDto> AddAsync(AddMetronomeSettingsDto entity);
         Task UpdateAsync(UpdateMetronomeSettingDto dto, Guid? bandId);
         Task ChangeTypeAsync(Guid settingId, Guid typeId);
@@ -24,8 +26,8 @@ namespace BandClickBackend.Application.Interfaces
         Task ChangePositionInPlaylistAsync(Guid metronomeSettingId, Guid playlistId, int newPosition);
         Task AddPositiveRaitingAsync(Guid id);
         Task AddNegativeRaitingAsync(Guid id);
-        Task RemovePositiveRaitingAsync(Guid id);
-        Task RemoveNegativeRaitingAsync(Guid id);
+        Task RemoveUserRaitingAsync(Guid id);
+        //Task RemoveNegativeRaitingAsync(Guid id);
         Task ShareInAppToggleAsync(Guid id);
         Task RemoveFromSharedInAppAsync(Guid id);
         Task DeleteAsync(Guid id);

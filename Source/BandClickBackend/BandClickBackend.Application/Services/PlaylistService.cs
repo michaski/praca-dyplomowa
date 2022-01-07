@@ -8,6 +8,7 @@ using AutoMapper;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.Playlist;
 using BandClickBackend.Application.Dtos.PlaylistComment;
+using BandClickBackend.Application.Dtos.Raitings;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Exceptions;
@@ -25,6 +26,7 @@ namespace BandClickBackend.Application.Services
         private readonly IPlaylistCommentRepository _playlistCommentRepository;
         private readonly IUserContextService _userContextService;
         private readonly IBandService _bandService;
+        private readonly IPlaylistRaitingsRepository _playlistRaitingsRepository;
         private readonly IMapper _mapper;
 
         public PlaylistService(
@@ -34,12 +36,14 @@ namespace BandClickBackend.Application.Services
             IPlaylistSharedInBandRepository playlistSharedInBandRepository,
             IPlaylistCommentRepository playlistCommentRepository,
             IMapper mapper,
-            IUserContextService userContextService, IBandService bandService)
+            IUserContextService userContextService, IBandService bandService, 
+            IPlaylistRaitingsRepository playlistRaitingsRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _userContextService = userContextService;
             _bandService = bandService;
+            _playlistRaitingsRepository = playlistRaitingsRepository;
             _playlistCommentRepository = playlistCommentRepository;
             _metronomeSettingsRepository = metronomeSettingsRepository;
             _metronomeSettingsInPlaylistService = metronomeSettingsInPlaylistService;
@@ -62,6 +66,20 @@ namespace BandClickBackend.Application.Services
         {
             var entity = await _repository.GetPlaylistByIdAsync(id);
             return await MapPlaylistEntityToSinglePlaylistDto(entity);
+        }
+
+        public async Task<RaitingTypeDto> GetIsUserRaitingPositiveAsync(Guid playlistId)
+        {
+            bool? result;
+            if (!await _playlistRaitingsRepository.HasUserGivenRaitingAsync(playlistId))
+            {
+                result = null;
+            }
+            else
+            {
+                result = await _playlistRaitingsRepository.IsUserRaitingPositive(playlistId);
+            }
+            return new RaitingTypeDto() { IsPositive = result };
         }
 
         public async Task<SinglePlaylistDto> AddPlaylistAsync(CreatePlaylistDto playlist)
@@ -100,15 +118,17 @@ namespace BandClickBackend.Application.Services
             {
                 throw new UserNotAllowedException("Nie można oceniać swoich playlist");
             }
-            if (entity.PositiveRaitingCount is not null)
+            if (await _playlistRaitingsRepository.HasUserGivenRaitingAsync(id))
             {
-                entity.PositiveRaitingCount++;
+                throw new UserNotAllowedException("Można oceniać tylko raz");
             }
-            else
+            var raiting = new PlaylistRaiting()
             {
-                entity.PositiveRaitingCount = 1;
-            }
-            await _repository.UpdatePlaylistAsync(entity);
+                UserId = (Guid)_userContextService.UserId,
+                PlaylistId = id,
+                IsPositive = true
+            };
+            await _playlistRaitingsRepository.AddRaitingAsync(raiting);
         }
 
         public async Task AddNegativeRaitingAsync(Guid id)
@@ -122,18 +142,20 @@ namespace BandClickBackend.Application.Services
             {
                 throw new UserNotAllowedException("Nie można oceniać swoich playlist");
             }
-            if (entity.NegativeRaitingCount is not null)
+            if (await _playlistRaitingsRepository.HasUserGivenRaitingAsync(id))
             {
-                entity.NegativeRaitingCount++;
+                throw new UserNotAllowedException("Można oceniać tylko raz");
             }
-            else
+            var raiting = new PlaylistRaiting()
             {
-                entity.NegativeRaitingCount = 1;
-            }
-            await _repository.UpdatePlaylistAsync(entity);
+                UserId = (Guid)_userContextService.UserId,
+                PlaylistId = id,
+                IsPositive = false
+            };
+            await _playlistRaitingsRepository.AddRaitingAsync(raiting);
         }
 
-        public async Task RemovePositiveRaitingAsync(Guid id)
+        public async Task RemoveRaitingAsync(Guid id)
         {
             var entity = await _repository.GetPlaylistByIdAsync(id);
             if (!entity.IsShared)
@@ -144,37 +166,12 @@ namespace BandClickBackend.Application.Services
             {
                 throw new UserNotAllowedException("Nie można oceniać swoich playlist");
             }
-            if (entity.PositiveRaitingCount is not null && entity.PositiveRaitingCount > 0)
+            if (!await _playlistRaitingsRepository.HasUserGivenRaitingAsync(id))
             {
-                entity.PositiveRaitingCount--;
+                throw new UserNotAllowedException("Playlista nie została jeszcze oceniona");
             }
-            else
-            {
-                entity.PositiveRaitingCount = 0;
-            }
-            await _repository.UpdatePlaylistAsync(entity);
-        }
-
-        public async Task RemoveNegativeRaitingAsync(Guid id)
-        {
-            var entity = await _repository.GetPlaylistByIdAsync(id);
-            if (!entity.IsShared)
-            {
-                throw new ValidationException("Nie można ocenić nieudostępnionej playlisty.");
-            }
-            if (_userContextService.IsEntityCreator(entity))
-            {
-                throw new UserNotAllowedException("Nie można oceniać swoich playlist");
-            }
-            if (entity.NegativeRaitingCount is not null && entity.NegativeRaitingCount > 0)
-            {
-                entity.NegativeRaitingCount--;
-            }
-            else
-            {
-                entity.NegativeRaitingCount = 0;
-            }
-            await _repository.UpdatePlaylistAsync(entity);
+            await _playlistRaitingsRepository.RemoveRaitingAsync(
+                await _playlistRaitingsRepository.GetUserRaitingAsync(id));
         }
 
         public async Task ShareInAppToggleAsync(Guid id)
@@ -260,8 +257,8 @@ namespace BandClickBackend.Application.Services
                 Name = entity.Name,
                 MetronomeSettings = mappedMetronomeSettings,
                 Comments = mappedComments,
-                PositiveRaitingCount = entity.PositiveRaitingCount,
-                NegativeRaitingCount = entity.NegativeRaitingCount
+                PositiveRaitingCount = await _playlistRaitingsRepository.GetPositiveRaitingsCountAsync(entity.Id),
+                NegativeRaitingCount = await _playlistRaitingsRepository.GetNegativeRaitingsCountAsync(entity.Id)
             };
             return dto;
         }

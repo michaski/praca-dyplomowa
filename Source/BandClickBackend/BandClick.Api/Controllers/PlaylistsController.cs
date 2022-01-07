@@ -61,6 +61,19 @@ namespace BandClickBackend.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}/raitings/user")]
+        [SwaggerOperation(Summary =
+            "Returns true if user has given positive raiting, false otherwise. If user hasn't given raiting, returns 404")]
+        public async Task<IActionResult> GetUserRaitingTypeAsync(Guid id)
+        {
+            var result = await _service.GetIsUserRaitingPositiveAsync(id);
+            if (result.IsPositive is null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Creates new playlist")]
         public async Task<IActionResult> CreatePlaylistAsync([FromBody] CreatePlaylistDto dto)
@@ -94,36 +107,44 @@ namespace BandClickBackend.Api.Controllers
         }
 
         [HttpPut("{id}/raitings/positive/add")]
-        [SwaggerOperation(Summary = "Adds positive raiting to shared setting")]
+        [SwaggerOperation(Summary = "Adds positive raiting to shared playlist")]
         public async Task<IActionResult> AddPositiveRaiting(Guid id)
         {
             await _service.AddPositiveRaitingAsync(id);
             return NoContent();
         }
 
-        [HttpPut("{id}/raitings/positive/subtract")]
-        [SwaggerOperation(Summary = "Subtracts positive raiting from shared setting")]
-        public async Task<IActionResult> SubtractPositiveRaiting(Guid id)
-        {
-            await _service.RemovePositiveRaitingAsync(id);
-            return NoContent();
-        }
+        //[HttpPut("{id}/raitings/positive/subtract")]
+        //[SwaggerOperation(Summary = "Subtracts positive raiting from shared setting")]
+        //public async Task<IActionResult> SubtractPositiveRaiting(Guid id)
+        //{
+        //    await _service.RemovePositiveRaitingAsync(id);
+        //    return NoContent();
+        //}
 
         [HttpPut("{id}/raitings/negative/add")]
-        [SwaggerOperation(Summary = "Adds negative raiting to shared setting")]
+        [SwaggerOperation(Summary = "Adds negative raiting to shared playlist")]
         public async Task<IActionResult> AddNegativeRaiting(Guid id)
         {
             await _service.AddNegativeRaitingAsync(id);
             return NoContent();
         }
 
-        [HttpPut("{id}/raitings/negative/subtract")]
-        [SwaggerOperation(Summary = "Subtracts negative raiting from shared setting")]
-        public async Task<IActionResult> SubtractNegativeRaiting(Guid id)
+        [HttpPut("{id}/raitings/remove")]
+        [SwaggerOperation(Summary = "Removes user's raiting from shared playlist")]
+        public async Task<IActionResult> RemoveUserRaiting(Guid id)
         {
-            await _service.RemoveNegativeRaitingAsync(id);
+            await _service.RemoveRaitingAsync(id);
             return NoContent();
         }
+
+        //[HttpPut("{id}/raitings/negative/subtract")]
+        //[SwaggerOperation(Summary = "Subtracts negative raiting from shared setting")]
+        //public async Task<IActionResult> SubtractNegativeRaiting(Guid id)
+        //{
+        //    await _service.RemoveNegativeRaitingAsync(id);
+        //    return NoContent();
+        //}
 
         [HttpPut("{playlistId}/shareInBand/{bandId}")]
         [SwaggerOperation(Summary = "Shares playlist in band")]

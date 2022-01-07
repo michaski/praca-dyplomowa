@@ -16,5 +16,7 @@ namespace BandClickBackend.Domain.Entities
         public ICollection<MetronomeSettingsComment> MetronomeSettingsComment { get; set; }
         public ICollection<PlaylistComment> PlaylistComments { get; set; }
         public ICollection<UserInBands> Bands { get; set; }
+        public IEnumerable<PlaylistRaiting> PlaylistRaitings { get; set; }
+        public IEnumerable<MetronomeSettingsRaiting> MetronomeSettingsRaitings { get; set; }
     }
 }
