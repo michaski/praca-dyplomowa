@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 
 namespace BandClickBackend.Domain.Interfaces
 {
     public interface IMetronomeSettingsRepository
     {
-        Task<IEnumerable<MetronomeSettings>> GetAllAsync();
-        Task<IEnumerable<MetronomeSettings>> GetAllSharedAsync();
+        Task<ResultPage<MetronomeSettings>> GetAllAsync(QueryFilters filters);
+        Task<ResultPage<MetronomeSettings>> GetAllSharedAsync(QueryFilters filters);
         Task<IEnumerable<MetronomeSettings>> GetAllSettingsForUserAsync();
         Task<MetronomeSettings> GetByIdAsync(Guid id);
         Task<MetronomeSettings> GetByIdNoTrackingAsync(Guid id);

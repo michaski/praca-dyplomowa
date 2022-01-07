@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using BandClickBackend.Application.Dtos.Filters;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
 using BandClickBackend.Application.Dtos.Raitings;
 using BandClickBackend.Application.Interfaces;
+using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Exceptions;
 using BandClickBackend.Domain.Interfaces;
@@ -52,10 +54,13 @@ namespace BandClickBackend.Application.Services
             _metronomeSettingsCommentRepository = metronomeSettingsCommentRepository;
         }
 
-        public async Task<IEnumerable<MetronomeSettingsListDto>> GetAllAsync()
+        public async Task<PagedResult<MetronomeSettingsListDto>> GetAllAsync(QueryFilters filters)
         {
-            return _mapper.Map<IEnumerable<MetronomeSettings>, IEnumerable<MetronomeSettingsListDto>>(
-                await _repository.GetAllAsync());
+            var result = await _repository.GetAllAsync(filters);
+            var mappedResult = new ResultPage<MetronomeSettingsListDto>(
+                _mapper.Map<IEnumerable<MetronomeSettings>, IEnumerable<MetronomeSettingsListDto>>(result.Results) as List<MetronomeSettingsListDto>,
+                result.TotalItemsCount);
+            return new PagedResult<MetronomeSettingsListDto>(mappedResult, filters);
         }
 
         public async Task<SingleMetronomeSettingDto> GetByIdAsync(Guid id)
@@ -67,10 +72,13 @@ namespace BandClickBackend.Application.Services
             return mappedResult;
         }
 
-        public async Task<IEnumerable<MetronomeSettingsListDto>> GetAllSharedAsync()
+        public async Task<PagedResult<MetronomeSettingsListDto>> GetAllSharedAsync(QueryFilters filters)
         {
-            return _mapper.Map<IEnumerable<MetronomeSettings>, IEnumerable<MetronomeSettingsListDto>>(
-                await _repository.GetAllSharedAsync());
+            var result = await _repository.GetAllSharedAsync(filters);
+            var mappedResult = new ResultPage<MetronomeSettingsListDto>(
+                _mapper.Map<IEnumerable<MetronomeSettings>, IEnumerable<MetronomeSettingsListDto>>(result.Results) as List<MetronomeSettingsListDto>,
+                result.TotalItemsCount);
+            return new PagedResult<MetronomeSettingsListDto>(mappedResult, filters);
         }
 
         public async Task<IEnumerable<MetronomeSettingsListDto>> GetAllSettingsForUserAsync()

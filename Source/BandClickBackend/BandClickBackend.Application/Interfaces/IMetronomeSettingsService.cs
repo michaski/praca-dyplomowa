@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BandClickBackend.Application.Dtos.Filters;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
 using BandClickBackend.Application.Dtos.Raitings;
+using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 
 namespace BandClickBackend.Application.Interfaces
 {
     public interface IMetronomeSettingsService
     {
-        Task<IEnumerable<MetronomeSettingsListDto>> GetAllAsync();
+        Task<PagedResult<MetronomeSettingsListDto>> GetAllAsync(QueryFilters filters);
         Task<SingleMetronomeSettingDto> GetByIdAsync(Guid id);
-        Task<IEnumerable<MetronomeSettingsListDto>> GetAllSharedAsync();
+        Task<PagedResult<MetronomeSettingsListDto>> GetAllSharedAsync(QueryFilters filters);
         Task<IEnumerable<MetronomeSettingsListDto>> GetAllSettingsForUserAsync();
         Task<IEnumerable<MetronomeSettingsType>> GetAvailableSettingTypesAsync();
         Task<RaitingTypeDto> IsUserRaitingPositiveAsync(Guid settingId);

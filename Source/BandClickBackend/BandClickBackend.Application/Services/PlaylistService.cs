@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using BandClickBackend.Application.Dtos.Filters;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.Playlist;
 using BandClickBackend.Application.Dtos.PlaylistComment;
 using BandClickBackend.Application.Dtos.Raitings;
 using BandClickBackend.Application.Interfaces;
+using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Exceptions;
 using BandClickBackend.Domain.Interfaces;
@@ -56,10 +58,13 @@ namespace BandClickBackend.Application.Services
                 await _repository.GetAllPlaylistsForUserAsync());
         }
 
-        public async Task<IEnumerable<PlaylistListDto>> GetAllSharedPlaylistsAsync()
+        public async Task<PagedResult<PlaylistListDto>> GetAllSharedPlaylistsAsync(QueryFilters filters)
         {
-            return _mapper.Map<IEnumerable<Playlist>, IEnumerable<PlaylistListDto>>(
-                await _repository.GetAllSharedPlaylistsAsync());
+            var result = await _repository.GetAllSharedPlaylistsAsync(filters);
+            var mappedResult = new ResultPage<PlaylistListDto>(
+                _mapper.Map<IEnumerable<Playlist>, IEnumerable<PlaylistListDto>>(result.Results) as List<PlaylistListDto>,
+                result.TotalItemsCount);
+            return new PagedResult<PlaylistListDto>(mappedResult, filters);
         }
 
         public async Task<SinglePlaylistDto> GetPlaylistByIdAsync(Guid id)

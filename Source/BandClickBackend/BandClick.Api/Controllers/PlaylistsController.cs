@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BandClickBackend.Application.Dtos.Playlist;
 using BandClickBackend.Application.Dtos.PlaylistComment;
 using BandClickBackend.Application.Interfaces;
+using BandClickBackend.Domain.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,10 +40,10 @@ namespace BandClickBackend.Api.Controllers
 
         [HttpGet("shared")]
         [SwaggerOperation(Summary = "Gets all playlists shared in app")]
-        public async Task<IActionResult> GetAllSharedPlaylistsAsync()
+        public async Task<IActionResult> GetAllSharedPlaylistsAsync([FromQuery] QueryFilters filters)
         {
-            var result = await _service.GetAllSharedPlaylistsAsync();
-            if (!result.Any())
+            var result = await _service.GetAllSharedPlaylistsAsync(filters);
+            if (!result.Items.Any())
             {
                 return NotFound();
             }

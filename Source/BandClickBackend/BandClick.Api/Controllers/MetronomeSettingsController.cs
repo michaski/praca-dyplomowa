@@ -9,6 +9,7 @@ using BandClickBackend.Application.Dtos.Metre;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
 using BandClickBackend.Application.Interfaces;
+using BandClickBackend.Domain.Common;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -52,10 +53,10 @@ namespace BandClickBackend.Api.Controllers
 
         [HttpGet("shared")]
         [SwaggerOperation(Summary = "Gets all shared metronome settings")]
-        public async Task<IActionResult> GetAllShared()
+        public async Task<IActionResult> GetAllShared([FromQuery] QueryFilters filters)
         {
-            var result = await _metronomeSettingsService.GetAllSharedAsync();
-            if (!result.Any())
+            var result = await _metronomeSettingsService.GetAllSharedAsync(filters);
+            if (!result.Items.Any())
             {
                 return NotFound();
             }

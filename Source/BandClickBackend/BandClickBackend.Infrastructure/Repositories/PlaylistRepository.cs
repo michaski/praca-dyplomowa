@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BandClickBackend.Application.Dtos.User;
 using BandClickBackend.Application.Interfaces;
+using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
 using BandClickBackend.Infrastructure.Data;
+using BandClickBackend.Infrastructure.Extensions.Filters;
 using Microsoft.EntityFrameworkCore;
 
 namespace BandClickBackend.Infrastructure.Repositories
@@ -32,11 +34,15 @@ namespace BandClickBackend.Infrastructure.Repositories
             return user.Playlists;
         }
 
-        public async Task<IEnumerable<Playlist>> GetAllSharedPlaylistsAsync()
+        public async Task<ResultPage<Playlist>> GetAllSharedPlaylistsAsync(QueryFilters filters)
         {
-            return await _context.Playlists
+            var filteredQuery = _context.Playlists
                 .Where(p => p.IsShared)
+                .Filter(filters);
+            var resultPage = await filteredQuery
+                .Paginate(filters)
                 .ToListAsync();
+            return new ResultPage<Playlist>(resultPage, await filteredQuery.CountAsync());
         }
 
         public async Task<Playlist> GetPlaylistByIdAsync(Guid id)

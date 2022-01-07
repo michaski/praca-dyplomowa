@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using BandClickBackend.Application.Dtos.Auth;
 using BandClickBackend.Application.Dtos.Band;
+using BandClickBackend.Application.Dtos.Filters;
 using BandClickBackend.Application.Dtos.Metre;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
@@ -13,6 +14,7 @@ using BandClickBackend.Application.Middleware;
 using BandClickBackend.Application.Services;
 using BandClickBackend.Application.Validators.Auth;
 using BandClickBackend.Application.Validators.Band;
+using BandClickBackend.Application.Validators.Filters;
 using BandClickBackend.Application.Validators.Metre;
 using BandClickBackend.Application.Validators.MetronomeSettings;
 using BandClickBackend.Application.Validators.MetronomeSettingsComment;
@@ -20,6 +22,7 @@ using BandClickBackend.Application.Validators.Playlist;
 using BandClickBackend.Application.Validators.PlaylistComment;
 using BandClickBackend.Application.Validators.User;
 using BandClickBackend.Application.Validators.UserInBands;
+using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -40,6 +43,7 @@ namespace BandClickBackend.Application
 
             services.AddScoped<IValidator<LoginDto>, LoginValidator>();
             services.AddScoped<IValidator<UpdateBandDto>, UpdateBandValidator>();
+            services.AddScoped<IValidator<QueryFilters>, QueryFiltersValidator>();
             services.AddScoped<IValidator<MetreViewDto>, MetreViewValidator>();
             services.AddScoped<IValidator<UpdateMetreDto>, UpdateMetreValidator>();
             services.AddScoped<IValidator<AddMetronomeSettingsDto>, AddMetronomeSettingValidator>();

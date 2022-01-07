@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BandClickBackend.Application.Dtos.Filters;
 using BandClickBackend.Application.Interfaces;
+using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 using BandClickBackend.Domain.Interfaces;
 using BandClickBackend.Infrastructure.Data;
+using BandClickBackend.Infrastructure.Extensions.Filters;
 using Microsoft.EntityFrameworkCore;
 
 namespace BandClickBackend.Infrastructure.Repositories
@@ -21,25 +24,33 @@ namespace BandClickBackend.Infrastructure.Repositories
             _userContextService = userContextService;
         }
 
-        public async Task<IEnumerable<MetronomeSettings>> GetAllAsync()
+        public async Task<ResultPage<MetronomeSettings>> GetAllAsync(QueryFilters filters)
         {
-            return await _context.MetronomeSettings
+            var filteredQuery = _context.MetronomeSettings
                 .Include(ms => ms.Metre)
                 .ThenInclude(m => m.AccentedBeats)
                 .Include(ms => ms.Metre.RhythmicUnit)
                 .Include(ms => ms.Type)
+                .Filter(filters);
+            var resultPage = await filteredQuery
+                .Paginate(filters)
                 .ToListAsync();
+            return new ResultPage<MetronomeSettings>(resultPage, await filteredQuery.CountAsync());
         }
 
-        public async Task<IEnumerable<MetronomeSettings>> GetAllSharedAsync()
+        public async Task<ResultPage<MetronomeSettings>> GetAllSharedAsync(QueryFilters filters)
         {
-            return await _context.MetronomeSettings
+            var filteredQuery = _context.MetronomeSettings
                 .Include(ms => ms.Metre)
                 .ThenInclude(m => m.AccentedBeats)
                 .Include(ms => ms.Metre.RhythmicUnit)
                 .Include(ms => ms.Type)
                 .Where(x => x.IsShared)
+                .Filter(filters);
+            var resultPage = await filteredQuery
+                .Paginate(filters)
                 .ToListAsync();
+            return new ResultPage<MetronomeSettings>(resultPage, await filteredQuery.CountAsync());
         }
 
         public async Task<IEnumerable<MetronomeSettings>> GetAllSettingsForUserAsync()
