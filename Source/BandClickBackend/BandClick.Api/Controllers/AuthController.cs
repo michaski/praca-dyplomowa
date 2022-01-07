@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using BandClickBackend.Application.Dtos.Auth;
 using BandClickBackend.Application.Dtos.User;
 using BandClickBackend.Application.Interfaces;
+using BandClickBackend.Domain.Exceptions;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace BandClickBackend.Api.Controllers
@@ -27,9 +28,9 @@ namespace BandClickBackend.Api.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto user)
         {
             var tokenDto = await _service.LoginAsync(user);
-            if (String.IsNullOrEmpty(tokenDto.Token))
+            if (tokenDto is null || string.IsNullOrEmpty(tokenDto.Token))
             {
-                return BadRequest("Podano zły adres email lub hasło");
+                return Unauthorized(new ExceptionAsJson("Podano zły adres email lub hasło"));
             }
             return Ok(tokenDto);
         }

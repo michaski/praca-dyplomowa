@@ -15,14 +15,12 @@ const requestFunction = <R>(url: string,
     
     const options: RequestInit = {
         method,
-        ...(!!auth && {
-            headers: {
-                Authorization: `Bearer ${auth}`
-            }
-        }),
         headers: {
             'Content-Type': 'application/json',
-            'charset': 'utf-8'
+            'charset': 'utf-8',
+            ...(!!auth && {
+                    Authorization: `Bearer ${auth}`
+            }),
         }
     };
     let parsedUrl = url;

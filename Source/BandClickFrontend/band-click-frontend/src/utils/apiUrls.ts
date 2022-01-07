@@ -12,6 +12,8 @@ export const METRONOME_SOUND_PROVIDER_HTTP = `${SERVER_HTTP}/MetronomeSoundProvi
 export const METRONOME_SOUND_PROVIDER_HTTPS = `${SERVER_HTTPS}/MetronomeSoundProvider`;
 export const METRONOME_SOUND_ACCENT = `${METRONOME_SOUND_PROVIDER_HTTPS}/accent`;
 export const METRONOME_SOUND_REGULAR = `${METRONOME_SOUND_PROVIDER_HTTPS}/regular`;
+// User
+export const USER_CONTROLLER = `${API_HTTPS_BASE_URL}/User`
 // Metronome Settings
 export const METRONOME_SETTINGS_CONTROLLER = `${API_HTTPS_BASE_URL}/MetronomeSettings`;
 export const METRONOME_SETTINGS_COMMENTS = `${METRONOME_SETTINGS_CONTROLLER}/comments`;

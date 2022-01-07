@@ -1,7 +1,8 @@
 import Header from "../../components/header/Header";
+import auth from "../../services/auth/auth";
 import LoginService from "../../services/auth/loginService";
 
-const Login = () => {
+const Login = (props: any) => {
     let email = '';
     let password = '';
 
@@ -26,8 +27,9 @@ const Login = () => {
                         </div>
                     </div>
                     <div className="mb-3 row">
-                        <input type="submit" className="btn btn-primary" value="Login" onClick={(e) => {
-                            LoginService.login(email, password);
+                        <input type="submit" className="btn btn-primary" value="Login" onClick={async (e) => {
+                            await auth.login(email, password);
+                            props.history.push('/app');
                         }} />
                     </div>
                 </div>

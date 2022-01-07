@@ -21,7 +21,7 @@ namespace BandClickBackend.Api.Controllers
             _service = service;
         }
 
-        [HttpGet("{email}")]
+        [HttpGet("email/{email}")]
         [SwaggerOperation(Summary = "Gets user by email address")]
         public async Task<IActionResult> GetUserByEmailAsync([FromRoute] string email)
         {
@@ -33,7 +33,7 @@ namespace BandClickBackend.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         [SwaggerOperation(Summary = "Gets user by id")]
         public async Task<IActionResult> GetUserByIdAsync([FromRoute] Guid id)
         {
