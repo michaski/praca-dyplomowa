@@ -7,6 +7,7 @@ import ProtectedRoute from './components/routes/ProtectedRoute';
 import Main from './views/main/Main';
 import { Provider } from 'react-redux';
 import store from './store';
+import Register from './views/register/Register';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Switch>
             <ProtectedRoute path="/app" component={Main} />
             <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
             <Route path="/" component={Home} />
           </Switch>
         </Provider>

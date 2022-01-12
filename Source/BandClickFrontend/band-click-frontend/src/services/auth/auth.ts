@@ -1,3 +1,4 @@
+import { RegisterUser } from "../../models/Auth/RegisterUser";
 import { User } from "../../models/Auth/User";
 import store from "../../store";
 import { authAction } from "../../store/actions/auth.actions";
@@ -16,6 +17,11 @@ class Auth {
     logout = async () => {
         await LoginService.logout();
         store.dispatch(authAction.removeUser());
+    }
+
+    register = async (userInfo: RegisterUser) => {
+        const registerSucceeded = await LoginService.register(userInfo);
+        return registerSucceeded;
     }
 
     getToken = (): string => {

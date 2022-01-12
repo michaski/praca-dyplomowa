@@ -4,12 +4,12 @@ import {useHistory} from "react-router";
 const Header = () => {
     const history = useHistory();
     const redirectTo = (path: string, name: string) =>
-        <a className="nav-link p-2" onClick={() => { history.push(path) }}>{name}</a>
+        <a className="nav-link text-light p-2" onClick={() => { history.push(path) }}>{name}</a>
     return (
         <header className="row">
-            <nav className="navbar navbar-expand-lg ">
-                <div className="container-fluid">
-                    <div>
+            <nav className="navbar navbar-dark bg-dark navbar-expand-lg ">
+                <div className="container-fluid justify-content-between">
+                    <div className="d-flex">
                         <a className="navbar-brand d-inline-flex" href="/">
                             <span className="fw-bold">Band Click</span>
                         </a>

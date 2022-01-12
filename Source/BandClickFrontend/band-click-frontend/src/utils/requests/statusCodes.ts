@@ -1,7 +1,7 @@
 
 export enum SuccessStatusCodes {
     OK = 200,
-    CREATED = 203,
+    CREATED = 201,
     NO_CONTENT = 204
 }
 

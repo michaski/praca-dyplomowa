@@ -1,6 +1,7 @@
 import { Token } from "../../models/Auth/Token";
-import { AUTH_LOGIN } from "../../utils/apiUrls";
+import { AUTH_LOGIN, AUTH_REGISTER } from "../../utils/apiUrls";
 import Requests from "../../utils/requests/requests";
+import { RegisterUser } from "../../models/Auth/RegisterUser";
 
 const LoginService = {
     login: async (email: string, password: string) => {
@@ -15,6 +16,15 @@ const LoginService = {
     },
     logout: () => {
         localStorage.removeItem('jwt');
+    },
+    register: async (userInfo: RegisterUser) => {
+        const requests = new Requests();
+        const response = await requests.post(AUTH_REGISTER, userInfo);
+        if (response == null) {
+            alert("Register failed");
+            return false;
+        }
+        return true;
     }
 }
 
