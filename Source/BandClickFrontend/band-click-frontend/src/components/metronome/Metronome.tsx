@@ -12,37 +12,16 @@ const Metronome = () => {
     const DEFAULT_RHYTHMIC_UNIT = 4;
     const accentSound = new Audio(METRONOME_SOUND_ACCENT);
     const regularSound = new Audio(METRONOME_SOUND_REGULAR);
-    let soundArray: HTMLAudioElement[];
-    let clickIntervalArray: number[];
     let tempo = DEFAULT_TEMPO;
     let beatsPerBar = DEFAULT_BEATS_PER_BAR;
     let rhythmicUnit = DEFAULT_RHYTHMIC_UNIT;
-    let clickIndex = 0;
-    let clickIntervalId: number;
-    let lastClickTime: number;
     const metronome: MetronomePlayer = new MetronomePlayer(tempo, beatsPerBar);
-    console.log(metronome);
-
-    const calculateClickInterval = (desiredTempo: number): number => {
-        return 60.0 / desiredTempo * 1000;
-    }
-
-    let clickInterval = calculateClickInterval(DEFAULT_TEMPO);
-    let isRunning: boolean = false;
-    let clickTimeout: number;    
 
     const handleTempoChange = (newTempo: number) => {
         if (isNaN(newTempo) || newTempo === Infinity || newTempo < MIN_TEMPO || newTempo > MAX_TEMPO) {
             return;
         }
         metronome.setTempo(newTempo);
-        // tempo = newTempo;
-        // clickInterval = calculateClickInterval(newTempo);
-        // if (isRunning) {
-        //     clearInterval(clickIntervalId);
-        //     clickIntervalId = setInterval(click, clickInterval, clickIndex);
-        //     console.log(clickInterval);
-        // }
     }
 
     const handleBeatsPerBarChange = (newBeatsPerBar: number) => {
@@ -57,66 +36,12 @@ const Metronome = () => {
 
     }
 
-    const prepareSoundArray = () => {
-        soundArray = [];
-        soundArray.push(accentSound);
-        soundArray.push(regularSound);
-        soundArray.push(regularSound);
-        soundArray.push(regularSound);
-    }
-
-    const testLatency = (): number[] => {
-        let latencyTable: number[] = [];
-        for (let i=0; i<soundArray.length; i++) {
-            soundArray[i].muted = true;
-            const startTime = Date.now();
-            click(0);
-            const endTime = Date.now();
-            clearTimeout(clickTimeout);
-            soundArray[i].muted = false;
-            const timeElapsed = endTime - startTime;
-            latencyTable.push(timeElapsed);
-        }
-        clickIndex = 0;
-        console.log(latencyTable);
-        return latencyTable;
-    }
-
     const toggleMetronome = () => {
         if (!metronome.getIsRunning()) {
             metronome.start();
         } else {
             metronome.stop();
         }
-        // if (!isRunning) {
-        //     prepareSoundArray();
-        //     // clickIntervalArray = testLatency();
-        //     isRunning = true;
-        //     clickIntervalId = setInterval(click, clickInterval, clickIndex);
-        //     // lastClickTime = Date.now();
-        //     // click(0);
-        // } else {
-        //     // clearTimeout(clickTimeout);
-        //     clearInterval(clickIntervalId);
-        //     isRunning = false;
-        //     clickIndex = 0;
-        // }
-    }
-
-    const click = (index: number) => {
-        // const newClickTime = Date.now();
-        soundArray[clickIndex].play();
-        if (clickIndex === beatsPerBar - 1) {
-            clickIndex = 0;
-        } else {
-            clickIndex++;
-        }
-        // let latency = clickInterval - (newClickTime - lastClickTime);
-        // console.log(newClickTime - lastClickTime);
-        // clickTimeout = setTimeout(click, clickInterval - latency, clickIndex);
-        // lastClickTime = newClickTime;
-        // let timeout = clickInterval - soundArray[index].duration;
-        // clickTimeout = setTimeout(click, timeout, index);
     }
 
     return (

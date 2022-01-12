@@ -5,17 +5,11 @@ class MetronomePlayer {
     private accentSound = new Audio(METRONOME_SOUND_ACCENT);
     private regularSound = new Audio(METRONOME_SOUND_REGULAR);
     private soundArray: HTMLAudioElement[] = [];
-    private clickIntervalArray: number[] = [];
     private tempo: number = 80;
     private beatsPerBar = 4;
-    private rhythmicUnit = 4;
     private clickIndex = 0;
-    private clickIntervalId: number = 0;
-    private clickTimeoutId: number = 0;
     private clickIntervalLength: number = 0;
-    private lastClickTime: number = 0;
     private isRunning: boolean = false;
-    private clickInterval: any;
     private timer: MetronomeTimer = new MetronomeTimer();
 
     constructor(tempo: number = 80, beatsPerBar: number = 4, accentedBeats: number[] = []) {
