@@ -12,6 +12,7 @@ const LoginService = {
             return false;
         }
         localStorage.setItem('jwt', response.token);
+        localStorage.setItem('email', email);
         return true;
     },
     logout: () => {
