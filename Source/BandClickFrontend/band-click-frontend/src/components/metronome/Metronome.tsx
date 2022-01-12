@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { METRONOME_SOUND_ACCENT, METRONOME_SOUND_REGULAR } from "../../utils/apiUrls";
+import React, { useRef, useState } from "react";
 import MetronomePlayer from "../../utils/metronome/metronomePlayer";
 import AccentPicker from "../accentPicker/AccentPicker";
 import NumericInput from "../numericInput/NumericInput";
@@ -10,22 +9,20 @@ const Metronome = () => {
     const MAX_TEMPO = 500;
     const DEFAULT_BEATS_PER_BAR = 4;
     const DEFAULT_RHYTHMIC_UNIT = 4;
-    const accentSound = new Audio(METRONOME_SOUND_ACCENT);
-    const regularSound = new Audio(METRONOME_SOUND_REGULAR);
     let tempo = DEFAULT_TEMPO;
-    let beatsPerBar = DEFAULT_BEATS_PER_BAR;
+    const [beatsPerBar, setBeatsPerBar] = useState(DEFAULT_BEATS_PER_BAR);
     let rhythmicUnit = DEFAULT_RHYTHMIC_UNIT;
-    const metronome: MetronomePlayer = new MetronomePlayer(tempo, beatsPerBar);
+    const metronome = useRef(new MetronomePlayer(tempo, beatsPerBar));
 
     const handleTempoChange = (newTempo: number) => {
         if (isNaN(newTempo) || newTempo === Infinity || newTempo < MIN_TEMPO || newTempo > MAX_TEMPO) {
             return;
         }
-        metronome.setTempo(newTempo);
+        metronome.current.setTempo(newTempo);
     }
 
     const handleBeatsPerBarChange = (newBeatsPerBar: number) => {
-        beatsPerBar = newBeatsPerBar;
+        setBeatsPerBar(newBeatsPerBar);
     }
 
     const handleMetreRhythmicUnitChange = (newRhythmicUnit: number) => {
@@ -33,14 +30,14 @@ const Metronome = () => {
     }
 
     const handleAccentPatternChange = (accentMap: boolean[]) => {
-
+        metronome.current.setAccentsFromAccentMap(accentMap);
     }
 
     const toggleMetronome = () => {
-        if (!metronome.getIsRunning()) {
-            metronome.start();
+        if (!metronome.current.getIsRunning()) {
+            metronome.current.start();
         } else {
-            metronome.stop();
+            metronome.current.stop();
         }
     }
 

@@ -24,6 +24,15 @@ class MetronomePlayer {
         accentedBeats.forEach(accentedBeat => {
             this.soundArray[accentedBeat - 1] = this.accentSound;
         });
+        this.beatsPerBar = accentedBeats.length;
+    }
+
+    public setAccentsFromAccentMap = (accentedBeats: boolean[]) => {
+        this.soundArray = new Array<HTMLAudioElement>(this.beatsPerBar);
+        accentedBeats.forEach((accentedBeat, index) => {
+            this.soundArray[index] = accentedBeat ? this.accentSound : this.regularSound;
+        });
+        this.beatsPerBar = accentedBeats.length;
     }
 
     public setTempo = (newTempo: number) => {
@@ -46,6 +55,7 @@ class MetronomePlayer {
     }
 
     private click = () => {
+        this.soundArray[this.clickIndex].play();
         if (this.clickIndex === this.beatsPerBar - 1) {
             this.clickIndex = 0;
         } else {

@@ -2,9 +2,9 @@ const worker = () => {
     let intervalId;
 
     onmessage = (e) => {
-        if (e.data.action == 'start-interval') {
+        if (e.data.action === 'start-interval') {
             intervalId = setInterval(tick, e.data.interval);
-        } else if (e.data.action == 'stop-interval') {
+        } else if (e.data.action === 'stop-interval') {
             clearInterval(intervalId);
         }
     };

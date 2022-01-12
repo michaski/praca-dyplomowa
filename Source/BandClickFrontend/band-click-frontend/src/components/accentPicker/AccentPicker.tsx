@@ -2,33 +2,49 @@ import React, { useState } from "react";
 
 interface AccentPickerProps {
     beatsPerBar: number,
+    accentedBeats?: boolean[]
     onAccentPatternChange: Function
 }
 
-const AccentPicker: React.FC<AccentPickerProps> = ({beatsPerBar, onAccentPatternChange}) => {
-    const [beatsCount, setBeatsCount] = useState(beatsPerBar);
+const AccentPicker: React.FC<AccentPickerProps> = ({beatsPerBar, accentedBeats, onAccentPatternChange}) => {
     const [accentMap, setAccentMap] = useState([] as boolean[]);
 
-    if (beatsPerBar != accentMap.length) {
-        if (beatsPerBar < accentMap.length) {
-            setAccentMap(accentMap.slice(0, beatsPerBar - 1));
-        } else {
-            //setAccentMap(accentMap.fill(false, accentMap.length - 1, beatsPerBar - 1));
+    const generateAccentMap = () => {
+        if (beatsPerBar !== accentMap.length) {
+            let newAccentMap: boolean[] = [];
+            if (beatsPerBar < accentMap.length) {
+                newAccentMap = accentMap.slice(0, beatsPerBar);
+                setAccentMap(newAccentMap);
+                onAccentPatternChange(newAccentMap);
+            } else {
+                let newAccentMap = Array.from(accentMap);
+                for (let i = accentMap.length; i < beatsPerBar; i++) {
+                    newAccentMap[i] = false;
+                }
+                setAccentMap(newAccentMap);
+                onAccentPatternChange(newAccentMap);
+            }
         }
     }
 
     const toggleAccentStatus = (accentIndex: number) => {
-        var modifiedAccentMap = accentMap;
-        modifiedAccentMap[accentIndex] = !modifiedAccentMap[accentIndex];
+        const modifiedAccentMap = accentMap.map((item, index) =>
+            index === accentIndex ? !item : item
+        );
         setAccentMap(modifiedAccentMap);
-        onAccentPatternChange(accentMap);
+        onAccentPatternChange(modifiedAccentMap);
     }
     
+    generateAccentMap();
+
     return (
         <div>
+            <h2>Akcenty</h2>
             {
             accentMap.map((isAccented, index) => {
-                return <button key={index} className={(isAccented) ? 'btn btn-dark text-ligth' : 'btn btn-outline-dark text-dark'} onClick={e => toggleAccentStatus(index)}>{index + 1}</button>
+                return <input key={index} type={'checkbox'} checked={isAccented} onChange={e => {
+                    toggleAccentStatus(index);
+                }} />
             })}
         </div>
     );
