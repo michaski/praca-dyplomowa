@@ -49,6 +49,14 @@ namespace BandClickBackend.Infrastructure.Repositories
         {
             return await _context.Playlists
                 .Include(p => p.Comments)
+                .Include(p => p.MetronomeSettings)
+                .ThenInclude(e => e.MetronomeSettings)
+                .ThenInclude(ms => ms.Metre)
+                .ThenInclude(m => m.RhythmicUnit)
+                .Include(p => p.MetronomeSettings)
+                .ThenInclude(e => e.MetronomeSettings)
+                .ThenInclude(ms => ms.Metre)
+                .ThenInclude(m => m.AccentedBeats)
                 .SingleOrDefaultAsync(p => p.Id == id);
         }
 

@@ -1,75 +1,66 @@
 import handleRequestError from "./handleRequestError";
 import http from "./http";
 
-class Requests {
-    isLoading: boolean = false;
-    data: any = null;
-    error: any = null;
-    redirectCallback: Function;
-
-    constructor(redirectCallback: Function = (path: string) => {}) {
-        this.redirectCallback = redirectCallback;
-    }
-
-    get = async (url: string, payload: any = null, authToken: string = '') => {
+const requests = {
+    get: async (url: string, authToken: string = '', onError?: Function, redirectCallback?: Function) => {
         try {
-            this.isLoading = true;
-            const response = await http.get(url, payload, authToken) as any;
-            this.isLoading = false;
+            const response = await http.get(url, undefined, authToken) as any;
             if (response) {
-                this.data = response;
                 return response;
             }
         } catch (error) {
-            this.error = error;
-            handleRequestError(error, this.redirectCallback);
+            if (onError) {
+                onError();
+            } else {
+                handleRequestError(error, redirectCallback ? redirectCallback : (path: string) => {});
+            }
         }
-    }
+    },
 
-    post = async (url: string, payload: any = null, authToken: string = '') => {
+    post: async (url: string, payload: any = null, authToken: string = '', onError?: Function, redirectCallback?: Function) => {
         try {
-            this.isLoading = true;
             const response = await http.post(url, payload, authToken) as any;
-            this.isLoading = false;
             if (response) {
-                this.data = response;
                 return response;
             }
         } catch (error) {
-            this.error = error;
-            handleRequestError(error, (path: string) => {});
+            if (onError) {
+                onError();
+            } else {
+                handleRequestError(error, redirectCallback ? redirectCallback : (path: string) => {});
+            }
         }
-    }
+    },
 
-    put = async (url: string, payload: any = null, authToken: string = '') => {
+    put: async (url: string, payload: any = null, authToken: string = '', onError?: Function, redirectCallback?: Function) => {
         try {
-            this.isLoading = true;
             const response = await http.put(url, payload, authToken) as any;
-            this.isLoading = false;
             if (response) {
-                this.data = response;
                 return response;
             }
         } catch (error) {
-            this.error = error;
-            handleRequestError(error, (path: string) => {});
+            if (onError) {
+                onError();
+            } else {
+                handleRequestError(error, redirectCallback ? redirectCallback : (path: string) => {});
+            }
         }
-    }
+    },
 
-    delete = async (url: string, payload: any = null, authToken: string = '') => {
+    delete: async (url: string, payload: any = null, authToken: string = '', onError?: Function, redirectCallback?: Function) => {
         try {
-            this.isLoading = true;
             const response = await http.delete(url, payload, authToken) as any;
-            this.isLoading = false;
             if (response) {
-                this.data = response;
                 return response;
             }
         } catch (error) {
-            this.error = error;
-            handleRequestError(error, (path: string) => {});
+            if (onError) {
+                onError();
+            } else {
+                handleRequestError(error, redirectCallback ? redirectCallback : (path: string) => {});
+            }
         }
     }
 }
 
-export default Requests;
+export default requests;

@@ -1,9 +1,17 @@
+import { useEffect } from "react";
+import { Redirect } from "react-router";
 import Header from "../../components/header/Header";
 import auth from "../../services/auth/auth";
 
 const Login = (props: any) => {
     let email = '';
     let password = '';
+
+    useEffect(() => {
+        if (auth.getToken() != '') {
+            props.history.push('/app');
+        }
+    });
 
     return (
         <div className="container-fluid">

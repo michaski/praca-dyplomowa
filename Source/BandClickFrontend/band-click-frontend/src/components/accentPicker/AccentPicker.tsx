@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface AccentPickerProps {
     beatsPerBar: number,
-    accentedBeats?: boolean[]
+    accentedBeats?: boolean[],
     onAccentPatternChange: Function
 }
 
 const AccentPicker: React.FC<AccentPickerProps> = ({beatsPerBar, accentedBeats, onAccentPatternChange}) => {
     const [accentMap, setAccentMap] = useState([] as boolean[]);
+
+    useEffect(() => {
+        if (accentedBeats) {
+            setAccentMap(accentedBeats);
+        }
+    }, [accentedBeats, beatsPerBar]);
 
     const generateAccentMap = () => {
         if (beatsPerBar !== accentMap.length) {
@@ -34,8 +40,6 @@ const AccentPicker: React.FC<AccentPickerProps> = ({beatsPerBar, accentedBeats, 
         setAccentMap(modifiedAccentMap);
         onAccentPatternChange(modifiedAccentMap);
     }
-    
-    generateAccentMap();
 
     return (
         <div>

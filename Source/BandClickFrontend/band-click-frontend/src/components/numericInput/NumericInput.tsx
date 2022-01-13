@@ -1,38 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface NumericInputProps {
-    defaultValue: number,
+    value: number,
     minValue: number,
     maxValue: number,
     step: number,
     onValueChange: Function
 } 
 
-const NumericInput: React.FC<NumericInputProps> = ({defaultValue, minValue, maxValue, step, onValueChange}) => {
-    const [value, setValue] = useState(defaultValue);
+const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, step, onValueChange}) => {
+    const [currentValue, setValue] = useState(0);
+
+    useEffect(() => {
+        setValue(value);
+    }, [value]);
     
     const increment = () => {
-        if (value + step > maxValue) {
+        if (currentValue + step > maxValue) {
             setValue(maxValue);
         } else {
-            setValue(value + step);
+            setValue(currentValue + step);
         }
-        onValueChange(value);
+        onValueChange(currentValue);
     }
 
     const decrement = () => {
-        if (value - step < minValue) {
+        if (currentValue - step < minValue) {
             setValue(minValue);
         } else {
-            setValue(value - step);
+            setValue(currentValue - step);
         }
-        onValueChange(value);
+        onValueChange(currentValue);
     }
 
     return (
         <div>
             <div>
-                <input className="form-control" type="number" defaultValue={defaultValue} value={value} onChange={e => {
+                <input className="form-control" type="number" value={currentValue} onChange={e => {
                     if (e.target.value.trim().length === 0) {
                         setValue(0);
                         return;

@@ -262,6 +262,7 @@ namespace BandClickBackend.Application.Services
                 Name = entity.Name,
                 MetronomeSettings = mappedMetronomeSettings,
                 Comments = mappedComments,
+                IsShared = entity.IsShared,
                 PositiveRaitingCount = await _playlistRaitingsRepository.GetPositiveRaitingsCountAsync(entity.Id),
                 NegativeRaitingCount = await _playlistRaitingsRepository.GetNegativeRaitingsCountAsync(entity.Id)
             };

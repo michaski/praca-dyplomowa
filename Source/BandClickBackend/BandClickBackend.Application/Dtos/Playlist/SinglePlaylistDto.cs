@@ -15,6 +15,7 @@ namespace BandClickBackend.Application.Dtos.Playlist
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public bool IsShared { get; set; }
         public int PositiveRaitingCount { get; set; }
         public int NegativeRaitingCount { get; set; }
         public IEnumerable<MetronomeSettingsListDto> MetronomeSettings { get; set; }

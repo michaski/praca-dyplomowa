@@ -27,6 +27,8 @@ namespace BandClickBackend.Infrastructure.Repositories
             return await _context.MetronomeSettingsInPlaylists
                 .Include(e => e.MetronomeSettings)
                 .Include(e => e.MetronomeSettings.Metre)
+                .ThenInclude(m => m.AccentedBeats)
+                .Include(e => e.MetronomeSettings.Metre.RhythmicUnit)
                 .Include(e => e.MetronomeSettings.Type)
                 .Where(e => e.PlaylistId == playlist.Id)
                 .OrderBy(e => e.PositionInPlaylist)
