@@ -81,16 +81,13 @@ export const playlistsStoreReducer: Reducer<PlaylistList, PlaylistActions> =
                 return state;
             case PlaylistStoreActions.REMOVE_SETTING_FROM_PLAYLIST:
                 if (playlistState) {
-                    let metronomeSettingsState = playlistState.metronomeSettings.find(ms => ms.id === actions.metronomeSettings.id);
-                    if (metronomeSettingsState) {
-                        playlistState.metronomeSettings = playlistState.metronomeSettings.filter(ms => ms.id !== actions.metronomeSettings.id);
-                        return {
-                            ...state,
-                            playlists: [
-                                ...state.playlists.filter(p => p.id !== actions.playlist.id),
-                                playlistState
-                            ]
-                        }
+                    playlistState.metronomeSettings = playlistState.metronomeSettings.filter(ms => ms.id !== actions.metronomeSettings.id);
+                    return {
+                        ...state,
+                        playlists: [
+                            ...state.playlists.filter(p => p.id !== actions.playlist.id),
+                            playlistState
+                        ]
                     }
                 }
                 return state;

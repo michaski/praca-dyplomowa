@@ -12,10 +12,11 @@ interface PlaylistPickerProps {
     forcePlaylistRefresh: boolean,
     onPlaylistRefreshed: Function,
     onSelectedPlaylistChange: Function,
-    onSelectedSettingsChanged: Function
+    onSelectedSettingsChanged: Function,
+    refreshPlaylist: Function
 }
 
-const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, onPlaylistRefreshed, onSelectedPlaylistChange, onSelectedSettingsChanged}) => {
+const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, onPlaylistRefreshed, onSelectedPlaylistChange, onSelectedSettingsChanged, refreshPlaylist}) => {
     const [playlists, setPlaylists] = useState([] as Playlist[]);
     const [selectedPlaylistId, setSelectedPlaylistId] = useState('');
     const playlistActions = useAction(PlaylistStoreService);
@@ -73,8 +74,9 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
             <PlaylistComponent 
                 id={selectedPlaylistId} 
                 onSelectedSettingsChanged={handleSelectedSettingsChanged} 
-                forcePlaylistRefresh={forcePlaylistRefresh} 
-                onPlaylistRefreshed={onPlaylistRefreshed} />
+                refreshPlaylist={forcePlaylistRefresh} 
+                onPlaylistRefreshed={onPlaylistRefreshed}
+                forceRefresh={refreshPlaylist} />
         </div>
     );
 }

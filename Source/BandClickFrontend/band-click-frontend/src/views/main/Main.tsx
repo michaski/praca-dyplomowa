@@ -23,9 +23,17 @@ const Main = (props: any) => {
             <LoggedInHeader />
             <div className="row">
                 <Metronome settings={selectedSettings} playlistId={selectedPlaylistId} onSettingsAdded={() => setForcePlaylistRefresh(true)} />
-                <PlaylistPicker onSelectedPlaylistChange={handleSelectedPlaylistChanged} onSelectedSettingsChanged={handleSelectedSettingsChanged} forcePlaylistRefresh={forcePlaylistRefresh} onPlaylistRefreshed={() => {
-                    setForcePlaylistRefresh(false);
-                }} />
+                <PlaylistPicker 
+                    onSelectedPlaylistChange={handleSelectedPlaylistChanged} 
+                    onSelectedSettingsChanged={handleSelectedSettingsChanged} 
+                    forcePlaylistRefresh={forcePlaylistRefresh} 
+                    onPlaylistRefreshed={() => {
+                        setForcePlaylistRefresh(false);
+                    }}
+                    refreshPlaylist={() => {
+                        setForcePlaylistRefresh(true);
+                    }}
+                    />
             </div>
         </div>
     );

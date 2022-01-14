@@ -1,20 +1,24 @@
+import { settings } from "cluster";
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
 import { useAction } from "../../hooks/useAction";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
+import MetronomeSettingsService from "../../services/metronomeSettings/metronomeSettingsService";
 import { MetronomeSettingsStoreSerivce } from "../../services/metronomeSettings/metronomeSettingsStoreService";
 import PlaylistService from "../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../services/playlists/playlistStoreService";
+import { metronomeSettingsInitialState } from "../../store/reducers/metronomeSettings.reducer";
 import playlistSelector from "../../store/selectors/playlist.selector";
 
 interface PlaylistComponentProps {
     id: string,
-    forcePlaylistRefresh: boolean,
+    refreshPlaylist: boolean,
     onPlaylistRefreshed: Function,
-    onSelectedSettingsChanged: Function
+    onSelectedSettingsChanged: Function,
+    forceRefresh: Function
 }
 
-const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, forcePlaylistRefresh, onPlaylistRefreshed, onSelectedSettingsChanged}) => {
+const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylist, onPlaylistRefreshed, onSelectedSettingsChanged, forceRefresh}) => {
     const playlistData = useSelector(playlistSelector.getSelectedPlaylist);
     const [refresh, setRefresh] = useState(false);
     const [selectedMetronomeSettings, setSelectedMetronomeSettings] = useState({} as MetronomeSettings);
@@ -22,7 +26,7 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, forcePlaylistR
     const playlistActions = useAction(PlaylistStoreService);
 
     useEffect(() => {
-        setRefresh(forcePlaylistRefresh);
+        setRefresh(refreshPlaylist);
         getPlaylistData();
         onPlaylistRefreshed();
         setRefresh(false);
@@ -41,6 +45,18 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, forcePlaylistR
         onSelectedSettingsChanged(settings);
     }
 
+    const removeSettingFromPlaylist = (setting: MetronomeSettings) => {
+        MetronomeSettingsService.removeFromPlaylist(setting.id, playlistData.id)
+            .then(result => {
+                MetronomeSettingsService.delete(setting.id);
+                let modifiedPlaylist = playlistData;
+                modifiedPlaylist.metronomeSettings = modifiedPlaylist.metronomeSettings.filter(ms => ms.id !== setting.id);
+                playlistActions.editPlaylist(modifiedPlaylist);
+                onSelectedSettingsChanged(metronomeSettingsInitialState);
+                forceRefresh();
+            });
+    }
+
     return (
         <div>
             <button className="btn btn-warning">Ustawienia</button>
@@ -56,7 +72,9 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, forcePlaylistR
                                 <div className="d-inline-flex">
                                     <button className="btn btn-sm btn-warning">Opcje</button>
                                     <button className="btn btn-sm btn-success">Przenieś</button>
-                                    <button className="btn btn-sm btn-danger">Usuń</button>
+                                    <button className="btn btn-sm btn-danger" onClick={() => {
+                                        removeSettingFromPlaylist(setting);
+                                    }}>Usuń</button>
                                 </div>
                             </li>
                         );
