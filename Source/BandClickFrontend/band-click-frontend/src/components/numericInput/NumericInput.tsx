@@ -45,6 +45,19 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
                     if (parsedValue === undefined || isNaN(parsedValue) || parsedValue === Infinity || parsedValue < minValue || parsedValue > maxValue) {
                         return;
                     }
+                    if (parsedValue > currentValue) {
+                        if (currentValue + step <= maxValue) {
+                            parsedValue = currentValue + step;
+                        } else {
+                            return;
+                        }
+                    } else if (parsedValue < currentValue) {
+                        if (currentValue - step >= minValue) {
+                            parsedValue = currentValue - step;
+                        } else {
+                            return;
+                        }
+                    }
                     setValue(parsedValue);
                     onValueChange(parsedValue);
                 }} />

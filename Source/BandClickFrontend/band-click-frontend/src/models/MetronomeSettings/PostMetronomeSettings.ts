@@ -1,10 +1,10 @@
-import { Metre } from "../Metre/Metre";
+import { PostMetre } from "../Metre/PostMetre";
 
 export interface PostMetronomeSettings {
     name: string,
-    numberOfMeasures: string,
+    numberOfMeasures: number,
     tempo: number,
-    metre: Metre,
+    metre: PostMetre,
     typeId: string,
     playlistId: string
 }

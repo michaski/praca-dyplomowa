@@ -11,6 +11,6 @@ export interface MetronomeSettings {
     type: MetronomeSettingsType,
     comments: Comment[],
     isShared: boolean,
-    positiveRaitingCouns: number,
+    positiveRaitingCount: number,
     negativeRaitingCount: number
 }

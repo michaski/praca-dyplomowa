@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import metronomeSettingsSelector from "../../store/selectors/metronomeSettings.selector";
 
 interface AccentPickerProps {
     beatsPerBar: number,
@@ -6,13 +8,31 @@ interface AccentPickerProps {
     onAccentPatternChange: Function
 }
 
-const AccentPicker: React.FC<AccentPickerProps> = ({beatsPerBar, accentedBeats, onAccentPatternChange}) => {
+const AccentPicker: React.FC<AccentPickerProps> = ({onAccentPatternChange}) => {
+    const accentedBeats = useSelector(metronomeSettingsSelector.getAccentedBeats);
+    const beatsPerBar = useSelector(metronomeSettingsSelector.getBeatsPerBar);
     const [accentMap, setAccentMap] = useState([] as boolean[]);
 
-    useEffect(() => {
-        if (accentedBeats) {
-            setAccentMap(accentedBeats);
+    const mapAccentedBeatsToAccentMap = (accentedBeats: number[]): boolean[] => {
+        let newMap: boolean[] = [];
+        for (let i = 0; i<beatsPerBar; i++) {
+            newMap[i] = accentedBeats.includes(i + 1) || false;
         }
+        return newMap;
+    }
+
+    const mapAccentMapToAccentedBeats = (accentMap: boolean[]): number[] => {
+        let accentedBeats: number[] = [];
+        accentMap.forEach((isAccented, index) => {
+            if (isAccented) {
+                accentedBeats.push(index + 1);
+            }
+        });
+        return accentedBeats;
+    }
+
+    useEffect(() => {
+        setAccentMap(mapAccentedBeatsToAccentMap(accentedBeats));
     }, [accentedBeats, beatsPerBar]);
 
     const generateAccentMap = () => {

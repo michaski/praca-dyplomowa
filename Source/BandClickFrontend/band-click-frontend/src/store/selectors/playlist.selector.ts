@@ -9,6 +9,10 @@ const playlistSelector = {
     getById: createSelector(
         (state: StoreState, id: string) => state.playlists.playlists.find(p => p.id === id),
         playlist => playlist
+    ),
+    getSelectedPlaylist: createSelector(
+        (state: StoreState) => state.playlists,
+        playlist => playlist.selectedPlaylist
     )
 }
 

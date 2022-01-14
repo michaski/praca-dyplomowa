@@ -1,35 +1,44 @@
 import React, { useEffect, useState } from "react"
+import { useSelector } from "react-redux";
 import { useAction } from "../../hooks/useAction";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
-import { Playlist } from "../../models/Playlists/Playlist";
 import { MetronomeSettingsStoreSerivce } from "../../services/metronomeSettings/metronomeSettingsStoreService";
 import PlaylistService from "../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../services/playlists/playlistStoreService";
-import { metronomeSettingsAction } from "../../store/actions/metronomeSettings.actions";
+import playlistSelector from "../../store/selectors/playlist.selector";
 
 interface PlaylistComponentProps {
     id: string,
+    forcePlaylistRefresh: boolean,
+    onPlaylistRefreshed: Function,
     onSelectedSettingsChanged: Function
 }
 
-const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, onSelectedSettingsChanged}) => {
-    const [playlistData, setPlaylistData] = useState({} as Playlist);
+const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, forcePlaylistRefresh, onPlaylistRefreshed, onSelectedSettingsChanged}) => {
+    const playlistData = useSelector(playlistSelector.getSelectedPlaylist);
+    const [refresh, setRefresh] = useState(false);
     const [selectedMetronomeSettings, setSelectedMetronomeSettings] = useState({} as MetronomeSettings);
-    // const metronomeActions = useAction(MetronomeSettingsStoreSerivce);
+    const metronomeActions = useAction(MetronomeSettingsStoreSerivce);
+    const playlistActions = useAction(PlaylistStoreService);
 
     useEffect(() => {
+        setRefresh(forcePlaylistRefresh);
         getPlaylistData();
+        onPlaylistRefreshed();
+        setRefresh(false);
     }, [id]);
 
     const getPlaylistData = async () => {
-        const result = await PlaylistService.getById(id);
-        setPlaylistData(result);
+        PlaylistService.getById(id)
+            .then(result => {
+                playlistActions.editPlaylist(result);
+            });
     }
 
     const changedMetronomeSetting = (settings: MetronomeSettings) => {
+        metronomeActions.loadSettings(settings);
         setSelectedMetronomeSettings(settings);
         onSelectedSettingsChanged(settings);
-        // metronomeActions.loadSettings(settings);
     }
 
     return (
@@ -37,7 +46,7 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, onSelectedSett
             <button className="btn btn-warning">Ustawienia</button>
             <ul>
                 {
-                    playlistData?.metronomeSettings?.map((setting, index) => {
+                    playlistData.metronomeSettings.map((setting, index) => {
                         return (
                             <li className="d-flex align-items-center" key={index} onClick={e => changedMetronomeSetting(setting)}>
                                 <div className="d-inline-flex flex-column">

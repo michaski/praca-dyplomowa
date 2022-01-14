@@ -7,6 +7,9 @@ export class PlaylistStoreService {
     addPlaylist(playlist: Playlist) {
         store.dispatch(playlistAction.addPlaylist(playlist));
     }
+    addPlaylists(playlists: Playlist[]) {
+        store.dispatch(playlistAction.addPlaylists(playlists));
+    }
     editPlaylist(playlist: Playlist) {
         store.dispatch(playlistAction.editPlaylist(playlist));
     }
@@ -21,5 +24,8 @@ export class PlaylistStoreService {
     }
     changeSettingPositionInPlaylist(playlist: Playlist, setting: MetronomeSettings, newPosition: number) {
         store.dispatch(playlistAction.changeSettingPositionInPlaylist(playlist, setting, newPosition));
+    }
+    setSelectedPlaylist(playlist: Playlist) {
+        store.dispatch(playlistAction.setSelectedPlaylist(playlist));
     }
 }

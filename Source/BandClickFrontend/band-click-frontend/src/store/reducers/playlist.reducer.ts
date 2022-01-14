@@ -4,16 +4,39 @@ import { Playlist } from "../../models/Playlists/Playlist";
 import { PlaylistActions, PlaylistStoreActions } from "../actions/playlists.actions";
 
 export interface PlaylistList {
-    playlists: Playlist[]
+    playlists: Playlist[],
+    selectedPlaylist: Playlist
+}
+
+export const playlistIninialState: Playlist = {
+    id: '',
+    name: '',
+    metronomeSettings: [],
+    comments: [],
+    positiveRaitingCount: 0,
+    negativeRaitingCount: 0
 }
 
 export const playlistListInitialState: PlaylistList = {
-    playlists: []
+    playlists: [],
+    selectedPlaylist: playlistIninialState
 }
 
 export const playlistsStoreReducer: Reducer<PlaylistList, PlaylistActions> = 
     (state: PlaylistList = playlistListInitialState, actions: PlaylistActions) => {
-        let playlistState: Playlist | undefined = state.playlists.find(p => p.id === actions.playlist.id);
+        if (actions.type === PlaylistStoreActions.ADD_PLAYLISTS) {
+            return {
+                ...state,
+                playlists: [
+                    ...state.playlists,
+                    ...actions.playlists
+                ]
+            };
+        }
+        let playlistState: Playlist | undefined = undefined;
+        if (typeof (actions.type) == typeof(PlaylistStoreActions)){
+            playlistState = state.playlists.find(p => p.id === actions.playlist.id);
+        } 
         switch (actions.type) {
             case PlaylistStoreActions.ADD_PLAYLIST:
                 return {
@@ -34,7 +57,6 @@ export const playlistsStoreReducer: Reducer<PlaylistList, PlaylistActions> =
                     }
                 }
                 return state;
-                break;
             case PlaylistStoreActions.DELETE_PLAYLIST:
                 if (playlistState) {
                     return {
@@ -98,6 +120,11 @@ export const playlistsStoreReducer: Reducer<PlaylistList, PlaylistActions> =
                     }
                 }
                 return state;
+            case PlaylistStoreActions.SET_SELECTED_PLAYLIST:
+                return {
+                    ...state,
+                    selectedPlaylist: actions.playlist
+                }
             default:
                 return state;
         }

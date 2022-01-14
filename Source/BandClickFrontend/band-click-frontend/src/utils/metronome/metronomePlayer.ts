@@ -33,6 +33,9 @@ class MetronomePlayer {
             this.soundArray[index] = accentedBeat ? this.accentSound : this.regularSound;
         });
         this.beatsPerBar = accentedBeats.length;
+        console.log(`Updated beats per bar to ${this.beatsPerBar}`);
+        console.log(`Updated accent map to `);
+        console.log(accentedBeats);
     }
 
     public setTempo = (newTempo: number) => {
@@ -41,6 +44,7 @@ class MetronomePlayer {
         if (this.isRunning) {
             this.restart();
         }
+        console.log(`Updated tempo to ${this.tempo} Bpm`);
     }
 
     public start = () => {

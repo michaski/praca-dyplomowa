@@ -1,5 +1,4 @@
 import { CommentTransfer } from "../../models/Comments/EditComment";
-import { Playlist } from "../../models/Playlists/Playlist";
 import { PostPlaylist } from "../../models/Playlists/PostPlaylist";
 import { UpdatePlaylist } from "../../models/Playlists/UpdatePlaylist";
 import { PLAYLISTS_CONTROLLER } from "../../utils/apiUrls";

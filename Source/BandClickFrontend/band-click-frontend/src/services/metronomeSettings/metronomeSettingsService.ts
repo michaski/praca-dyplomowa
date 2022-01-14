@@ -1,4 +1,3 @@
-import { Comment } from "../../models/Comments/Comment";
 import { CommentTransfer } from "../../models/Comments/EditComment";
 import { Metre } from "../../models/Metre/Metre";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";

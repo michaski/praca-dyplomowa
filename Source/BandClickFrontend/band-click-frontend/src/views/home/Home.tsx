@@ -18,7 +18,7 @@ const Home = () => {
         isShared: false,
         name: '',
         negativeRaitingCount: 0,
-        positiveRaitingCouns: 0,
+        positiveRaitingCount: 0,
         type: {
             id: '',
             name: ''

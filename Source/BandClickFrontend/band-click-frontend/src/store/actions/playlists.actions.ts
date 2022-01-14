@@ -3,16 +3,23 @@ import { Playlist } from "../../models/Playlists/Playlist";
 
 export enum PlaylistStoreActions {
     ADD_PLAYLIST = 'ADD_PLAYLIST',
+    ADD_PLAYLISTS = 'ADD_PLAYLISTS',
     EDIT_PLAYLIST = 'EDIT_PLAYLIST',
     DELETE_PLAYLIST = 'DELETE_PLAYLIST',
     ADD_SETTING_TO_PLAYLIST = 'ADD_SETTING_TO_PLAYLIST',
     REMOVE_SETTING_FROM_PLAYLIST = 'REMOVE_SETTING_FROM_PLAYLIST',
-    CHANGE_SETTING_POSITION_IN_PLAYLIST = 'CHANGE_SETTING_POSITION_IN_PLAYLIST'
+    CHANGE_SETTING_POSITION_IN_PLAYLIST = 'CHANGE_SETTING_POSITION_IN_PLAYLIST',
+    SET_SELECTED_PLAYLIST = 'SET_SELECTED_PLAYLIST'
 }
 
 export interface AddPlaylistAction {
     type: PlaylistStoreActions.ADD_PLAYLIST,
     playlist: Playlist
+}
+
+export interface AddPlaylistsAction {
+    type: PlaylistStoreActions.ADD_PLAYLISTS,
+    playlists: Playlist[]
 }
 
 export interface EditPlaylistAction {
@@ -44,18 +51,29 @@ export interface ChangeSettingPositionInPlaylistAction {
     newPosition: number
 }
 
+export interface SetSelectedPlaylist {
+    type: PlaylistStoreActions.SET_SELECTED_PLAYLIST,
+    playlist: Playlist
+}
+
 export type PlaylistActions = 
     AddPlaylistAction | 
+    AddPlaylistsAction |
     EditPlaylistAction | 
     DeletePlaylistAction | 
     AddSettingToPlaylistAction | 
     RemoveSettingFromPlaylistAction | 
-    ChangeSettingPositionInPlaylistAction;
+    ChangeSettingPositionInPlaylistAction |
+    SetSelectedPlaylist;
 
 export const playlistAction = {
     addPlaylist: (playlist: Playlist): AddPlaylistAction => ({
         type: PlaylistStoreActions.ADD_PLAYLIST,
         playlist: playlist
+    }),
+    addPlaylists: (playlists: Playlist[]): AddPlaylistsAction => ({
+        type: PlaylistStoreActions.ADD_PLAYLISTS,
+        playlists: playlists
     }),
     editPlaylist: (playlist: Playlist): EditPlaylistAction => ({
         type: PlaylistStoreActions.EDIT_PLAYLIST,
@@ -80,5 +98,9 @@ export const playlistAction = {
         playlist: playlist,
         metronomeSettings: metronomeSettings,
         newPosition: newPosition
+    }),
+    setSelectedPlaylist: (playlist: Playlist) => ({
+        type: PlaylistStoreActions.SET_SELECTED_PLAYLIST,
+        playlist: playlist
     })
 }
