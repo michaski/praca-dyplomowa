@@ -12,6 +12,7 @@ namespace BandClickBackend.Application.Dtos.Metre
 {
     public class MetreViewDto : IMap
     {
+        public Guid Id { get; set; }
         public int BeatsPerBar { get; set; }
         public int RhythmicUnit { get; set; }
         public IEnumerable<int> AccentedBeats { get; set; }

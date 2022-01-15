@@ -18,11 +18,11 @@ namespace BandClickBackend.Application.Validators.Metre
             RuleFor(dto => dto.Id)
                 .NotEmpty()
                 .MustAsync(async (guid, token) =>
-                    await repository.GetByIdAsync(guid) is not null)
+                    await repository.GetByIdNoTrackingAsync(guid) is not null)
                 .WithMessage("Nie znaleziono metrum o podanym Id.");
             RuleFor(dto => dto.RhythmicUnit)
                 .MustAsync(async (rhythmicUnit, token) =>
-                    await rhythmicUnitRepository.GetRhythmicUnitByNumberAsync(rhythmicUnit) is not null)
+                    await rhythmicUnitRepository.GetRhythmicUnitByNumberNoTrackingAsync(rhythmicUnit) is not null)
                 .WithMessage("Taka wartość rytmiczna nie istnieje lub nie jest obecnie obsługiwana przez aplikację.");
             RuleFor(dto => dto.BeatsPerBar)
                 .GreaterThan(0)

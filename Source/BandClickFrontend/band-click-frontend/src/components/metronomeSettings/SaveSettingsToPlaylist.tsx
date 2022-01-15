@@ -1,5 +1,5 @@
 import { settings } from "cluster";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Form, FormControl, Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAction } from "../../hooks/useAction";
@@ -19,7 +19,8 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
     const [show, setShow] = useState(false);
     const [settingsName, setSettingsName] = useState('');
     const [settingsTypes, setSettingsTypes] = useState([] as MetronomeSettingsType[]);
-    const [selectedTypeId, setSelectedTypeId] = useState('');
+    // const [selectedTypeId, setSelectedTypeId] = useState('');
+    let selectedTypeId = useRef('');
     const metronomeSettings = useSelector(metronomeSettingsSelector.getSettings);
     const metronomeSettingsActions = useAction(MetronomeSettingsStoreSerivce);
     const selectedPlaylist = useSelector(playlistSelector.getSelectedPlaylist);
@@ -29,9 +30,9 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
         MetronomeSettingsService.getTypes()
             .then(types => {
                 setSettingsTypes(types);
-                setSelectedTypeId(types[0].id);
+                selectedTypeId.current = types[0].id;
             });
-    }, []);
+    }, [selectedTypeId]);
 
     const handleClose = () => {
         setShow(false);
@@ -42,7 +43,7 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
 
     const addSettingsToPlaylist = () => {
         metronomeSettingsActions.setName(settingsName);
-        metronomeSettingsActions.setType(settingsTypes.find(t => t.id === selectedTypeId) || settingsTypes[0]);
+        metronomeSettingsActions.setType(settingsTypes.find(t => t.id === selectedTypeId.current) || settingsTypes[0]);
         MetronomeSettingsService.create({
             name: settingsName,
             tempo: metronomeSettings.tempo,
@@ -53,9 +54,9 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
             },
             numberOfMeasures: 4,
             playlistId: selectedPlaylist.id,
-            typeId: selectedTypeId
+            typeId: selectedTypeId.current
         }).then(createdSetting => {
-            console.log(`Adding ${createdSetting.name} to ${selectedPlaylist.name}`)
+            console.log(createdSetting.numberOfMeasures);
             let modifiedPlaylist = selectedPlaylist;
             modifiedPlaylist.metronomeSettings.push(createdSetting);
             playlistActions.editPlaylist(modifiedPlaylist);
@@ -65,7 +66,8 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
     }
 
     const selectedTypeChanged = (id: string) => {
-        setSelectedTypeId(id);
+        selectedTypeId.current = id;
+        // setSelectedTypeId(id);
     }
 
     return (
@@ -80,16 +82,16 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <FormControl type="text" placeholder="Nazwa..." onChange={e => {
+                        <FormControl id="settingName" type="text" placeholder="Nazwa..." onChange={e => {
                             setSettingsName(e.target.value);
                         }} />
                         <Form.Label htmlFor="type-select">Typ:</Form.Label>
-                        <Form.Select id={'type-select'} aria-label="Rodzaj">
+                        <Form.Select id={'type-select'} aria-label="Rodzaj" onChange={e => {
+                                    selectedTypeChanged(e.currentTarget.value);
+                                }}>
                             {
                                 settingsTypes.map((type, index) => {
-                                    return <option key={index} value={type.id} onChange={e => {
-                                        selectedTypeChanged(e.currentTarget.value);
-                                    }}>{type.name}</option>
+                                    return <option key={index} value={type.id}>{type.name}</option>
                                 })
                             }
                         </Form.Select>

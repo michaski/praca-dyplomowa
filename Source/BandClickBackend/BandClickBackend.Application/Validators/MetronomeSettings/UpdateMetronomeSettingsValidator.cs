@@ -24,7 +24,7 @@ namespace BandClickBackend.Application.Validators.MetronomeSettings
                 .NotEmpty()
                 .MinimumLength(1)
                 .MaximumLength(45);
-            RuleFor(dto => dto.NumberOdMeasures)
+            RuleFor(dto => dto.NumberOfMeasures)
                 .GreaterThan(0);
             RuleFor(dto => dto.Tempo)
                 .GreaterThan(0)

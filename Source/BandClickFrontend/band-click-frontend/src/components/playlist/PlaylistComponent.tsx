@@ -9,6 +9,7 @@ import PlaylistService from "../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../services/playlists/playlistStoreService";
 import { metronomeSettingsInitialState } from "../../store/reducers/metronomeSettings.reducer";
 import playlistSelector from "../../store/selectors/playlist.selector";
+import MetronomeSettingsOptions from "../metronomeSettings/MetronomeSettingsOptions";
 
 interface PlaylistComponentProps {
     id: string,
@@ -20,8 +21,8 @@ interface PlaylistComponentProps {
 
 const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylist, onPlaylistRefreshed, onSelectedSettingsChanged, forceRefresh}) => {
     const playlistData = useSelector(playlistSelector.getSelectedPlaylist);
-    const [refresh, setRefresh] = useState(false);
-    const [selectedMetronomeSettings, setSelectedMetronomeSettings] = useState({} as MetronomeSettings);
+    const [refresh, setRefresh] = useState(refreshPlaylist);
+    const [selectedMetronomeSettings, setSelectedMetronomeSettings] = useState(metronomeSettingsInitialState);
     const metronomeActions = useAction(MetronomeSettingsStoreSerivce);
     const playlistActions = useAction(PlaylistStoreService);
 
@@ -70,7 +71,7 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
                                     <span>{setting.metre.beatsPerBar}/{setting.metre.rhythmicUnit} {setting.tempo} Bpm</span>
                                 </div>
                                 <div className="d-inline-flex">
-                                    <button className="btn btn-sm btn-warning">Opcje</button>
+                                    <MetronomeSettingsOptions settings={selectedMetronomeSettings} onSettingsChanged={forceRefresh} />
                                     <button className="btn btn-sm btn-success">Przenieś</button>
                                     <button className="btn btn-sm btn-danger" onClick={() => {
                                         removeSettingFromPlaylist(setting);

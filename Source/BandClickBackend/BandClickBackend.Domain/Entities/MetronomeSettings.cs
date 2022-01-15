@@ -7,7 +7,7 @@ namespace BandClickBackend.Domain.Entities
     public class MetronomeSettings : ShareableEntity<MetronomeSettingsRaiting>
     {
         public string Name { get; set; }
-        public int NumberOdMeasures { get; set; }
+        public int NumberOfMeasures { get; set; }
         public int Tempo { get; set; }
         public Metre Metre { get; set; }
         public MetronomeSettingsType Type { get; set; }

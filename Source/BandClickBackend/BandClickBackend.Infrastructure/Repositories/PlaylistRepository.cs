@@ -47,7 +47,7 @@ namespace BandClickBackend.Infrastructure.Repositories
 
         public async Task<Playlist> GetPlaylistByIdAsync(Guid id)
         {
-            return await _context.Playlists
+            var entity = await _context.Playlists
                 .Include(p => p.Comments)
                 .Include(p => p.MetronomeSettings)
                 .ThenInclude(e => e.MetronomeSettings)
@@ -57,7 +57,9 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .ThenInclude(e => e.MetronomeSettings)
                 .ThenInclude(ms => ms.Metre)
                 .ThenInclude(m => m.AccentedBeats)
+                .AsNoTracking()
                 .SingleOrDefaultAsync(p => p.Id == id);
+            return entity;
         }
 
         public async Task<Playlist> AddPlaylistAsync(Playlist playlist)
@@ -70,6 +72,7 @@ namespace BandClickBackend.Infrastructure.Repositories
 
         public async Task UpdatePlaylistAsync(Playlist playlist)
         {
+            _context.Entry(playlist).State = EntityState.Modified;
             _context.Playlists.Update(playlist);
             await _context.SaveChangesSignInAsync(_userContextService);
         }

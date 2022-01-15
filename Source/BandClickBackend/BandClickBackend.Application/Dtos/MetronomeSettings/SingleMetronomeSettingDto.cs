@@ -15,7 +15,7 @@ namespace BandClickBackend.Application.Dtos.MetronomeSettings
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public int NumberOdMeasures { get; set; }
+        public int NumberOfMeasures { get; set; }
         public int Tempo { get; set; }
         public UpdateMetreDto Metre { get; set; }
         public MetronomeSettingsType Type { get; set; }

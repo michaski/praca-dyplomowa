@@ -26,6 +26,13 @@ namespace BandClickBackend.Infrastructure.Repositories
             return await _context.RhythmicUnits.SingleOrDefaultAsync(ru => ru.NumericValue == number);
         }
 
+        public async Task<RhythmicUnit> GetRhythmicUnitByNumberNoTrackingAsync(int number)
+        {
+            return await _context.RhythmicUnits
+                .AsNoTracking()
+                .SingleOrDefaultAsync(ru => ru.NumericValue == number);
+        }
+
         public async Task<RhythmicUnit> GetRhythmicUnitByNameAsync(string name)
         {
             return await _context.RhythmicUnits.SingleOrDefaultAsync(ru => ru.DisplayName == name);

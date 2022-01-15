@@ -165,7 +165,7 @@ namespace BandClickBackend.Application.Services
                 }
             }
             entity.Name = dto.Name;
-            entity.NumberOdMeasures = dto.NumberOdMeasures;
+            entity.NumberOfMeasures = dto.NumberOfMeasures;
             entity.Tempo = dto.Tempo;
             if (entity.Type.Id != dto.TypeId)
             {

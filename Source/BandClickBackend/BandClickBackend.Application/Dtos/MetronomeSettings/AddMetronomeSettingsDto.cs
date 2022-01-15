@@ -13,7 +13,7 @@ namespace BandClickBackend.Application.Dtos.MetronomeSettings
     public class AddMetronomeSettingsDto : IMap
     {
         public string Name { get; set; }
-        public int? NumberOdMeasures { get; set; } = 4;
+        public int? NumberOfMeasures { get; set; } = 4;
         public int Tempo { get; set; } = 80;
         public MetreViewDto Metre { get; set; }
         public Guid TypeId { get; set; }

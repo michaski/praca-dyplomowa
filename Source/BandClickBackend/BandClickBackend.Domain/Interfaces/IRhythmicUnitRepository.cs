@@ -13,6 +13,7 @@ namespace BandClickBackend.Domain.Interfaces
         RhythmicUnit EightNote { get; }
         RhythmicUnit SixteenthNote { get; }
         Task<RhythmicUnit> GetRhythmicUnitByNumberAsync(int number);
+        Task<RhythmicUnit> GetRhythmicUnitByNumberNoTrackingAsync(int number);
         Task<RhythmicUnit> GetRhythmicUnitByNameAsync(string name);
     }
 }

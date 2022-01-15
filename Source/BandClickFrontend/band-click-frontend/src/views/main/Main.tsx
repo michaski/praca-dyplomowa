@@ -31,7 +31,7 @@ const Main = (props: any) => {
                         setForcePlaylistRefresh(false);
                     }}
                     refreshPlaylist={() => {
-                        setForcePlaylistRefresh(true);
+                        setForcePlaylistRefresh(!forcePlaylistRefresh);
                     }}
                     />
             </div>

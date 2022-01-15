@@ -2,7 +2,7 @@
 export interface UpdateMetronomeSettings {
     id: string,
     name: string,
-    numberOfMeasures: string,
+    numberOfMeasures: number,
     tempo: number,
     typeId: string
 }

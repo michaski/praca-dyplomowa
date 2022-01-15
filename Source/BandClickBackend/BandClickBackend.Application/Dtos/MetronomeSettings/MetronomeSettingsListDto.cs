@@ -16,6 +16,7 @@ namespace BandClickBackend.Application.Dtos.MetronomeSettings
         public string Name { get; set; }
         public int Tempo { get; set; }
         public MetreViewDto Metre { get; set; }
+        public int NumberOfMeasures { get; set; }
         public MetronomeSettingsType Type { get; set; }
 
         public void Mapping(Profile profile)
