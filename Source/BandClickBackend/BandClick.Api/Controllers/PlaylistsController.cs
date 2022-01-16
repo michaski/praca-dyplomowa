@@ -196,7 +196,7 @@ namespace BandClickBackend.Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deletes playlist with given id")]
         public async Task<IActionResult> DeletePlaylistAsync(Guid id)
         {

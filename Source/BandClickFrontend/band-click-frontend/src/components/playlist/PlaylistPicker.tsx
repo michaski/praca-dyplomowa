@@ -68,6 +68,20 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
         getPlaylists();
     }
 
+    const deletePlaylist = () => {
+        PlaylistService.delete(selectedPlaylistId)
+        .then(_ => {
+            const deletedPlaylist = playlistsStore.find(p => p.id === selectedPlaylistId);
+            if (deletedPlaylist) {
+                console.log(deletedPlaylist);
+                playlistActions.deletePlaylist(deletedPlaylist);
+                setPlaylists(playlists.filter(p => p.id !== selectedPlaylistId));
+                playlistActions.setSelectedPlaylist(playlistsStore[0]);
+                setSelectedPlaylistId(playlists[0].id);
+            }
+        });
+    }
+
     return (
         <div className="col-md-4">
             <h2>Playlista</h2>
@@ -82,6 +96,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
             </select>
             <ButtonGroup size="sm">
                 <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
+                <Button variant="danger" onClick={deletePlaylist}>&#10006;</Button>
             </ButtonGroup>
             <PlaylistComponent 
                 id={selectedPlaylistId} 

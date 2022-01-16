@@ -39,7 +39,7 @@ export const playlistsStoreReducer: Reducer<PlaylistList, PlaylistActions> =
             };
         }
         let playlistState: Playlist | undefined = undefined;
-        if (typeof (actions.type) == typeof(PlaylistStoreActions)){
+        if (actions.type as PlaylistStoreActions){
             playlistState = state.playlists.find(p => p.id === actions.playlist.id);
         } 
         switch (actions.type) {
@@ -64,11 +64,12 @@ export const playlistsStoreReducer: Reducer<PlaylistList, PlaylistActions> =
                 return state;
             case PlaylistStoreActions.DELETE_PLAYLIST:
                 if (playlistState) {
+                    console.log(state.playlists);
+                    let playlistsAfterDelete = state.playlists.filter(p => p.id !== actions.playlist.id);
+                    console.log(playlistsAfterDelete);
                     return {
-                        ...state,
-                        playlists: [
-                            ...state.playlists.filter(p => p.id !== actions.playlist.id)
-                        ]
+                        selectedPlaylist: state.selectedPlaylist,
+                        playlists: playlistsAfterDelete
                     }
                 }
                 return state;

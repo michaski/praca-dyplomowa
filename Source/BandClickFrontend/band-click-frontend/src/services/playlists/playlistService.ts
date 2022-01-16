@@ -63,7 +63,7 @@ const PlaylistService = {
         await requests.delete(`${PLAYLISTS_CONTROLLER}/${id}`, null, auth.getToken());
     },
     deleteComment: async (commentId: string) => {
-        await requests.delete(`${PLAYLISTS_CONTROLLER}/delete/${commentId}`, null, auth.getToken());
+        await requests.delete(`${PLAYLISTS_CONTROLLER}/comments/delete/${commentId}`, null, auth.getToken());
     }
 }
 
