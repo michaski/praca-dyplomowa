@@ -13,10 +13,12 @@ interface PlaylistPickerProps {
     onPlaylistRefreshed: Function,
     onSelectedPlaylistChange: Function,
     onSelectedSettingsChanged: Function,
-    refreshPlaylist: Function
+    refreshPlaylist: Function,
+    barCount: number,
+    onAutoSwitchToggle: Function
 }
 
-const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, onPlaylistRefreshed, onSelectedPlaylistChange, onSelectedSettingsChanged, refreshPlaylist}) => {
+const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, onPlaylistRefreshed, onSelectedPlaylistChange, onSelectedSettingsChanged, refreshPlaylist, barCount, onAutoSwitchToggle}) => {
     const [playlists, setPlaylists] = useState([] as Playlist[]);
     const [selectedPlaylistId, setSelectedPlaylistId] = useState('');
     const playlistActions = useAction(PlaylistStoreService);
@@ -76,7 +78,10 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
                 onSelectedSettingsChanged={handleSelectedSettingsChanged} 
                 refreshPlaylist={forcePlaylistRefresh} 
                 onPlaylistRefreshed={onPlaylistRefreshed}
-                forceRefresh={refreshPlaylist} />
+                forceRefresh={refreshPlaylist}
+                barsFinished={barCount}
+                onAutoSwitchToggle={onAutoSwitchToggle}
+            />
         </div>
     );
 }

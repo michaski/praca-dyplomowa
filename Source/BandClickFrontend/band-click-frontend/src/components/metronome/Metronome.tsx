@@ -13,13 +13,24 @@ import { mapAccentedBeatsToAccentMap, mapAccentMapToAccentedBeats } from "../../
 interface MetronomeProps {
     settings: MetronomeSettings,
     playlistId?: string,
-    onSettingsAdded?: Function
+    onSettingsAdded?: Function,
+    onBarFinished: Function,
+    isAutoSwitchOn: boolean
 }
 
-const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAdded}) => {
+const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAdded, onBarFinished, isAutoSwitchOn}) => {
+    let barCount = useRef(0);
+
+    const handleFinishedBar = () => {
+        if (autoSwitchState.current) {
+            barCount.current++;
+            onBarFinished(barCount.current);
+        }
+    }
+
     const DEFAULT_TEMPO = 80;
     const MIN_TEMPO = 20;
-    const MAX_TEMPO = 500;
+    const MAX_TEMPO = 300;
     const DEFAULT_BEATS_PER_BAR = 4;
     const DEFAULT_RHYTHMIC_UNIT = 4;
     const metronomeSettings = useSelector(metronomeSettingsSelector.getSettings);
@@ -28,15 +39,18 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
     const [beatsPerBar, setBeatsPerBar] = useState(metronomeSettings.metre.beatsPerBar);
     const [rhythmicUnit, setRhythmicUnit] = useState(metronomeSettings.metre.rhythmicUnit);
     const [accentMap, setAccentMap] = useState([] as boolean[]);
-    const metronome = useRef(new MetronomePlayer(tempo, beatsPerBar));
+    let autoSwitchState = useRef(isAutoSwitchOn);
+    const metronome = useRef(new MetronomePlayer(tempo, beatsPerBar, [], handleFinishedBar));
 
     useEffect(() => {
+        autoSwitchState.current = isAutoSwitchOn;
+        barCount.current = 0;
         handleTempoChange(metronomeSettings.tempo);
         handleBeatsPerBarChange(metronomeSettings.metre.beatsPerBar);
         const newAccentMap = mapAccentedBeatsToAccentMap(metronomeSettings.metre.accentedBeats, metronomeSettings.metre.beatsPerBar);
         handleAccentPatternChange(newAccentMap);
         handleRhythmicUnitChange(metronomeSettings.metre.rhythmicUnit);
-    }, [settings]);
+    }, [settings, isAutoSwitchOn]);
 
     const handleTempoChange = (newTempo: number) => {
         if (isNaN(newTempo) || newTempo === Infinity || newTempo < MIN_TEMPO || newTempo > MAX_TEMPO) {
@@ -82,6 +96,7 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
 
     const toggleMetronome = () => {
         if (!metronome.current.getIsRunning()) {
+            barCount.current = 0;
             metronome.current.start();
         } else {
             metronome.current.stop();

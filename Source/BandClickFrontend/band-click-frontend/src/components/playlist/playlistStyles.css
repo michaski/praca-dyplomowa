@@ -1,0 +1,13 @@
+.playlist-item {
+    cursor: pointer;
+    transition-duration: 200ms;
+}
+
+.playlist-item:not(.selected-setting):hover {
+    background-color: #f3f3f3;
+}
+
+.selected-setting {
+    background-color: lightgrey;
+    color: red;
+}

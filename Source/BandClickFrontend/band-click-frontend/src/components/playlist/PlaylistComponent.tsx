@@ -1,5 +1,4 @@
-import { settings } from "cluster";
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux";
 import { useAction } from "../../hooks/useAction";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
@@ -9,23 +8,30 @@ import PlaylistService from "../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../services/playlists/playlistStoreService";
 import { metronomeSettingsInitialState } from "../../store/reducers/metronomeSettings.reducer";
 import playlistSelector from "../../store/selectors/playlist.selector";
+import AutoSwitch from "../metronomeSettings/AutoSwitch";
 import MetronomeSettingsOptions from "../metronomeSettings/MetronomeSettingsOptions";
 import PositionSwitch from "../metronomeSettings/PositionSwitch";
+import './playlistStyles.css';
 
 interface PlaylistComponentProps {
     id: string,
     refreshPlaylist: boolean,
     onPlaylistRefreshed: Function,
     onSelectedSettingsChanged: Function,
-    forceRefresh: Function
+    forceRefresh: Function,
+    barsFinished: number,
+    onAutoSwitchToggle: Function
 }
 
-const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylist, onPlaylistRefreshed, onSelectedSettingsChanged, forceRefresh}) => {
+const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylist, onPlaylistRefreshed, onSelectedSettingsChanged, forceRefresh, barsFinished, onAutoSwitchToggle}) => {
     const playlistData = useSelector(playlistSelector.getSelectedPlaylist);
     const [refresh, setRefresh] = useState(refreshPlaylist);
     const [selectedMetronomeSettings, setSelectedMetronomeSettings] = useState(metronomeSettingsInitialState);
+    const [isAutoSwitchEnabled, setAutoSwitchEnabled] = useState(false);
+    const [barProgress, setBarProgress] = useState(barsFinished);
     const metronomeActions = useAction(MetronomeSettingsStoreSerivce);
     const playlistActions = useAction(PlaylistStoreService);
+    let previouslySelectedEmelentIndex = useRef(0);
 
     useEffect(() => {
         setRefresh(refreshPlaylist);
@@ -35,6 +41,10 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
     }, [id]);
 
     const getPlaylistData = async () => {
+        const previousElement = document.querySelector(`#metronome-setting-${previouslySelectedEmelentIndex.current}`);
+        if (previousElement?.classList.contains('selected-setting')) {
+            previousElement?.classList.remove('selected-setting');
+        }
         PlaylistService.getById(id)
             .then(result => {
                 playlistActions.editPlaylist(result);
@@ -42,10 +52,17 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
             });
     }
 
-    const changedMetronomeSetting = (settings: MetronomeSettings) => {
+    const changedMetronomeSetting = (settings: MetronomeSettings, index: number) => {
         metronomeActions.loadSettings(settings);
         setSelectedMetronomeSettings(settings);
         onSelectedSettingsChanged(settings);
+        const previousElement = document.querySelector(`#metronome-setting-${previouslySelectedEmelentIndex.current}`);
+        const element = document.querySelector(`#metronome-setting-${index}`);
+        if (previousElement?.classList.contains('selected-setting')) {
+            previousElement?.classList.remove('selected-setting');
+        }
+        element?.classList.add('selected-setting');
+        previouslySelectedEmelentIndex.current = index;
     }
 
     const removeSettingFromPlaylist = (setting: MetronomeSettings) => {
@@ -68,6 +85,9 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
             .then(_ => {
                 getPlaylistData();
                 forceRefresh();
+                previouslySelectedEmelentIndex.current--;
+                const element = document.querySelector(`#metronome-setting-${previouslySelectedEmelentIndex.current}`);
+                element?.classList.add('selected-setting');
             });
     }
 
@@ -79,7 +99,24 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
             .then(_ => {
                 getPlaylistData();
                 forceRefresh();
+                previouslySelectedEmelentIndex.current++;
+                const element = document.querySelector(`#metronome-setting-${previouslySelectedEmelentIndex.current}`);
+                element?.classList.add('selected-setting');
             });
+    }
+
+    const handleAutoSwitchToggle = (isOn: boolean) => {
+        setAutoSwitchEnabled(isOn);
+        onAutoSwitchToggle(isOn);
+    }
+
+    const handleSwitchRequested = () => {
+        const currentSettingsIndex = playlistData.metronomeSettings.indexOf(selectedMetronomeSettings);
+        if (currentSettingsIndex == playlistData.metronomeSettings.length - 1) {
+            changedMetronomeSetting(playlistData.metronomeSettings[0], 0);
+        } else {
+            changedMetronomeSetting(playlistData.metronomeSettings[currentSettingsIndex + 1], currentSettingsIndex + 1);
+        }
     }
 
     return (
@@ -89,7 +126,9 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
                 {
                     playlistData.metronomeSettings?.map((setting, index) => {
                         return (
-                            <li className="d-flex align-items-center" key={index} onClick={e => changedMetronomeSetting(setting)}>
+                            <li className="d-flex align-items-center playlist-item" key={index} id={`metronome-setting-${index}`} onClick={e => {
+                                changedMetronomeSetting(setting, index);
+                            }}>
                                 <div className="d-inline-flex flex-column">
                                     <span>{setting.name}</span>
                                     <span>{setting.metre.beatsPerBar}/{setting.metre.rhythmicUnit} {setting.tempo} Bpm</span>
@@ -106,7 +145,6 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
                                             handleMoveDown(setting);
                                         }}
                                         onPositionChanged={() => {
-                                            console.log('Position changed');
                                             getPlaylistData()
                                                 .then(result => {
                                                     forceRefresh();
@@ -121,12 +159,15 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
                     })
                 }
             </ul>
-            <div className="form-check">
-                <input type="checkbox" className="form-check-input" id="autoSwitchCheck" />
-                <label className="form-check-label" htmlFor="autoSwitchCheck">Automatyczna zmiana</label>
-            </div>
+            <AutoSwitch 
+                onToggle={handleAutoSwitchToggle}
+                barsFinished={barsFinished}
+                totalBars={selectedMetronomeSettings.numberOfMeasures}
+                onSwitchRequested={handleSwitchRequested}
+            />
         </div>
     );
 }
 
 export default PlaylistComponent;
+

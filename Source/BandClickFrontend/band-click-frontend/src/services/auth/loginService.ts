@@ -16,6 +16,7 @@ const LoginService = {
     },
     logout: () => {
         localStorage.removeItem('jwt');
+        localStorage.removeItem('email');
     },
     register: async (userInfo: RegisterUser) => {
         const response = await requests.post(AUTH_REGISTER, userInfo);

@@ -11,11 +11,17 @@ class MetronomePlayer {
     private clickIntervalLength: number = 0;
     private isRunning: boolean = false;
     private timer: MetronomeTimer = new MetronomeTimer();
+    private reportFinishedBar: Function;
 
-    constructor(tempo: number = 80, beatsPerBar: number = 4, accentedBeats: number[] = []) {
+    constructor(
+        tempo: number = 80,
+        beatsPerBar: number = 4, 
+        accentedBeats: number[] = [], 
+        reportFinishedBar: Function = () => {}) {
         this.setTempo(tempo);
         this.beatsPerBar = beatsPerBar;
         this.setAccents(accentedBeats);
+        this.reportFinishedBar = reportFinishedBar;
     }
 
     public setAccents = (accentedBeats: number[]) => {
@@ -58,6 +64,7 @@ class MetronomePlayer {
         this.soundArray[this.clickIndex].play();
         if (this.clickIndex === this.beatsPerBar - 1) {
             this.clickIndex = 0;
+            this.reportFinishedBar();
         } else {
             this.clickIndex++;
         }

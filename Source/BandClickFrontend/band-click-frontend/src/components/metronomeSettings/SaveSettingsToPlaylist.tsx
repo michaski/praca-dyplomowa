@@ -56,7 +56,6 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
             playlistId: selectedPlaylist.id,
             typeId: selectedTypeId.current
         }).then(createdSetting => {
-            console.log(createdSetting.numberOfMeasures);
             let modifiedPlaylist = selectedPlaylist;
             modifiedPlaylist.metronomeSettings.push(createdSetting);
             playlistActions.editPlaylist(modifiedPlaylist);

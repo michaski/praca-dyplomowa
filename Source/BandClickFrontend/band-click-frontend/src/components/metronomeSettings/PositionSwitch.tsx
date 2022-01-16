@@ -21,27 +21,6 @@ const PositionSwitch: React.FC<PositionSwitchProps> = ({ playlist, metronomeSett
         setPlaylist(playlist);
     }, [metronomeSettings, playlist]);
 
-    // const moveUp = () => {
-    //     const settingsState = settingsToMove;
-    //     const playlistState = currentPlaylist;
-    //     console.log(`Moving up ${settingsState.id}`);
-    //     MetronomeSettingsService.moveUpInPlaylist(
-    //         settingsState.id,
-    //         playlistState.id)
-    //         .then(_ => {
-    //             onPositionChanged();
-    //         });
-    // }
-
-    // const moveDown = () => {
-    //     MetronomeSettingsService.moveDownInPlaylist(
-    //         settingsToMove.id,
-    //         currentPlaylist.id)
-    //         .then(_ => {
-    //             onPositionChanged();
-    //         });
-    // }
-
     return (
         <>
             <ButtonGroup vertical size="sm">

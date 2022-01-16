@@ -28,7 +28,7 @@ const Home = () => {
     return (
         <div className="container-fluid">
             <Header />
-            <Metronome settings={defaultSettings} />
+            <Metronome settings={defaultSettings} onBarFinished={() => {}} isAutoSwitchOn={false} />
         </div>
     );
 }
