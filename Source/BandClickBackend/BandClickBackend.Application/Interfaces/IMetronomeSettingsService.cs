@@ -26,6 +26,8 @@ namespace BandClickBackend.Application.Interfaces
         Task AddToPlaylistAsync(Guid metronomeSettingId, Guid playlistId);
         Task RemoveFromPlaylistAsync(Guid metronomeSettingId, Guid playlistId);
         Task ChangePositionInPlaylistAsync(Guid metronomeSettingId, Guid playlistId, int newPosition);
+        Task MoveUpInPlaylistAsync(Guid metronomeSettingId, Guid playlistId);
+        Task MoveDownInPlaylistAsync(Guid metronomeSettingId, Guid playlistId);
         Task AddPositiveRaitingAsync(Guid id);
         Task AddNegativeRaitingAsync(Guid id);
         Task RemoveUserRaitingAsync(Guid id);

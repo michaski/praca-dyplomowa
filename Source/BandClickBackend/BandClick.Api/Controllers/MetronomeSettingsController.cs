@@ -188,6 +188,22 @@ namespace BandClickBackend.Api.Controllers
             return NoContent();
         }
 
+        [HttpPut("{metronomeSettingId}/moveUpInPlaylist/{playlistId}")]
+        [SwaggerOperation(Summary = "Changes metronome setting's position in playlist")]
+        public async Task<IActionResult> MoveUpInPlaylist(Guid metronomeSettingId, Guid playlistId)
+        {
+            await _metronomeSettingsService.MoveUpInPlaylistAsync(metronomeSettingId, playlistId);
+            return NoContent();
+        }
+
+        [HttpPut("{metronomeSettingId}/moveDownInPlaylist/{playlistId}")]
+        [SwaggerOperation(Summary = "Changes metronome setting's position in playlist")]
+        public async Task<IActionResult> MoveDownInPlaylist(Guid metronomeSettingId, Guid playlistId)
+        {
+            await _metronomeSettingsService.MoveDownInPlaylistAsync(metronomeSettingId, playlistId);
+            return NoContent();
+        }
+
         [HttpPut("shareInApp/{id}")]
         [SwaggerOperation(Summary = "Changes in app sharing for metronome setting with given id")]
         public async Task<IActionResult> ToggleInAppSharingAsync([FromRoute] Guid id)

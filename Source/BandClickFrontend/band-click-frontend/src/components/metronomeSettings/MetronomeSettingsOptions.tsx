@@ -52,9 +52,9 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
 
     return (
         <>
-        <Button variant="warning" size="sm" onClick={openModal}>Opcje</Button>
+        <Button variant="warning" size="sm" onClick={openModal}>&#9998;</Button>
         {
-            settings.tempo &&
+            settings.type &&
             <Modal
                 show={showModal}
                 onHide={onHide}
@@ -64,7 +64,7 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
             >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    {settings.name} &mdash; opcje
+                    Edycja &mdash; {settings.name}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

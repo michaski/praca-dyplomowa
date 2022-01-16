@@ -149,6 +149,16 @@ namespace BandClickBackend.Application.Services
                 metronomeSettingId, playlistId, newPosition);
         }
 
+        public async Task MoveUpInPlaylistAsync(Guid metronomeSettingId, Guid playlistId)
+        {
+            await _metronomeSettingsInPlaylistService.MoveUpInPlaylistAsync(metronomeSettingId, playlistId);
+        }
+
+        public async Task MoveDownInPlaylistAsync(Guid metronomeSettingId, Guid playlistId)
+        {
+            await _metronomeSettingsInPlaylistService.MoveDownInPlaylistAsync(metronomeSettingId, playlistId);
+        }
+
         public async Task UpdateAsync(UpdateMetronomeSettingDto dto, Guid? bandId)
         {
             var entity = await _repository.GetByIdAsync(dto.Id);

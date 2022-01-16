@@ -49,8 +49,15 @@ namespace BandClickBackend.Infrastructure.Repositories
         {
             return await _context.MetronomeSettingsInPlaylists
                 .Where(e =>
-                    e.PositionInPlaylist >= startPosition || e.PositionInPlaylist <= endPosition)
+                    e.PositionInPlaylist >= startPosition && e.PositionInPlaylist <= endPosition)
                 .ToListAsync();
+        }
+
+        public async Task<MetronomeSettingsInPlaylist> GetEntryByPositionAsync(Guid playlistId, int position)
+        {
+            return await _context.MetronomeSettingsInPlaylists
+                .Where(e => e.PlaylistId == playlistId)
+                .SingleOrDefaultAsync(e => e.PositionInPlaylist == position);
         }
 
         public async Task<MetronomeSettingsInPlaylist> GetEntryBySettingAndPlaylistIdAsync(Guid metronomeSettingId, Guid playlistId)
@@ -73,10 +80,23 @@ namespace BandClickBackend.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(IEnumerable<MetronomeSettingsInPlaylist> entries)
+        {
+            _context.UpdateRange(entries);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task ChangePositionInPlaylistAsync(MetronomeSettingsInPlaylist entryToMove, IEnumerable<MetronomeSettingsInPlaylist> entriesToShift)
         {
             _context.Update(entryToMove);
             _context.UpdateRange(entriesToShift);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ChangePositionInPlaylistAsync(MetronomeSettingsInPlaylist entryToMove, MetronomeSettingsInPlaylist entryToShift)
+        {
+            _context.Update(entryToMove);
+            _context.UpdateRange(entryToShift);
             await _context.SaveChangesAsync();
         }
 

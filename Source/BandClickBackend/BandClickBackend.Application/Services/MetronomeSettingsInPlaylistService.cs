@@ -21,10 +21,10 @@ namespace BandClickBackend.Application.Services
         private readonly IMapper _mapper;
 
         public MetronomeSettingsInPlaylistService(
-            IMetronomeSettingsInPlaylistRepository metronomeSettingsInPlaylistRepository, 
-            IMapper mapper, 
+            IMetronomeSettingsInPlaylistRepository metronomeSettingsInPlaylistRepository,
+            IMapper mapper,
             IPlaylistRepository playlistRepository,
-            IMetronomeSettingsRepository metronomeSettingsRepository, 
+            IMetronomeSettingsRepository metronomeSettingsRepository,
             IUserContextService userContextService)
         {
             _metronomeSettingsInPlaylistRepository = metronomeSettingsInPlaylistRepository;
@@ -104,6 +104,39 @@ namespace BandClickBackend.Application.Services
             await _metronomeSettingsInPlaylistRepository.ChangePositionInPlaylistAsync(entryToMove, entriesToShift);
         }
 
+        public async Task MoveUpInPlaylistAsync(Guid metronomeSettingId, Guid playlistId)
+        {
+            var entryToMove = await _metronomeSettingsInPlaylistRepository
+                .GetEntryBySettingAndPlaylistIdAsync(metronomeSettingId, playlistId);
+            if (entryToMove.PositionInPlaylist <= 1)
+            {
+                return;
+            }
+            var entryAbove = await _metronomeSettingsInPlaylistRepository
+                .GetEntryByPositionAsync(playlistId, entryToMove.PositionInPlaylist - 1);
+            entryAbove.PositionInPlaylist++;
+            entryToMove.PositionInPlaylist--;
+            await _metronomeSettingsInPlaylistRepository.ChangePositionInPlaylistAsync(entryToMove, entryAbove);
+        }
+
+        public async Task MoveDownInPlaylistAsync(Guid metronomeSettingId, Guid playlistId)
+        {
+            var entryToMove = await _metronomeSettingsInPlaylistRepository
+                .GetEntryBySettingAndPlaylistIdAsync(metronomeSettingId, playlistId);
+            var playlistLength =
+                await _metronomeSettingsInPlaylistRepository.GetPlaylistLengthAsync(
+                    await _playlistRepository.GetPlaylistByIdAsync(playlistId));
+            if (entryToMove.PositionInPlaylist >= playlistLength)
+            {
+                return;
+            }
+            var entryBelow = await _metronomeSettingsInPlaylistRepository
+                .GetEntryByPositionAsync(playlistId, entryToMove.PositionInPlaylist + 1);
+            entryBelow.PositionInPlaylist--;
+            entryToMove.PositionInPlaylist++;
+            await _metronomeSettingsInPlaylistRepository.ChangePositionInPlaylistAsync(entryToMove, entryBelow);
+        }
+
         public async Task RemoveMetronomeSettingFromPlaylistAsync(Guid metronomeSettingId, Guid playlistId)
         {
             var playlist = await _playlistRepository.GetPlaylistByIdAsync(playlistId);
@@ -111,9 +144,21 @@ namespace BandClickBackend.Application.Services
             {
                 throw new UserNotAllowedException("Tylko twórca playlisty może nią zarządzać.");
             }
-            await _metronomeSettingsInPlaylistRepository.RemoveMetronomeSettingFromPlaylistAsync(
-                await _metronomeSettingsInPlaylistRepository.GetEntryBySettingAndPlaylistIdAsync(
-                    metronomeSettingId, playlistId));
+            var entryToDelete = await _metronomeSettingsInPlaylistRepository.GetEntryBySettingAndPlaylistIdAsync(
+                metronomeSettingId, playlistId);
+            var playlistLength =
+                await _metronomeSettingsInPlaylistRepository.GetPlaylistLengthAsync(
+                    await _playlistRepository.GetPlaylistByIdAsync(playlistId));
+            var entriesToShift = await _metronomeSettingsInPlaylistRepository
+                .GetEntriesRangeByPositionAsync(
+                    entryToDelete.PositionInPlaylist + 1,
+                    playlistLength) as List<MetronomeSettingsInPlaylist>;
+            foreach (var entry in entriesToShift)
+            {
+                entry.PositionInPlaylist--;
+            }
+            await _metronomeSettingsInPlaylistRepository.RemoveMetronomeSettingFromPlaylistAsync(entryToDelete);
+            await _metronomeSettingsInPlaylistRepository.UpdateAsync(entriesToShift);
         }
     }
 }

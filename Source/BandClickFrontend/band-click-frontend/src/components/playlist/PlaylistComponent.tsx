@@ -10,6 +10,7 @@ import { PlaylistStoreService } from "../../services/playlists/playlistStoreServ
 import { metronomeSettingsInitialState } from "../../store/reducers/metronomeSettings.reducer";
 import playlistSelector from "../../store/selectors/playlist.selector";
 import MetronomeSettingsOptions from "../metronomeSettings/MetronomeSettingsOptions";
+import PositionSwitch from "../metronomeSettings/PositionSwitch";
 
 interface PlaylistComponentProps {
     id: string,
@@ -37,6 +38,7 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
         PlaylistService.getById(id)
             .then(result => {
                 playlistActions.editPlaylist(result);
+                playlistActions.setSelectedPlaylist(result);
             });
     }
 
@@ -58,12 +60,34 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
             });
     }
 
+    const handleMoveUp = (setting: MetronomeSettings) => {
+        const playlistState = playlistData;
+        MetronomeSettingsService.moveUpInPlaylist(
+            setting.id,
+            playlistState.id)
+            .then(_ => {
+                getPlaylistData();
+                forceRefresh();
+            });
+    }
+
+    const handleMoveDown = (setting: MetronomeSettings) => {
+        const playlistState = playlistData;
+        MetronomeSettingsService.moveDownInPlaylist(
+            setting.id,
+            playlistState.id)
+            .then(_ => {
+                getPlaylistData();
+                forceRefresh();
+            });
+    }
+
     return (
         <div>
             <button className="btn btn-warning">Ustawienia</button>
             <ul>
                 {
-                    playlistData.metronomeSettings.map((setting, index) => {
+                    playlistData.metronomeSettings?.map((setting, index) => {
                         return (
                             <li className="d-flex align-items-center" key={index} onClick={e => changedMetronomeSetting(setting)}>
                                 <div className="d-inline-flex flex-column">
@@ -72,10 +96,25 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
                                 </div>
                                 <div className="d-inline-flex">
                                     <MetronomeSettingsOptions settings={selectedMetronomeSettings} onSettingsChanged={forceRefresh} />
-                                    <button className="btn btn-sm btn-success">Przenieś</button>
+                                    <PositionSwitch
+                                        playlist={playlistData}
+                                        metronomeSettings={selectedMetronomeSettings}
+                                        moveUp={() => {
+                                            handleMoveUp(setting);
+                                        }}
+                                        moveDown={() => {
+                                            handleMoveDown(setting);
+                                        }}
+                                        onPositionChanged={() => {
+                                            console.log('Position changed');
+                                            getPlaylistData()
+                                                .then(result => {
+                                                    forceRefresh();
+                                                });
+                                        }} />
                                     <button className="btn btn-sm btn-danger" onClick={() => {
                                         removeSettingFromPlaylist(setting);
-                                    }}>Usuń</button>
+                                    }}>&#10006;</button>
                                 </div>
                             </li>
                         );

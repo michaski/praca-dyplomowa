@@ -65,6 +65,12 @@ const MetronomeSettingsService = {
     changePositionInPlaylist: async (metronomeSettingId: string, playlistId: string, newPosition: number) => {
         await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/changePositionInPlaylist/${playlistId}/${newPosition}`, null, auth.getToken());
     },
+    moveUpInPlaylist: async (metronomeSettingId: string, playlistId: string) => {
+        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/moveUpInPlaylist/${playlistId}`, null, auth.getToken());
+    },
+    moveDownInPlaylist: async (metronomeSettingId: string, playlistId: string) => {
+        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/moveDownInPlaylist/${playlistId}`, null, auth.getToken());
+    },
     shareInApp: async (metronomeSettingId: string) => {
         await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/shareInApp/${metronomeSettingId}`);
     },
