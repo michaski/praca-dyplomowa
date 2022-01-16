@@ -31,7 +31,7 @@ namespace BandClickBackend.Infrastructure.Repositories
             var user = await _context.Users
                 .Include(x => x.Playlists)
                 .SingleOrDefaultAsync(u => u.Id == _userContextService.UserId);
-            return user.Playlists;
+            return user.Playlists.OrderBy(p => p.Name);
         }
 
         public async Task<ResultPage<Playlist>> GetAllSharedPlaylistsAsync(QueryFilters filters)

@@ -25,11 +25,16 @@ export const playlistListInitialState: PlaylistList = {
 export const playlistsStoreReducer: Reducer<PlaylistList, PlaylistActions> = 
     (state: PlaylistList = playlistListInitialState, actions: PlaylistActions) => {
         if (actions.type === PlaylistStoreActions.ADD_PLAYLISTS) {
+            let playlistsState = state.playlists;
+            actions.playlists.forEach(playlist => {
+                if (!playlistsState.find(p => p.id === playlist.id)) {
+                    playlistsState.push(playlist);
+                }
+            });
             return {
                 ...state,
                 playlists: [
-                    ...state.playlists,
-                    ...actions.playlists
+                    ...playlistsState
                 ]
             };
         }

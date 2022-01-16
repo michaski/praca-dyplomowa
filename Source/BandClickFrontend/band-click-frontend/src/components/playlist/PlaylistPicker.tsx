@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Button, ButtonGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAction } from "../../hooks/useAction";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
@@ -6,6 +7,7 @@ import { Playlist } from "../../models/Playlists/Playlist";
 import PlaylistService from "../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../services/playlists/playlistStoreService";
 import playlistSelector from "../../store/selectors/playlist.selector";
+import AddPlaylist from "./AddPlaylist";
 import PlaylistComponent from "./PlaylistComponent";
 
 interface PlaylistPickerProps {
@@ -32,12 +34,12 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
 
     const getPlaylists = () => {
         PlaylistService.getAll()
-            .then(result => {
-                setPlaylists(result);
-                playlistActions.addPlaylists(result);
-                fetchPlaylistInfo(result[0].id);
-                setSelectedPlaylistId(result[0].id);
-            });
+        .then(result => {
+            setPlaylists(result);
+            playlistActions.addPlaylists(result);
+            fetchPlaylistInfo(result[0].id);
+            setSelectedPlaylistId(result[0].id);
+        });;
     }
 
     const handleSelectedSettingsChanged = (settings: MetronomeSettings) => {
@@ -61,6 +63,11 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
         }
     }
 
+    const handlePlaylistCreated = (newPlaylist: Playlist) => {
+        playlistActions.addPlaylist(newPlaylist);
+        getPlaylists();
+    }
+
     return (
         <div className="col-md-4">
             <h2>Playlista</h2>
@@ -73,6 +80,9 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
                     })
                 }
             </select>
+            <ButtonGroup size="sm">
+                <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
+            </ButtonGroup>
             <PlaylistComponent 
                 id={selectedPlaylistId} 
                 onSelectedSettingsChanged={handleSelectedSettingsChanged} 
