@@ -1,19 +1,19 @@
 import React from "react";
 import { Container, Tab, Tabs } from "react-bootstrap";
-import SimpleMemberList from "./SimpleMemberList";
-import SimplePlaylistList from "./SimplePlaylistList";
+import EditableMemberList from "./EditableMemberList";
+import EditablePlaylistList from "./EditablePlaylistList";
 
-const SimpleBand = () => {
+const EditableBand = () => {
     return (
-    <>
-    <Container>
+        <>
+        <Container>
         <h1>Nazwa zespołu</h1>
         <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="mb-3">
             <Tab eventKey="home" title="Członkowie">
-                <SimpleMemberList />
+                <EditableMemberList />
             </Tab>
             <Tab eventKey="profile" title="Playlisty">
-                <SimplePlaylistList />
+                <EditablePlaylistList />
             </Tab>
         </Tabs>
     </Container>
@@ -21,4 +21,4 @@ const SimpleBand = () => {
     );
 }
 
-export default SimpleBand;
+export default EditableBand;

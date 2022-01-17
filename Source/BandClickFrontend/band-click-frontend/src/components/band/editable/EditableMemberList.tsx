@@ -1,7 +1,9 @@
-import React from 'react';
-import { Badge, ListGroup } from 'react-bootstrap';
+import React from "react";
+import { Badge, Button, ButtonGroup, ListGroup, Row } from "react-bootstrap";
+import AddBandMember from "./AddBandMember";
+import MemberActionButtons from "./MemberActionButtons";
 
-const SimpleMemberList = () => {
+const EditableMemberList = () => {
     return (
     <>
     <ListGroup as="ol" numbered>
@@ -13,6 +15,7 @@ const SimpleMemberList = () => {
                 <div className="fw-bold">Użytkownik 1<Badge pill>Lider</Badge></div>
                 <span className="fst-italic">mail@mail.com</span>
             </div>
+            <MemberActionButtons isLeader={true} />
         </ListGroup.Item>
         <ListGroup.Item
             as="li"
@@ -22,6 +25,7 @@ const SimpleMemberList = () => {
                 <div className="fw-bold">Użytkownik 2</div>
                 <span className="fst-italic">mail@mail.com</span>
             </div>
+            <MemberActionButtons isLeader={false} />
         </ListGroup.Item>
         <ListGroup.Item
             as="li"
@@ -33,6 +37,7 @@ const SimpleMemberList = () => {
                 </div>
                 <span className="fst-italic">mail@mail.com</span>
             </div>
+            <MemberActionButtons isLeader={false} />
         </ListGroup.Item>
         <ListGroup.Item
             as="li"
@@ -42,6 +47,7 @@ const SimpleMemberList = () => {
                 <div className="fw-bold">Użytkownik 4</div>
                 <span className="fst-italic">mail@mail.com</span>
             </div>
+            <MemberActionButtons isLeader={false} />
         </ListGroup.Item>
         <ListGroup.Item
             as="li"
@@ -51,10 +57,14 @@ const SimpleMemberList = () => {
                 <div className="fw-bold">Użytkownik 5</div>
                 <span className="fst-italic">mail@mail.com</span>
             </div>
+            <MemberActionButtons isLeader={false} />
         </ListGroup.Item>
     </ListGroup>
+    <Row>
+        <AddBandMember />
+    </Row>
     </>
     );
 }
 
-export default SimpleMemberList;
+export default EditableMemberList;

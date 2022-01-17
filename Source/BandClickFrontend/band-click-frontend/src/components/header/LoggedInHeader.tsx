@@ -9,7 +9,7 @@ const LoggedInHeader = (props: any) => {
     const user = useSelector(authSelector.getUser);
     const history = useHistory();
     const redirectTo = (path: string, name: string) =>
-        <a className="p-2" href="#" onClick={() => { history.push(path) }}>{name}</a>
+        <a className="p-2" href="" onClick={() => { history.push(path) }}>{name}</a>
     return (
         <header className="row">
 
@@ -20,15 +20,15 @@ const LoggedInHeader = (props: any) => {
                 </a>
 
                 <ul className="nav col-12 col-md-auto mb-2 justify-content-center align-items-center mb-md-0">
-                    <li className="nav-item">{redirectTo('/', 'Home')}</li>
-                    <li className="nav-item">{redirectTo('shared', 'Udostępnione')}</li>        
+                    <li className="nav-item">{redirectTo('/app', 'Metronom')}</li>
+                    <li className="nav-item">{redirectTo('/shared', 'Udostępnione')}</li>        
                     <li className="nav-item dropdown">
                         <a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Zespoły
                         </a>
                         <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('bands/all') }}>Wszystkie zespoły</a></li>
-                            <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('bands/my') }}>Moje zespoły</a></li>
+                            <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('/bands/all') }}>Wszystkie zespoły</a></li>
+                            <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('/bands/managed') }}>Zarządzane zespoły</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -39,7 +39,6 @@ const LoggedInHeader = (props: any) => {
                 </div>
             </header>
         </div>
-
 
             <nav className="navbar navbar-dark bg-dark navbar-expand-lg ">
                 <div className="container-fluid justify-content-between">
@@ -53,15 +52,15 @@ const LoggedInHeader = (props: any) => {
                     </div>
                     <div className="collapse navbar-collapse d-inline-flex justify-content-center flex-row" id="navbarNavAltMarkup">
                         <div className="navbar">
-                            {redirectTo('/', 'Home')}
-                            {redirectTo('shared', 'Udostępnione')}
+                            {redirectTo('/app', 'Metronom')}
+                            {redirectTo('/shared', 'Udostępnione')}
                             <div className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Zespoły
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('/bands/all') }}>Wszystkie zespoły</a></li>
-                                    <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('/bands/my') }}>Moje zespoły</a></li>
+                                    <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('/bands/managed') }}>Zarządzane zespoły</a></li>
                                 </ul>
                             </div>
                         </div>

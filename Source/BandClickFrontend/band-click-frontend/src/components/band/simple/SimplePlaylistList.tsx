@@ -5,7 +5,7 @@ const SimplePlaylistList = () => {
     return (
         <>
             <Container>
-                <Accordion defaultActiveKey="0">
+                <Accordion>
                     <Accordion.Item eventKey="0">
                         <Accordion.Header>
                             <span>Playlista #1</span>
