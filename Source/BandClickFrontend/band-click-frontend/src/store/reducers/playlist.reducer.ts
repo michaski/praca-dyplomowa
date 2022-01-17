@@ -12,6 +12,7 @@ export const playlistIninialState: Playlist = {
     id: '',
     name: '',
     metronomeSettings: [],
+    isShared: false,
     comments: [],
     positiveRaitingCount: 0,
     negativeRaitingCount: 0
@@ -39,7 +40,7 @@ export const playlistsStoreReducer: Reducer<PlaylistList, PlaylistActions> =
             };
         }
         let playlistState: Playlist | undefined = undefined;
-        if (actions.type as PlaylistStoreActions){
+        if (actions.type as PlaylistStoreActions && actions.playlist){
             playlistState = state.playlists.find(p => p.id === actions.playlist.id);
         } 
         switch (actions.type) {

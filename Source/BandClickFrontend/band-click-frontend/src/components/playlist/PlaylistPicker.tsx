@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAction } from "../../hooks/useAction";
@@ -8,6 +8,7 @@ import PlaylistService from "../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../services/playlists/playlistStoreService";
 import playlistSelector from "../../store/selectors/playlist.selector";
 import AddPlaylist from "./AddPlaylist";
+import EditPlaylist from "./EditPlaylist";
 import PlaylistComponent from "./PlaylistComponent";
 
 interface PlaylistPickerProps {
@@ -25,6 +26,8 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
     const [selectedPlaylistId, setSelectedPlaylistId] = useState('');
     const playlistActions = useAction(PlaylistStoreService);
     const playlistsStore = useSelector(playlistSelector.getAll);
+    const selectedPlaylist = useSelector(playlistSelector.getSelectedPlaylist);
+    let playlistIndex = useRef(0);
 
     useEffect(() => {
         if (playlists.length === 0) {
@@ -37,8 +40,8 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
         .then(result => {
             setPlaylists(result);
             playlistActions.addPlaylists(result);
-            fetchPlaylistInfo(result[0].id);
-            setSelectedPlaylistId(result[0].id);
+            fetchPlaylistInfo(result[playlistIndex.current].id);
+            setSelectedPlaylistId(result[playlistIndex.current].id);
         });;
     }
 
@@ -57,6 +60,10 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
     const handleSelectedPlaylistChanged = (playlistId: string) => {
         setSelectedPlaylistId(playlistId);
         onSelectedPlaylistChange(playlistId);
+        const playlistState = playlists.find(p => p.id === playlistId);
+        if (playlistState) {
+            playlistIndex.current = playlists.indexOf(playlistState);
+        }
         const selectedPlaylistState = playlistsStore.find(p => p.id === playlistId) || playlistsStore[0];
         if (!selectedPlaylistState || !selectedPlaylistState.metronomeSettings) {
             fetchPlaylistInfo(playlistId);
@@ -73,13 +80,23 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
         .then(_ => {
             const deletedPlaylist = playlistsStore.find(p => p.id === selectedPlaylistId);
             if (deletedPlaylist) {
-                console.log(deletedPlaylist);
                 playlistActions.deletePlaylist(deletedPlaylist);
                 setPlaylists(playlists.filter(p => p.id !== selectedPlaylistId));
                 playlistActions.setSelectedPlaylist(playlistsStore[0]);
                 setSelectedPlaylistId(playlists[0].id);
+                playlistIndex.current = 0;
             }
         });
+    }
+
+    const handlePlaylistEdit = (modifiedPlaylist: Playlist) => {
+        playlistActions.editPlaylist(modifiedPlaylist);
+        handleSelectedPlaylistChanged(modifiedPlaylist.id);
+        let unmodifiedPlaylists = playlists.filter(p => p.id !== modifiedPlaylist.id);
+        unmodifiedPlaylists.push(selectedPlaylist);
+        setPlaylists(unmodifiedPlaylists);
+        playlistIndex.current = playlists.indexOf(selectedPlaylist);
+        onSelectedSettingsChanged();
     }
 
     return (
@@ -96,6 +113,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
             </select>
             <ButtonGroup size="sm">
                 <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
+                <EditPlaylist playlist={selectedPlaylist} onPlaylistModified={handlePlaylistEdit} />
                 <Button variant="danger" onClick={deletePlaylist}>&#10006;</Button>
             </ButtonGroup>
             <PlaylistComponent 
