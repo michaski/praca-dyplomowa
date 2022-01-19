@@ -83,6 +83,10 @@ namespace BandClickBackend.Application.Services
         public async Task DemoteLeaderAsync(UserBandRelationDto dto)
         {
             var leader = await _userRepository.GetUserByUsernameAsync(dto.Username);
+            if (await _userInBandsRepository.IsOnlyBandLeaderAsync(dto.BandId))
+            {
+                throw new ValidationException("Nie można usunąć jedynego lidera zespołu.");
+            }
             await _userInBandsRepository.DemoteLeaderAsync(dto.BandId, leader.Id);
         }
 

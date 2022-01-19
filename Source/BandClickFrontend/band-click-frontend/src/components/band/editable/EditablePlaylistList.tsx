@@ -1,13 +1,17 @@
 import React from "react";
 import { Accordion, Button, ButtonGroup, Container, ListGroup, Row } from "react-bootstrap";
+import { Band } from "../../../models/Bands/Band";
 import { Playlist } from "../../../models/Playlists/Playlist";
 import AddPlaylistToBand from "./AddPlaylistToBand";
 
 interface EditablePlaylistListProps {
-    playlists: Playlist[]
+    playlists: Playlist[], 
+    band: Band,
+    onPlaylistAdded: Function
 }
 
-const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists}) =>{
+const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, band, onPlaylistAdded}) =>{
+
     return (
         <>
             <Container>
@@ -55,7 +59,7 @@ const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists}) 
                     }
                 </Accordion>
                 <Row>
-                    <AddPlaylistToBand />
+                    <AddPlaylistToBand band={band} onPlaylistAdded={onPlaylistAdded} />
                 </Row>
             </Container>
         </>

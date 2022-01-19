@@ -11,15 +11,21 @@ interface EditableBandProps {
 
 const EditableBand: React.FC<EditableBandProps> = ({band}) => {
     const [bandInfo, setBandInfo] = useState(band);
+    const [hasNewPlaylist, setHasNewPlaylist] = useState(true);
 
     useEffect(() => {
-        if (band.id) {
+        if (band.id && hasNewPlaylist) {
             BandService.getById(band.id)
             .then(bandDetails => {
                 setBandInfo(bandDetails);
+                setHasNewPlaylist(false);
             });
         }
-    }, [band]);
+    }, [band, hasNewPlaylist]);
+
+    const handlePlaylistAdded = () => {
+        setHasNewPlaylist(true);
+    }
 
     return (
     <>
@@ -30,7 +36,7 @@ const EditableBand: React.FC<EditableBandProps> = ({band}) => {
                 <EditableMemberList members={bandInfo && bandInfo.members} />
             </Tab>
             <Tab eventKey="playlists" title="Playlisty">
-                <EditablePlaylistList playlists={bandInfo && bandInfo.playlists} />
+                <EditablePlaylistList playlists={bandInfo && bandInfo.playlists} band={bandInfo} onPlaylistAdded={handlePlaylistAdded} />
             </Tab>
         </Tabs>
     </Container>

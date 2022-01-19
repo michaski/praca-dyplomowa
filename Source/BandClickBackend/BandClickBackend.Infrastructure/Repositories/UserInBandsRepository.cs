@@ -110,6 +110,15 @@ namespace BandClickBackend.Infrastructure.Repositories
             return entry != null && entry.BandRole == _bandRoleRepository.Leader;
         }
 
+        public async Task<bool> IsOnlyBandLeaderAsync(Guid bandId)
+        {
+            var leaderCount = await _context.UsersInBands
+                .Include(e => e.BandRole)
+                .Where(e => e.BandId == bandId && e.BandRole == _bandRoleRepository.Leader)
+                .CountAsync();
+            return leaderCount == 1;
+        }
+
         public async Task<bool> IsUserInBandAsync(Guid bandId)
         {
             var entry = await _context.UsersInBands
