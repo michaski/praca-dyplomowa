@@ -3,14 +3,17 @@ import { Accordion, Button, ButtonGroup, Container, ListGroup, Row } from "react
 import { Band } from "../../../models/Bands/Band";
 import { Playlist } from "../../../models/Playlists/Playlist";
 import AddPlaylistToBand from "./AddPlaylistToBand";
+import PlaylistActionButtons from "./PlaylistActionButtons";
 
 interface EditablePlaylistListProps {
     playlists: Playlist[], 
     band: Band,
-    onPlaylistAdded: Function
+    onPlaylistAdded: Function,
+    onPlaylistDeleted: Function,
+    onPlaylistLoad: Function
 }
 
-const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, band, onPlaylistAdded}) =>{
+const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, band, onPlaylistAdded, onPlaylistDeleted, onPlaylistLoad}) =>{
 
     return (
         <>
@@ -27,10 +30,11 @@ const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, b
                             <Accordion.Item key={parentIndex} eventKey={`${parentIndex}`}>
                             <Accordion.Header>
                                 <span>{playlist.name}</span>
-                                <ButtonGroup size="sm">
-                                    <Button>Wczytaj</Button>
-                                    <Button variant="danger">Usuń z zespołu</Button>
-                                </ButtonGroup>
+                                <PlaylistActionButtons 
+                                    band={band}
+                                    playlist={playlist}
+                                    onPlaylistLoad={onPlaylistLoad}
+                                    onPlaylistDeleted={onPlaylistDeleted} />
                             </Accordion.Header>
                             <Accordion.Body>
                                 <ListGroup as="ol" numbered>
