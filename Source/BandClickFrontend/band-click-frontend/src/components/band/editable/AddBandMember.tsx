@@ -36,7 +36,7 @@ const AddBandMember = () => {
         </Modal.Header>
         <Modal.Body>
             <div className="container">
-                <Form.Control type="email" placeholder="Email..." onChange={e => {
+                <Form.Control type="text" placeholder="Nazwa użytkownika..." onChange={e => {
                     setName(e.target.value);
                 }} />
             </div>

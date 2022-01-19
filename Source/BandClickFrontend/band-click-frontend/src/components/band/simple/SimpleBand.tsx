@@ -33,7 +33,7 @@ const SimpleBand: React.FC<SimpleBandProps> = ({band}) => {
                 <SimpleMemberList members={bandInfo && bandInfo.members} />
             </Tab>
             <Tab eventKey="playlists" title="Playlisty">
-                <SimplePlaylistList />
+                <SimplePlaylistList playlists={bandInfo && bandInfo.playlists} />
             </Tab>
         </Tabs>
     </Container>

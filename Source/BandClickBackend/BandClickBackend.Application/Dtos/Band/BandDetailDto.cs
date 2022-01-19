@@ -16,7 +16,8 @@ namespace BandClickBackend.Application.Dtos.Band
         public Guid Id { get; set; }
         public string Name { get; set; }
         public ICollection<UserBandInfo> Members { get; set; }
-        public ICollection<PlaylistListDto> Playlists { get; set; }
+        //public ICollection<PlaylistListDto> Playlists { get; set; }
+        public ICollection<BandPlaylistDto> Playlists { get; set; }
 
         public void Mapping(Profile profile)
         {

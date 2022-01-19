@@ -29,6 +29,9 @@ namespace BandClickBackend.Infrastructure.Repositories
             return await _context.Bands
                 .Include(b => b.Playlists)
                 .ThenInclude(p => p.Playlist)
+                .ThenInclude(p => p.MetronomeSettings)
+                .ThenInclude(ms => ms.MetronomeSettings)
+                .ThenInclude(ms => ms.Metre)
                 .Include(b => b.Members)
                 .ThenInclude(uib => uib.Member)
                 .SingleOrDefaultAsync(b => b.Id == id);

@@ -1,70 +1,46 @@
 import React from "react";
 import { Badge, Button, ButtonGroup, ListGroup, Row } from "react-bootstrap";
+import { UserInBandInfo } from "../../../models/Bands/UserInBandInfo";
 import AddBandMember from "./AddBandMember";
 import MemberActionButtons from "./MemberActionButtons";
 
-const EditableMemberList = () => {
+interface EditableMemberListProps {
+    members: UserInBandInfo[]
+}
+
+const EditableMemberList: React.FC<EditableMemberListProps> = ({members}) => {
     return (
-    <>
-    <ListGroup as="ol" numbered>
-        <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-between align-items-start"
-        >
-            <div className="ms-2 me-auto">
-                <div className="fw-bold">Użytkownik 1<Badge pill>Lider</Badge></div>
-                <span className="fst-italic">mail@mail.com</span>
-            </div>
-            <MemberActionButtons isLeader={true} />
-        </ListGroup.Item>
-        <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-between align-items-start"
-        >
-            <div className="ms-2 me-auto">
-                <div className="fw-bold">Użytkownik 2</div>
-                <span className="fst-italic">mail@mail.com</span>
-            </div>
-            <MemberActionButtons isLeader={false} />
-        </ListGroup.Item>
-        <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-between align-items-start"
-        >
-            <div className="ms-2 me-auto">
-                <div className="fw-bold">
-                    Użytkownik 3
-                </div>
-                <span className="fst-italic">mail@mail.com</span>
-            </div>
-            <MemberActionButtons isLeader={false} />
-        </ListGroup.Item>
-        <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-between align-items-start"
-        >
-            <div className="ms-2 me-auto">
-                <div className="fw-bold">Użytkownik 4</div>
-                <span className="fst-italic">mail@mail.com</span>
-            </div>
-            <MemberActionButtons isLeader={false} />
-        </ListGroup.Item>
-        <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-between align-items-start"
-        >
-            <div className="ms-2 me-auto">
-                <div className="fw-bold">Użytkownik 5</div>
-                <span className="fst-italic">mail@mail.com</span>
-            </div>
-            <MemberActionButtons isLeader={false} />
-        </ListGroup.Item>
-    </ListGroup>
-    <Row>
-        <AddBandMember />
-    </Row>
-    </>
-    );
+        <>
+        <ListGroup as="ol" numbered>
+            {
+                members &&
+                members.map((member, index) => {
+                    const currentMember = members[index];
+                    return (
+                    <ListGroup.Item key={index} as="li" className="d-flex justify-content-between align-items-start">
+                        <div className="ms-2 me-auto">
+                            <div className="fw-bold">
+                                {member.member.username}
+                                {
+                                    currentMember.bandRole === 'Leader' &&
+                                    <Badge pill>Lider</Badge>
+                                }
+                            </div>
+                            <span className="fst-italic">{}</span>
+                        </div>
+                        <div>
+                            <MemberActionButtons isLeader={currentMember.bandRole === "Leader"} />
+                        </div>
+                    </ListGroup.Item>
+                    );
+                })
+            }
+        </ListGroup>
+        <Row>
+            <AddBandMember />
+        </Row>
+        </>
+        );
 }
 
 export default EditableMemberList;

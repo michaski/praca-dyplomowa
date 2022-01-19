@@ -13,11 +13,15 @@ const ManagedBands = () => {
 
     useEffect(() => {
         BandService.getAll()
-        .then(result => {
-            setBands(result);
-            setSelectedBand(result[0]);
+        .then(results => {
+            setBands(results);
+            setSelectedBand(results[0]);
         });
-    }, [setBands, setSelectedBand]);
+    }, []);
+
+    const handleSelectedBandChanged = (band: Band) => {
+        setSelectedBand(band);
+    }
 
     const handleBandCreated = (band: any) => {
 
@@ -30,7 +34,7 @@ const ManagedBands = () => {
         <Row>
             <Col md={10}>
                 <BandSelector bands={bands} onSelectedBandChange={(band: Band) => {
-                    setSelectedBand(band);
+                    handleSelectedBandChanged(band);
                 }} />
             </Col>
             <Col md={2}>
@@ -39,7 +43,7 @@ const ManagedBands = () => {
         </Row>
         <Row>
             <Container>
-                <EditableBand />
+                <EditableBand band={selectedBand} />
             </Container>
         </Row>
     </Container>

@@ -9,8 +9,6 @@ interface BandSelectorProps {
 }
 
 const BandSelector: React.FC<BandSelectorProps> = ({bands, onSelectedBandChange}) => {
-    console.log('BandSelector render with:');
-    console.log(bands);
 
     const handleSelectedBandChanged = (selectedBandIndex: string) => {
         const indexValue = parseInt(selectedBandIndex);
@@ -27,8 +25,6 @@ const BandSelector: React.FC<BandSelectorProps> = ({bands, onSelectedBandChange}
                 {
                     bands && bands.length > 0 &&
                     bands.map((band, index) => {
-                        console.log('rendering band:');
-                        console.log(band);
                         return <option key={index} value={index}>{band.name}</option>
                     })
                 }
