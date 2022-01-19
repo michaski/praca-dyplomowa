@@ -1,14 +1,18 @@
 import React from "react";
 import { Badge, Button, ButtonGroup, ListGroup, Row } from "react-bootstrap";
+import { Band } from "../../../models/Bands/Band";
 import { UserInBandInfo } from "../../../models/Bands/UserInBandInfo";
 import AddBandMember from "./AddBandMember";
 import MemberActionButtons from "./MemberActionButtons";
 
 interface EditableMemberListProps {
-    members: UserInBandInfo[]
+    members: UserInBandInfo[],
+    band: Band,
+    onBandMemberAdded: Function
 }
 
-const EditableMemberList: React.FC<EditableMemberListProps> = ({members}) => {
+const EditableMemberList: React.FC<EditableMemberListProps> = ({members, band, onBandMemberAdded}) => {
+
     return (
         <>
         <ListGroup as="ol" numbered>
@@ -37,7 +41,7 @@ const EditableMemberList: React.FC<EditableMemberListProps> = ({members}) => {
             }
         </ListGroup>
         <Row>
-            <AddBandMember />
+            <AddBandMember band={band} onBandMemberAdded={onBandMemberAdded} />
         </Row>
         </>
         );

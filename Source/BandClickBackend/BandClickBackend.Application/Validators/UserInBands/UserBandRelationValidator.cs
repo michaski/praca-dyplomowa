@@ -28,8 +28,8 @@ namespace BandClickBackend.Application.Validators.UserInBands
                 .MinimumLength(1)
                 .MaximumLength(64)
                 .MustAsync(async (username, token) =>
-                    await userRepository.GetUserByUsernameAsync(username) is null)
-                .WithMessage("Nazwa użytkownika jest już zajęta.");
+                    await userRepository.GetUserByUsernameAsync(username) is not null)
+                .WithMessage("Użytkownik o podanej nazwie nie isnieje.");
             RuleFor(dto => dto.BandId)
                 .NotEmpty()
                 .MustAsync(async (id, token) =>

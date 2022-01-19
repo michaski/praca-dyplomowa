@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { Band } from "../../../models/Bands/Band";
+import BandService from "../../../services/bands/bandService";
 
-const AddBandMember = () => {
+interface AddBandMemberProps {
+    band: Band,
+    onBandMemberAdded: Function
+}
+
+const AddBandMember: React.FC<AddBandMemberProps> = ({band, onBandMemberAdded}) => {
     const [showModal, setShowModal] = useState(false);
     const [name, setName] = useState('');
 
@@ -14,11 +21,12 @@ const AddBandMember = () => {
     }
 
     const onSave = () => {
-        // BandService.create({
-        //     name: name
-        // }).then(result => {
-        //     onBandCreated(result);
-        // });
+        BandService.addMember({
+            username: name,
+            bandId: band.id
+        }).then(result => {
+            onBandMemberAdded();
+        });
         setShowModal(false);
     }
 

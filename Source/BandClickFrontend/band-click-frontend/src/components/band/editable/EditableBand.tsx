@@ -24,6 +24,7 @@ const EditableBand: React.FC<EditableBandProps> = ({band}) => {
             BandService.getById(band.id)
             .then(bandDetails => {
                 setBandInfo(bandDetails);
+                setHasNewPlaylist(false);
             });
         }
     }, [band, hasNewPlaylist]);
@@ -41,13 +42,20 @@ const EditableBand: React.FC<EditableBandProps> = ({band}) => {
         history.push('/app');
     }
 
+    const handleBandMemberAdded = () => {
+        setHasNewPlaylist(true);
+    }
+
     return (
     <>
     <Container>
         <h1>{bandInfo && bandInfo.name}</h1>
         <Tabs defaultActiveKey="members" className="mb-3">
             <Tab eventKey="members" title="Członkowie">
-                <EditableMemberList members={bandInfo && bandInfo.members} />
+                <EditableMemberList 
+                    band={bandInfo} 
+                    members={bandInfo && bandInfo.members}
+                    onBandMemberAdded={handleBandMemberAdded} />
             </Tab>
             <Tab eventKey="playlists" title="Playlisty">
                 <EditablePlaylistList 
