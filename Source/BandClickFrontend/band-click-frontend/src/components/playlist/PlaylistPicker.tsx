@@ -40,8 +40,15 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
         .then(result => {
             setPlaylists(result);
             playlistActions.addPlaylists(result);
-            fetchPlaylistInfo(result[playlistIndex.current].id);
-            setSelectedPlaylistId(result[playlistIndex.current].id);
+            if (selectedPlaylist && selectedPlaylist.id.length > 0) {
+                fetchPlaylistInfo(selectedPlaylist.id);
+                setSelectedPlaylistId(selectedPlaylist.id);
+                playlistIndex.current = playlistsStore.indexOf(selectedPlaylist);
+                onSelectedPlaylistChange(selectedPlaylist.id);
+            } else {
+                fetchPlaylistInfo(result[playlistIndex.current].id);
+                setSelectedPlaylistId(result[playlistIndex.current].id);
+            }
         });;
     }
 
@@ -102,7 +109,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
     return (
         <div className="col-md-4">
             <h2>Playlista</h2>
-            <select name="playlists" id="playlist-select" onChange={e => {
+            <select name="playlists" id="playlist-select" value={selectedPlaylist.id} onChange={e => {
                 handleSelectedPlaylistChanged(e.target.value);
             }}>
                 {

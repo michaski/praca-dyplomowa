@@ -64,7 +64,7 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
     const handleBeatsPerBarChange = (newBeatsPerBar: number) => {
         let newAccentMap: boolean[] = [];
         if (newBeatsPerBar < accentMap.length) {
-            newAccentMap = accentMap.slice(0, beatsPerBar);
+            newAccentMap = accentMap.slice(0, beatsPerBar - 1);
         } else {
             newAccentMap = Array.from(accentMap);
             for (let i = accentMap.length; i < newBeatsPerBar; i++) {

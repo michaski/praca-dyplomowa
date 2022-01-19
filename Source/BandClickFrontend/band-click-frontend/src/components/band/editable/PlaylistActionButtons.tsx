@@ -20,9 +20,13 @@ const PlaylistActionButtons: React.FC<PlaylistActionButtonsProps> = ({playlist, 
         });
     }
 
+    const handlePlaylistLoad = () => {
+        onPlaylistLoad(playlist);
+    }
+
     return (
     <ButtonGroup size="sm">
-        <Button>Wczytaj</Button>
+        <Button onClick={handlePlaylistLoad}>Wczytaj</Button>
         <Button variant="danger" onClick={handleDeletePlaylist}>Usuń z zespołu</Button>
     </ButtonGroup>
     );
