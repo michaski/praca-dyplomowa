@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import BandSelector from "../../../components/band/BandSelector";
 import AddBand from "../../../components/band/editable/AddBand";
 import EditableBand from "../../../components/band/editable/EditableBand";
 import LoggedInHeader from "../../../components/header/LoggedInHeader";
+import { Band } from "../../../models/Bands/Band";
+import BandService from "../../../services/bands/bandService";
 
 const ManagedBands = () => {
+    const [bands, setBands] = useState([] as Band[]);
+    const [selectedBand, setSelectedBand] = useState({} as Band);
+
+    useEffect(() => {
+        BandService.getAll()
+        .then(result => {
+            setBands(result);
+            setSelectedBand(result[0]);
+        });
+    }, [setBands, setSelectedBand]);
 
     const handleBandCreated = (band: any) => {
 
@@ -16,18 +29,9 @@ const ManagedBands = () => {
     <Container fluid>
         <Row>
             <Col md={10}>
-                <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                    <Form.Label column sm="2">
-                    Wybierz zespół:
-                    </Form.Label>
-                    <Col sm="10">
-                        <Form.Select size="lg">
-                            <option>Zespół 1</option>
-                            <option>Zespół 2</option>
-                            <option>Zespół 3</option>
-                        </Form.Select>
-                    </Col>
-                </Form.Group>
+                <BandSelector bands={bands} onSelectedBandChange={(band: Band) => {
+                    setSelectedBand(band);
+                }} />
             </Col>
             <Col md={2}>
                 <AddBand onBandCreated={handleBandCreated} />

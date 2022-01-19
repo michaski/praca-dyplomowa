@@ -7,6 +7,23 @@ const UserService = {
     getUserByEmail: async (email: string): Promise<User> => {
         const result = await requests.get(`${USER_CONTROLLER}/email/${email}`, auth.getToken()) as User;
         return result;
+    },
+    getUserByUsername: async (username: string): Promise<User> => {
+        const result = await requests.get(`${USER_CONTROLLER}/username/${username}`, auth.getToken()) as User;
+        return result;
+    },
+    getUserById: async (id: string): Promise<User> => {
+        const result = await requests.get(`${USER_CONTROLLER}/id/${id}`, auth.getToken()) as User;
+        return result;
+    },
+    update: async(userData: User) => {
+        await requests.put(USER_CONTROLLER, userData, auth.getToken());
+    },
+    promoteToAdmin: async(id: string) => {
+        await requests.put(`${USER_CONTROLLER}/${id}/promoteToAdmin`, null, auth.getToken());
+    },
+    demoteToUser: async(id: string) => {
+        await requests.put(`${USER_CONTROLLER}/${id}/demoteToUser`, null, auth.getToken());
     }
 }
 

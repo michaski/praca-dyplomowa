@@ -1,4 +1,6 @@
+import { User } from "../Auth/User";
+
 export interface UserInBandInfo {
-    userId: string,
+    member: User,
     bandRole: string
 }

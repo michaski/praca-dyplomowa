@@ -1,35 +1,39 @@
-import React, { useState } from "react";
-import { Button, Col, Container, Form, Nav, Offcanvas, Row, Tab } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Row } from "react-bootstrap";
+import BandSelector from "../../../components/band/BandSelector";
 import SimpleBand from "../../../components/band/simple/SimpleBand";
 import LoggedInHeader from "../../../components/header/LoggedInHeader";
+import { Band } from "../../../models/Bands/Band";
+import BandService from "../../../services/bands/bandService";
 
 const AllBands = () => {
-    const [show, setShow] = useState(false);
+    const [bands, setBands] = useState([] as Band[]);
+    const [selectedBand, setSelectedBand] = useState({} as Band);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    useEffect(() => {
+        BandService.getAll()
+        .then(results => {
+            setBands(results);
+            setSelectedBand(results[0]);
+        });
+    }, []);
+
+    const handleSelectedBandChanged = (band: Band) => {
+        setSelectedBand(band);
+    }
 
     return (
     <>
     <LoggedInHeader />
     <Container fluid>
         <Row>
-            <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                <Form.Label column sm="2">
-                Wybierz zespół:
-                </Form.Label>
-                <Col sm="10">
-                    <Form.Select size="lg">
-                        <option>Zespół 1</option>
-                        <option>Zespół 2</option>
-                        <option>Zespół 3</option>
-                    </Form.Select>
-                </Col>
-            </Form.Group>
+            <BandSelector bands={bands} onSelectedBandChange={(band: Band) => {
+                handleSelectedBandChanged(band);
+            }} />
         </Row>
         <Row>
             <Container>
-                <SimpleBand />
+                <SimpleBand band={selectedBand} />
             </Container>
         </Row>
     </Container>

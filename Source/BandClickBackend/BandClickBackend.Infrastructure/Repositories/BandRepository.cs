@@ -30,6 +30,7 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .Include(b => b.Playlists)
                 .ThenInclude(p => p.Playlist)
                 .Include(b => b.Members)
+                .ThenInclude(uib => uib.Member)
                 .SingleOrDefaultAsync(b => b.Id == id);
         }
 

@@ -8,7 +8,7 @@ namespace BandClickBackend.Application.Dtos.UserInBands
 {
     public class UserBandRelationDto
     {
-        public string UserEmail { get; set; }
+        public string Username { get; set; }
         public Guid BandId { get; set; }
     }
 }

@@ -33,6 +33,12 @@ namespace BandClickBackend.Application.Services
                 await _repository.GetUserByEmailAsync(email));
         }
 
+        public async Task<SingleUserDto> GetUserByUsernameAsync(string username)
+        {
+            return _mapper.Map<User, SingleUserDto>(
+                await _repository.GetUserByUsernameAsync(username));
+        }
+
         public async Task<SingleUserDto> GetUserByIdAsync(Guid id)
         {
             return _mapper.Map<User, SingleUserDto>(

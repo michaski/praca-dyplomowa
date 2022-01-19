@@ -8,6 +8,7 @@ namespace BandClickBackend.Application.Interfaces
     public interface IUserService
     {
         Task<SingleUserDto> GetUserByEmailAsync(string email);
+        Task<SingleUserDto> GetUserByUsernameAsync(string username);
         Task<SingleUserDto> GetUserByIdAsync(Guid id);
         Task UpdateUserAsync(SingleUserDto dto);
         Task PromoteUserToAdminAsync(Guid userId);

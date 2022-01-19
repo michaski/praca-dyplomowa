@@ -33,6 +33,18 @@ namespace BandClickBackend.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("username/{username}")]
+        [SwaggerOperation(Summary = "Gets user by username")]
+        public async Task<IActionResult> GetUserByUsernameAsync([FromRoute] string username)
+        {
+            var result = await _service.GetUserByUsernameAsync(username);
+            if (result is null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+
         [HttpGet("id/{id}")]
         [SwaggerOperation(Summary = "Gets user by id")]
         public async Task<IActionResult> GetUserByIdAsync([FromRoute] Guid id)

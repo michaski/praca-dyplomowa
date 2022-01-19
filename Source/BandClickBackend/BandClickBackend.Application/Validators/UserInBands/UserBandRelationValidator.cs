@@ -15,14 +15,21 @@ namespace BandClickBackend.Application.Validators.UserInBands
             IUserRepository userRepository,
             IBandRepository bandRepository)
         {
-            RuleFor(dto => dto.UserEmail)
+            //RuleFor(dto => dto.UserEmail)
+            //    .NotEmpty()
+            //    .EmailAddress()
+            //    .MinimumLength(5)
+            //    .MaximumLength(64)
+            //    .MustAsync(async (email, token) =>
+            //        await userRepository.GetUserByEmailAsync(email) is not null)
+            //    .WithMessage("Użytkownik o podanym adresie email nie istnieje.");
+            RuleFor(dto => dto.Username)
                 .NotEmpty()
-                .EmailAddress()
-                .MinimumLength(5)
+                .MinimumLength(1)
                 .MaximumLength(64)
-                .MustAsync(async (email, token) =>
-                    await userRepository.GetUserByEmailAsync(email) is not null)
-                .WithMessage("Użytkownik o podanym adresie email nie istnieje.");
+                .MustAsync(async (username, token) =>
+                    await userRepository.GetUserByUsernameAsync(username) is null)
+                .WithMessage("Nazwa użytkownika jest już zajęta.");
             RuleFor(dto => dto.BandId)
                 .NotEmpty()
                 .MustAsync(async (id, token) =>

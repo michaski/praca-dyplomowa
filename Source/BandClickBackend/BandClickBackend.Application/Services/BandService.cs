@@ -82,25 +82,25 @@ namespace BandClickBackend.Application.Services
 
         public async Task DemoteLeaderAsync(UserBandRelationDto dto)
         {
-            var leader = await _userRepository.GetUserByEmailAsync(dto.UserEmail);
+            var leader = await _userRepository.GetUserByUsernameAsync(dto.Username);
             await _userInBandsRepository.DemoteLeaderAsync(dto.BandId, leader.Id);
         }
 
         public async Task AddMemberAsync(UserBandRelationDto dto)
         {
-            var member = await _userRepository.GetUserByEmailAsync(dto.UserEmail);
+            var member = await _userRepository.GetUserByUsernameAsync(dto.Username);
             await _userInBandsRepository.AddMemberAsync(dto.BandId, member.Id);
         }
 
         public async Task PromoteMemberAsync(UserBandRelationDto dto)
         {
-            var member = await _userRepository.GetUserByEmailAsync(dto.UserEmail);
+            var member = await _userRepository.GetUserByUsernameAsync(dto.Username);
             await _userInBandsRepository.PromoteMemberAsync(dto.BandId, member.Id);
         }
 
         public async Task RemoveUserFromBandAsync(UserBandRelationDto dto)
         {
-            var member = await _userRepository.GetUserByEmailAsync(dto.UserEmail);
+            var member = await _userRepository.GetUserByUsernameAsync(dto.Username);
             await _userInBandsRepository.RemoveUserFromBandAsync(dto.BandId, member.Id);
         }
 
