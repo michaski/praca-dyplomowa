@@ -25,7 +25,7 @@ const requestFunction = <R>(url: string,
     };
     let parsedUrl = url;
     if (
-        (method === MethodType.POST || method === MethodType.PUT) &&
+        (method === MethodType.POST || method === MethodType.PUT || method === MethodType.DELETE) &&
         payload
     ) {
         options.body = JSON.stringify(payload);

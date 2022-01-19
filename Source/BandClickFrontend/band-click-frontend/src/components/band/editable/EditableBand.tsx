@@ -46,6 +46,10 @@ const EditableBand: React.FC<EditableBandProps> = ({band}) => {
         setHasNewPlaylist(true);
     }
 
+    const handleBandMemberDeleted = () => {
+        setHasNewPlaylist(true);
+    }
+
     return (
     <>
     <Container>
@@ -55,7 +59,8 @@ const EditableBand: React.FC<EditableBandProps> = ({band}) => {
                 <EditableMemberList 
                     band={bandInfo} 
                     members={bandInfo && bandInfo.members}
-                    onBandMemberAdded={handleBandMemberAdded} />
+                    onBandMemberAdded={handleBandMemberAdded}
+                    onMemberDelete={handleBandMemberDeleted} />
             </Tab>
             <Tab eventKey="playlists" title="Playlisty">
                 <EditablePlaylistList 

@@ -8,10 +8,11 @@ import MemberActionButtons from "./MemberActionButtons";
 interface EditableMemberListProps {
     members: UserInBandInfo[],
     band: Band,
-    onBandMemberAdded: Function
+    onBandMemberAdded: Function,
+    onMemberDelete: Function
 }
 
-const EditableMemberList: React.FC<EditableMemberListProps> = ({members, band, onBandMemberAdded}) => {
+const EditableMemberList: React.FC<EditableMemberListProps> = ({members, band, onBandMemberAdded, onMemberDelete}) => {
 
     return (
         <>
@@ -33,7 +34,10 @@ const EditableMemberList: React.FC<EditableMemberListProps> = ({members, band, o
                             <span className="fst-italic">{}</span>
                         </div>
                         <div>
-                            <MemberActionButtons isLeader={currentMember.bandRole === "Leader"} />
+                            <MemberActionButtons 
+                                memberInfo={currentMember} 
+                                band={band}
+                                onMemberDelete={onMemberDelete} />
                         </div>
                     </ListGroup.Item>
                     );
