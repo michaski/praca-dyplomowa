@@ -23,12 +23,16 @@ namespace BandClickBackend.Application.Dtos.MetronomeSettings
         public bool IsShared { get; set; }
         public int PositiveRaitingCount { get; set; }
         public int NegativeRaitingCount { get; set; }
+        public string Author { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? LastModified { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Entities.MetronomeSettings, SingleMetronomeSettingDto>()
                 .ForMember(ms => ms.PositiveRaitingCount, e => e.Ignore())
                 .ForMember(ms => ms.NegativeRaitingCount, e => e.Ignore())
+                .ForMember(dto => dto.Author, cfg => cfg.MapFrom(ms => ms.CreatedBy.Username))
                 .ReverseMap()
                 .ForMember(ms => ms.Metre, e => e.Ignore())
                 .ForMember(ms => ms.Raitings, e => e.Ignore());

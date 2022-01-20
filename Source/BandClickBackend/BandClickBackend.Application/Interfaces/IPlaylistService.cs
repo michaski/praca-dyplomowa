@@ -7,6 +7,7 @@ using BandClickBackend.Application.Dtos.Filters;
 using BandClickBackend.Application.Dtos.Playlist;
 using BandClickBackend.Application.Dtos.PlaylistComment;
 using BandClickBackend.Application.Dtos.Raitings;
+using BandClickBackend.Application.Dtos.Shared;
 using BandClickBackend.Domain.Common;
 
 namespace BandClickBackend.Application.Interfaces
@@ -14,7 +15,7 @@ namespace BandClickBackend.Application.Interfaces
     public interface IPlaylistService
     {
         Task<IEnumerable<PlaylistListDto>> GetAllPlaylistsForUserAsync();
-        Task<PagedResult<PlaylistListDto>> GetAllSharedPlaylistsAsync(QueryFilters filters);
+        Task<PagedResult<SharedPlaylistDto>> GetAllSharedPlaylistsAsync(QueryFilters filters);
         Task<SinglePlaylistDto> GetPlaylistByIdAsync(Guid id);
         Task<RaitingTypeDto> GetIsUserRaitingPositiveAsync(Guid playlistId);
         Task<SinglePlaylistDto> AddPlaylistAsync(CreatePlaylistDto playlist);

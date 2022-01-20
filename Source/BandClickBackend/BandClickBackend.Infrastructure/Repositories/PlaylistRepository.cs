@@ -37,6 +37,8 @@ namespace BandClickBackend.Infrastructure.Repositories
         public async Task<ResultPage<Playlist>> GetAllSharedPlaylistsAsync(QueryFilters filters)
         {
             var filteredQuery = _context.Playlists
+                .Include(p => p.Comments)
+                .Include(p => p.CreatedBy)
                 .Where(p => p.IsShared)
                 .Filter(filters);
             var resultPage = await filteredQuery
@@ -48,6 +50,7 @@ namespace BandClickBackend.Infrastructure.Repositories
         public async Task<Playlist> GetPlaylistByIdAsync(Guid id)
         {
             var entity = await _context.Playlists
+                .Include(p => p.CreatedBy)
                 .Include(p => p.Comments)
                 .Include(p => p.MetronomeSettings)
                 .ThenInclude(e => e.MetronomeSettings)

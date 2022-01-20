@@ -10,6 +10,7 @@ using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.Playlist;
 using BandClickBackend.Application.Dtos.PlaylistComment;
 using BandClickBackend.Application.Dtos.Raitings;
+using BandClickBackend.Application.Dtos.Shared;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
@@ -58,13 +59,18 @@ namespace BandClickBackend.Application.Services
                 await _repository.GetAllPlaylistsForUserAsync());
         }
 
-        public async Task<PagedResult<PlaylistListDto>> GetAllSharedPlaylistsAsync(QueryFilters filters)
+        public async Task<PagedResult<SharedPlaylistDto>> GetAllSharedPlaylistsAsync(QueryFilters filters)
         {
             var result = await _repository.GetAllSharedPlaylistsAsync(filters);
-            var mappedResult = new ResultPage<PlaylistListDto>(
-                _mapper.Map<IEnumerable<Playlist>, IEnumerable<PlaylistListDto>>(result.Results) as List<PlaylistListDto>,
+            var mappedResult = new ResultPage<SharedPlaylistDto>(
+                _mapper.Map<IEnumerable<Playlist>, IEnumerable<SharedPlaylistDto>>(result.Results) as List<SharedPlaylistDto>,
                 result.TotalItemsCount);
-            return new PagedResult<PlaylistListDto>(mappedResult, filters);
+            foreach (var playlistDto in mappedResult.Results)
+            {
+                playlistDto.PositiveRaitingCount = await _playlistRaitingsRepository.GetPositiveRaitingsCountAsync(playlistDto.Id);
+                playlistDto.NegativeRaitingCount = await _playlistRaitingsRepository.GetNegativeRaitingsCountAsync(playlistDto.Id);
+            }
+            return new PagedResult<SharedPlaylistDto>(mappedResult, filters);
         }
 
         public async Task<SinglePlaylistDto> GetPlaylistByIdAsync(Guid id)
@@ -264,7 +270,10 @@ namespace BandClickBackend.Application.Services
                 Comments = mappedComments,
                 IsShared = entity.IsShared,
                 PositiveRaitingCount = await _playlistRaitingsRepository.GetPositiveRaitingsCountAsync(entity.Id),
-                NegativeRaitingCount = await _playlistRaitingsRepository.GetNegativeRaitingsCountAsync(entity.Id)
+                NegativeRaitingCount = await _playlistRaitingsRepository.GetNegativeRaitingsCountAsync(entity.Id),
+                Author = entity.CreatedBy.Username,
+                Created = entity.Created,
+                LastModified = entity.LastModified
             };
             return dto;
         }

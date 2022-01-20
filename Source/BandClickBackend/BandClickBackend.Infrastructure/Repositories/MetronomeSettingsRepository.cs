@@ -45,6 +45,8 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .ThenInclude(m => m.AccentedBeats)
                 .Include(ms => ms.Metre.RhythmicUnit)
                 .Include(ms => ms.Type)
+                .Include(ms => ms.CreatedBy)
+                .Include(ms => ms.Comments)
                 .Where(x => x.IsShared)
                 .Filter(filters);
             var resultPage = await filteredQuery
@@ -71,6 +73,7 @@ namespace BandClickBackend.Infrastructure.Repositories
         public async Task<MetronomeSettings> GetByIdAsync(Guid id)
         {
             return await _context.MetronomeSettings
+                .Include(ms => ms.CreatedBy)
                 .Include(ms => ms.Metre)
                 .ThenInclude(m => m.AccentedBeats)
                 .Include(ms => ms.Metre.RhythmicUnit)

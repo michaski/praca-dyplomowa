@@ -24,11 +24,17 @@ namespace BandClickBackend.Application.Validators.Filters
                 .When(q => q.PageSize is not null)
                 .NotEmpty()
                 .NotNull()
-                .When(q => q.Page is not null); ;
+                .When(q => q.Page is not null);
             RuleFor(q => q.Search)
                 .MinimumLength(1)
                 .MaximumLength(64)
                 .When(q => !string.IsNullOrEmpty(q.Search));
+            RuleFor(q => q.OrderBy)
+                .NotNull()
+                .When(q => q.OrderByDirection is not null);
+            RuleFor(q => q.OrderByDirection)
+                .NotNull()
+                .When(q => q.OrderBy is not null);
         }
     }
 }

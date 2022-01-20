@@ -7,6 +7,7 @@ using BandClickBackend.Application.Dtos.Filters;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
 using BandClickBackend.Application.Dtos.Raitings;
+using BandClickBackend.Application.Dtos.Shared;
 using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
 
@@ -16,7 +17,7 @@ namespace BandClickBackend.Application.Interfaces
     {
         Task<PagedResult<MetronomeSettingsListDto>> GetAllAsync(QueryFilters filters);
         Task<SingleMetronomeSettingDto> GetByIdAsync(Guid id);
-        Task<PagedResult<MetronomeSettingsListDto>> GetAllSharedAsync(QueryFilters filters);
+        Task<PagedResult<SharedSettingsDto>> GetAllSharedAsync(QueryFilters filters);
         Task<IEnumerable<MetronomeSettingsListDto>> GetAllSettingsForUserAsync();
         Task<IEnumerable<MetronomeSettingsType>> GetAvailableSettingTypesAsync();
         Task<RaitingTypeDto> IsUserRaitingPositiveAsync(Guid settingId);

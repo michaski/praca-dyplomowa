@@ -20,5 +20,8 @@ namespace BandClickBackend.Application.Dtos.Playlist
         public int NegativeRaitingCount { get; set; }
         public IEnumerable<MetronomeSettingsListDto> MetronomeSettings { get; set; }
         public IEnumerable<PlaylistCommentDetailsDto> Comments { get; set; }
+        public string Author { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? LastModified { get; set; }
     }
 }

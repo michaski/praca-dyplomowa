@@ -8,6 +8,7 @@ using BandClickBackend.Application.Dtos.Filters;
 using BandClickBackend.Application.Dtos.MetronomeSettings;
 using BandClickBackend.Application.Dtos.MetronomeSettingsComment;
 using BandClickBackend.Application.Dtos.Raitings;
+using BandClickBackend.Application.Dtos.Shared;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Common;
 using BandClickBackend.Domain.Entities;
@@ -72,13 +73,18 @@ namespace BandClickBackend.Application.Services
             return mappedResult;
         }
 
-        public async Task<PagedResult<MetronomeSettingsListDto>> GetAllSharedAsync(QueryFilters filters)
+        public async Task<PagedResult<SharedSettingsDto>> GetAllSharedAsync(QueryFilters filters)
         {
             var result = await _repository.GetAllSharedAsync(filters);
-            var mappedResult = new ResultPage<MetronomeSettingsListDto>(
-                _mapper.Map<IEnumerable<MetronomeSettings>, IEnumerable<MetronomeSettingsListDto>>(result.Results) as List<MetronomeSettingsListDto>,
+            var mappedResult = new ResultPage<SharedSettingsDto>(
+                _mapper.Map<IEnumerable<MetronomeSettings>, IEnumerable<SharedSettingsDto>>(result.Results) as List<SharedSettingsDto>,
                 result.TotalItemsCount);
-            return new PagedResult<MetronomeSettingsListDto>(mappedResult, filters);
+            foreach (var settingsDto in mappedResult.Results)
+            {
+                settingsDto.PositiveRaitingCount = await _metronomeSettingsRaitingsRepository.GetPositiveRaitingsCountAsync(settingsDto.Id);
+                settingsDto.NegativeRaitingCount = await _metronomeSettingsRaitingsRepository.GetNegativeRaitingsCountAsync(settingsDto.Id);
+            }
+            return new PagedResult<SharedSettingsDto>(mappedResult, filters);
         }
 
         public async Task<IEnumerable<MetronomeSettingsListDto>> GetAllSettingsForUserAsync()
