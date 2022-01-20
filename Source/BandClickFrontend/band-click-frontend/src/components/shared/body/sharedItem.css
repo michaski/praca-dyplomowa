@@ -1,0 +1,19 @@
+.shared-item {
+    text-align: left;
+    margin: 0 15%;
+}
+
+.item-info {
+    font-size: 0.7em;
+}
+
+.item-info li {
+    display: inline-block;
+    list-style-type: none;
+    margin-left: 1em;
+}
+
+.item-info li:not(:last-of-type)::after {
+    content: '\2022';
+    margin-left: 1em;
+}

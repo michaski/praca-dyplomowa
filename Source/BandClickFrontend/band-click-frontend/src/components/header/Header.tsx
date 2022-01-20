@@ -20,6 +20,7 @@ const Header = () => {
                     <div className="collapse navbar-collapse d-inline-flex justify-content-end" id="navbarNavAltMarkup">
                         <div className="navbar">
                             {redirectTo('/', 'Home')}
+                            {redirectTo('/shared', 'Udostępnione')}
                             {redirectTo('login', 'Logowanie')}
                             {redirectTo('register', 'Zarejestruj się')}
                         </div>

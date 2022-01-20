@@ -10,6 +10,7 @@ import store from './store';
 import Register from './views/register/Register';
 import AllBands from './views/bands/all/AllBands';
 import ManagedBands from './views/bands/managed/ManagedBands';
+import SharedSectionMainPage from './views/shared/main/SharedSectionMainPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <BrowserRouter>
         <Provider store={store}>
           <Switch>
+            <Route path="/shared" component={SharedSectionMainPage} />
             <ProtectedRoute path="/bands/managed" component={ManagedBands} />
             <ProtectedRoute path="/bands/all" component={AllBands} />
             <ProtectedRoute path="/app" component={Main} />
