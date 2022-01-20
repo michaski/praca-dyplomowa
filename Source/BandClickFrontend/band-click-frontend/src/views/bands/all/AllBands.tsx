@@ -27,7 +27,7 @@ const AllBands = () => {
     <LoggedInHeader />
     <Container fluid>
         <Row>
-            <BandSelector bands={bands} onSelectedBandChange={(band: Band) => {
+            <BandSelector bands={bands} selectedBand={selectedBand} onSelectedBandChange={(band: Band) => {
                 handleSelectedBandChanged(band);
             }} />
         </Row>

@@ -8,12 +8,11 @@ import PlaylistActionButtons from "./PlaylistActionButtons";
 interface EditablePlaylistListProps {
     playlists: Playlist[], 
     band: Band,
-    onPlaylistAdded: Function,
-    onPlaylistDeleted: Function,
+    handleBandInfoChanged: Function,
     onPlaylistLoad: Function
 }
 
-const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, band, onPlaylistAdded, onPlaylistDeleted, onPlaylistLoad}) =>{
+const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, band, handleBandInfoChanged, onPlaylistLoad}) =>{
 
     return (
         <>
@@ -34,7 +33,7 @@ const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, b
                                     band={band}
                                     playlist={playlist}
                                     onPlaylistLoad={onPlaylistLoad}
-                                    onPlaylistDeleted={onPlaylistDeleted} />
+                                    onPlaylistDeleted={handleBandInfoChanged} />
                             </Accordion.Header>
                             <Accordion.Body>
                                 <ListGroup as="ol" numbered>
@@ -63,7 +62,7 @@ const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, b
                     }
                 </Accordion>
                 <Row>
-                    <AddPlaylistToBand band={band} onPlaylistAdded={onPlaylistAdded} />
+                    <AddPlaylistToBand band={band} onPlaylistAdded={handleBandInfoChanged} />
                 </Row>
             </Container>
         </>

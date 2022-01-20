@@ -15,16 +15,22 @@ const ManagedBands = () => {
         BandService.getAll()
         .then(results => {
             setBands(results);
-            setSelectedBand(results[0]);
+            if (!selectedBand || !selectedBand.id) {
+                setSelectedBand(results[0]);
+            }
         });
-    }, []);
+    }, [selectedBand]);
 
     const handleSelectedBandChanged = (band: Band) => {
         setSelectedBand(band);
     }
 
-    const handleBandCreated = (band: any) => {
+    const handleBandCreated = (band: Band) => {
+        setSelectedBand(band);
+    }
 
+    const handleBandDeleted = (band: Band) => {
+        setSelectedBand(bands.filter(b => b.id !== band.id)[0]);
     }
 
     return (
@@ -33,7 +39,7 @@ const ManagedBands = () => {
     <Container fluid>
         <Row>
             <Col md={10}>
-                <BandSelector bands={bands} onSelectedBandChange={(band: Band) => {
+                <BandSelector bands={bands} selectedBand={selectedBand} onSelectedBandChange={(band: Band) => {
                     handleSelectedBandChanged(band);
                 }} />
             </Col>
@@ -43,7 +49,7 @@ const ManagedBands = () => {
         </Row>
         <Row>
             <Container>
-                <EditableBand band={selectedBand} />
+                <EditableBand band={selectedBand} onBandDeleted={handleBandDeleted} />
             </Container>
         </Row>
     </Container>

@@ -7,17 +7,35 @@ import BandService from "../../../services/bands/bandService";
 interface MemberActionButtonsProps {
     memberInfo: UserInBandInfo,
     band: Band,
-    onMemberDelete: Function
+    handleBandInfoChanged: Function
 }
 
-const MemberActionButtons: React.FC<MemberActionButtonsProps> = ({memberInfo, band, onMemberDelete}) => {
+const MemberActionButtons: React.FC<MemberActionButtonsProps> = ({memberInfo, band, handleBandInfoChanged}) => {
 
     const handleMemberDelete = () => {
         BandService.removeMember({
             bandId: band.id,
             username: memberInfo.member.username
         }).then(_ => {
-            onMemberDelete(memberInfo);
+            handleBandInfoChanged(memberInfo);
+        });
+    }
+
+    const handlePromoteMember = () => {
+        BandService.promoteMember({
+            bandId: band.id,
+            username: memberInfo.member.username
+        }).then(_ => {
+            handleBandInfoChanged(memberInfo);
+        });
+    }
+
+    const handleDemoteMember = () => {
+        BandService.demoteMember({
+            bandId: band.id,
+            username: memberInfo.member.username
+        }).then(_ => {
+            handleBandInfoChanged(memberInfo);
         });
     }
 
@@ -26,13 +44,13 @@ const MemberActionButtons: React.FC<MemberActionButtonsProps> = ({memberInfo, ba
         {
             memberInfo.bandRole === 'Leader' &&
             <ButtonGroup size="sm">
-                <Button variant={"warning"}>Zdegraduj</Button>
+                <Button variant={"warning"} onClick={handleDemoteMember}>Zdegraduj</Button>
             </ButtonGroup>
         }
         {
         memberInfo.bandRole !== 'Leader' &&
         <ButtonGroup size="sm">
-            <Button variant={"success"}>Awansuj na lidera</Button>
+            <Button variant={"success"} onClick={handlePromoteMember}>Awansuj na lidera</Button>
             <Button variant={"danger"} onClick={handleMemberDelete}>Usuń z zespołu</Button>
         </ButtonGroup>
         }

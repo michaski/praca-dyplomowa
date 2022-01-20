@@ -5,14 +5,14 @@ import BandService from "../../services/bands/bandService";
 
 interface BandSelectorProps {
     bands: Band[],
+    selectedBand: Band,
     onSelectedBandChange: Function
 }
 
-const BandSelector: React.FC<BandSelectorProps> = ({bands, onSelectedBandChange}) => {
+const BandSelector: React.FC<BandSelectorProps> = ({bands, selectedBand, onSelectedBandChange}) => {
 
     const handleSelectedBandChanged = (selectedBandIndex: string) => {
-        const indexValue = parseInt(selectedBandIndex);
-        onSelectedBandChange(bands[indexValue]);
+        onSelectedBandChange(bands.find(b => b.id === selectedBandIndex));
     }
 
     return (
@@ -21,11 +21,11 @@ const BandSelector: React.FC<BandSelectorProps> = ({bands, onSelectedBandChange}
             Wybierz zespół:
         </Form.Label>
         <Col sm="10">
-            <Form.Select size="lg" onChange={e => handleSelectedBandChanged(e.target.value)}>
+            <Form.Select size="lg" value={selectedBand.id} onChange={e => handleSelectedBandChanged(e.target.value)}>
                 {
                     bands && bands.length > 0 &&
                     bands.map((band, index) => {
-                        return <option key={index} value={index}>{band.name}</option>
+                        return <option key={index} value={band.id}>{band.name}</option>
                     })
                 }
             </Form.Select>

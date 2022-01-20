@@ -22,7 +22,7 @@ const BandService = {
         return result;
     },
     create: async (bandName: string) => {
-        const result = await requests.post(`${BANDS_CONTROLLER}/create/${bandName}`, auth.getToken());
+        const result = await requests.post(`${BANDS_CONTROLLER}/create/${bandName}`, null, auth.getToken());
         return result;
     },
     addMember: async (data: BandMemberAction) => {
@@ -36,7 +36,7 @@ const BandService = {
         await requests.put(`${BANDS_CONTROLLER}/promoteMember`, data, auth.getToken());
     },
     demoteMember: async (data: BandMemberAction) => {
-        await requests.put(`${BANDS_CONTROLLER}/demoteMember`, data, auth.getToken());
+        await requests.put(`${BANDS_CONTROLLER}/demoteLeader`, data, auth.getToken());
     },
     delete: async (id: string) => {
         await requests.delete(`${BANDS_CONTROLLER}/${id}`, null, auth.getToken());
