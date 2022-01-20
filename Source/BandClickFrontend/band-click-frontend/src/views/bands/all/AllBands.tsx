@@ -13,8 +13,10 @@ const AllBands = () => {
     useEffect(() => {
         BandService.getAll()
         .then(results => {
-            setBands(results);
-            setSelectedBand(results[0]);
+            if (results && results.length > 0) {
+                setBands(results);
+                setSelectedBand(results[0]);
+            }
         });
     }, []);
 
@@ -26,6 +28,9 @@ const AllBands = () => {
     <>
     <LoggedInHeader />
     <Container fluid>
+        {
+        bands && bands.length > 0 && selectedBand && selectedBand.id &&
+        <>
         <Row>
             <BandSelector bands={bands} selectedBand={selectedBand} onSelectedBandChange={(band: Band) => {
                 handleSelectedBandChanged(band);
@@ -36,6 +41,14 @@ const AllBands = () => {
                 <SimpleBand band={selectedBand} />
             </Container>
         </Row>
+        </>
+        }
+        {
+            (!bands || bands.length === 0 || !selectedBand || selectedBand.id === '') &&
+            <>
+            <p className="fst-italic">Nie należysz do żadnych zespołów</p>
+            </>
+        }
     </Container>
     </>
     );

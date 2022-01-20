@@ -38,16 +38,18 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
     const getPlaylists = () => {
         PlaylistService.getAll()
         .then(result => {
-            setPlaylists(result);
-            playlistActions.addPlaylists(result);
-            if (selectedPlaylist && selectedPlaylist.id.length > 0) {
-                fetchPlaylistInfo(selectedPlaylist.id);
-                setSelectedPlaylistId(selectedPlaylist.id);
-                playlistIndex.current = playlistsStore.indexOf(selectedPlaylist);
-                onSelectedPlaylistChange(selectedPlaylist.id);
-            } else {
-                fetchPlaylistInfo(result[playlistIndex.current].id);
-                setSelectedPlaylistId(result[playlistIndex.current].id);
+            if(result && result.length > 0) {
+                setPlaylists(result);
+                playlistActions.addPlaylists(result);
+                if (selectedPlaylist && selectedPlaylist.id.length > 0) {
+                    fetchPlaylistInfo(selectedPlaylist.id);
+                    setSelectedPlaylistId(selectedPlaylist.id);
+                    playlistIndex.current = playlistsStore.indexOf(selectedPlaylist);
+                    onSelectedPlaylistChange(selectedPlaylist.id);
+                } else {
+                    fetchPlaylistInfo(result[playlistIndex.current].id);
+                    setSelectedPlaylistId(result[playlistIndex.current].id);
+                }
             }
         });;
     }
@@ -109,6 +111,9 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
     return (
         <div className="col-md-4">
             <h2>Playlista</h2>
+            {
+            playlists && playlists.length > 0 && selectedPlaylist && selectedPlaylist.id &&
+            <>
             <select name="playlists" id="playlist-select" value={selectedPlaylist.id} onChange={e => {
                 handleSelectedPlaylistChanged(e.target.value);
             }}>
@@ -132,6 +137,15 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
                 barsFinished={barCount}
                 onAutoSwitchToggle={onAutoSwitchToggle}
             />
+            </>
+            }
+            {
+                (!playlists || playlists.length === 0) &&
+                <>
+                <p className="fst-italic">Brak playlist</p>
+                <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
+                </>
+            }
         </div>
     );
 }

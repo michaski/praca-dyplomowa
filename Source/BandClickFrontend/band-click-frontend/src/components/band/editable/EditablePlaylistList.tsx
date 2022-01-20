@@ -18,7 +18,7 @@ const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, b
         <>
             <Container>
                 {
-                    playlists && playlists.length === 0 &&
+                    !playlists || playlists.length === 0 &&
                     <p className="fst-italic">Brak playlist</p>
                 }
                 <Accordion>

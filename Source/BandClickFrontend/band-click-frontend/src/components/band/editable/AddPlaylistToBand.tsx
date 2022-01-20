@@ -22,10 +22,12 @@ const AddPlaylistToBand: React.FC<AddPlaylistToBandProps> = ({band, onPlaylistAd
     const playlistActions = useAction(PlaylistStoreService);
 
     useEffect(() => {
-        if (!userPlaylists || userPlaylists.length === 0) {
+        if ((band && band.id) && !userPlaylists || userPlaylists.length === 0) {
             PlaylistService.getAll()
             .then(result => {
-                playlistActions.addPlaylists(result);
+                if (result && result.length > 0) {
+                    playlistActions.addPlaylists(result);
+                }
             });
         }
         setSelectedPlaylist(userPlaylists[0]);

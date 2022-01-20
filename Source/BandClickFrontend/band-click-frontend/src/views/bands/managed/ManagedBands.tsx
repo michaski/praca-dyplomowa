@@ -14,9 +14,11 @@ const ManagedBands = () => {
     useEffect(() => {
         BandService.getAll()
         .then(results => {
-            setBands(results);
-            if (!selectedBand || !selectedBand.id) {
-                setSelectedBand(results[0]);
+            if (results && results.length > 0) {
+                setBands(results);
+                if (!selectedBand || !selectedBand.id) {
+                    setSelectedBand(results[0]);
+                }
             }
         });
     }, [selectedBand]);
@@ -37,6 +39,9 @@ const ManagedBands = () => {
     <>
     <LoggedInHeader />
     <Container fluid>
+        {
+        bands && bands.length > 0 && selectedBand && selectedBand.id &&
+        <>
         <Row>
             <Col md={10}>
                 <BandSelector bands={bands} selectedBand={selectedBand} onSelectedBandChange={(band: Band) => {
@@ -52,6 +57,15 @@ const ManagedBands = () => {
                 <EditableBand band={selectedBand} onBandDeleted={handleBandDeleted} />
             </Container>
         </Row>
+        </>
+        }
+        {
+            (!bands || bands.length === 0 || !selectedBand || selectedBand.id === '') &&
+            <>
+            <p className="fst-italic">Nie zarządzasz żadnymi zespołami</p>
+            <AddBand onBandCreated={handleBandCreated} />
+            </>
+        }
     </Container>
     
     </>
