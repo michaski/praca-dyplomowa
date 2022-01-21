@@ -21,9 +21,18 @@ namespace BandClickBackend.Application.Dtos.Filters
             filters.PageSize ??= results.TotalItemsCount;
             Items = results.Results;
             TotalItemsCount = results.TotalItemsCount;
-            ItemsFrom = filters.PageSize.Value * (filters.Page.Value - 1) + 1;
-            ItemsTo = ItemsFrom + filters.PageSize.Value - 1;
-            TotalPages = (int)Math.Ceiling(results.TotalItemsCount / (double)filters.PageSize);
+            if (results.TotalItemsCount > 0)
+            {
+                ItemsFrom = filters.PageSize.Value * (filters.Page.Value - 1) + 1;
+                ItemsTo = ItemsFrom + filters.PageSize.Value - 1;
+                TotalPages = (int)Math.Ceiling(results.TotalItemsCount / (double)filters.PageSize);
+            }
+            else
+            {
+                ItemsFrom = 0;
+                ItemsTo = 0;
+                TotalPages = 0;
+            }
         }
 
         public PagedResult(List<T> items, int totalItemsCount, int pageSize, int pageNumber)

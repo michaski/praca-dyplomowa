@@ -7,12 +7,15 @@ import SharedPlaylistItem from "./SharedPlaylistItem";
 
 interface SharedPlaylistListProps {
     visible: boolean,
+    page: number,
+    pageSize: number,
     searchPhrase: string,
     orderBy?: OrderByValues,
-    orderByDirection?: OrderByDirection
+    orderByDirection?: OrderByDirection,
+    onPaginationDataCollected: Function
 }
 
-const SharedPlaylistList: React.FC<SharedPlaylistListProps> = ({visible, searchPhrase, orderBy, orderByDirection}) => {
+const SharedPlaylistList: React.FC<SharedPlaylistListProps> = ({visible, page, pageSize, searchPhrase, orderBy, orderByDirection, onPaginationDataCollected}) => {
 
     const [isActive, setIsActive] = useState(false);
     const [playlists, setPlaylists] = useState({} as PagedPlaylists);
@@ -28,11 +31,14 @@ const SharedPlaylistList: React.FC<SharedPlaylistListProps> = ({visible, searchP
         PlaylistService.getAllShared({
             search: searchPhrase === '' ? undefined : searchPhrase,
             orderBy: (orderByDirection && !orderBy) ? OrderByValues.DEFAULT : orderBy,
-            orderByDirection: (orderBy && !orderByDirection) ? OrderByDirection.DEFAULT : orderByDirection
+            orderByDirection: (orderBy && !orderByDirection) ? OrderByDirection.DEFAULT : orderByDirection,
+            page: page,
+            pageSize: pageSize
         })
         .then(result => {
             if (result && result.items.length >= 0) {
                 setPlaylists(result);
+                onPaginationDataCollected(result.totalPages, result.itemsFrom, result.itemsTo, result.totalItemsCount);
             }
         });
     }

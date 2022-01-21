@@ -16,6 +16,12 @@ const SharedSectionMainPage = () => {
     const [searchPhrase, setSearchPhrase] = useState('');
     const [orderBy, setOrderBy] = useState(undefined as OrderByValues | undefined);
     const [orderByDirection, setOrderByDirection] = useState(undefined as OrderByDirection | undefined);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(15);
+    const [itemsFrom, setItemsFrom] = useState(1);
+    const [itemsTo, setItemsTo] = useState(15);
+    const [totalItemsCount, setTotalItemsCount] = useState(15);
 
     const handleSelectedItemTypeChanged = (newSelectedItemType: string) => {
         setSelectedItemType(newSelectedItemType);
@@ -38,6 +44,14 @@ const SharedSectionMainPage = () => {
     }
 
     const handlePageChanged = (selectedPage: number) => {
+        setPage(selectedPage);
+    }
+
+    const handlePaginationDataCollected = (totalPages: number, itemsFrom: number, itemsTo: number, totalItemsCount: number) => {
+        setTotalPages(totalPages);
+        setItemsFrom(itemsFrom);
+        setItemsTo(itemsTo);
+        setTotalItemsCount(totalItemsCount);
     }
 
     return (
@@ -61,30 +75,17 @@ const SharedSectionMainPage = () => {
     </div>
     <Row>
         {
-            selectedItemType === 'all' &&
-            <>
-                <SharedMetronomeSettingsList 
-                    visible={true}
-                    selectedMetronomeSettingsType={selectedMetronomeSettingsType}
-                    searchPhrase={searchPhrase}
-                    orderBy={orderBy}
-                    orderByDirection={orderByDirection} />
-                <SharedPlaylistList 
-                    visible={true}
-                    searchPhrase={searchPhrase}
-                    orderBy={orderBy}
-                    orderByDirection={orderByDirection} />
-            </>
-        }
-        {
             selectedItemType === 'metronomeSettings' &&
             <>
                 <SharedMetronomeSettingsList 
                     visible={true}
+                    page={page}
+                    pageSize={itemsPerPage}
                     selectedMetronomeSettingsType={selectedMetronomeSettingsType}
                     searchPhrase={searchPhrase}
                     orderBy={orderBy}
-                    orderByDirection={orderByDirection} />
+                    orderByDirection={orderByDirection}
+                    onPaginationDataCollected={handlePaginationDataCollected} />
             </>
         }
         {
@@ -92,20 +93,23 @@ const SharedSectionMainPage = () => {
             <>
                 <SharedPlaylistList 
                     visible={true}
+                    page={page}
+                    pageSize={itemsPerPage}
                     searchPhrase={searchPhrase}
                     orderBy={orderBy}
-                    orderByDirection={orderByDirection} />
+                    orderByDirection={orderByDirection}
+                    onPaginationDataCollected={handlePaginationDataCollected} />
             </>
         }
     </Row>
     <Row>
         <div>
             <Paginator
-                page={1}
-                totalPages={10}
-                itemsFrom={1}
-                itemsTo={15}
-                totalItemsCount={150}
+                page={page}
+                totalPages={totalPages}
+                itemsFrom={itemsFrom}
+                itemsTo={itemsTo}
+                totalItemsCount={totalItemsCount}
                 onPageChanged={handlePageChanged} />
         </div>
     </Row>

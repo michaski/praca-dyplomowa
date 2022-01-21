@@ -7,7 +7,7 @@ interface ItemTypeFilterProps {
 
 const ItemTypeFilter: React.FC<ItemTypeFilterProps> = ({onSelectedItemTypeChange}) => {
 
-    const [selectedType, setSelectedType] = useState('all');
+    const [selectedType, setSelectedType] = useState('metronomeSettings');
 
     return (
     <>
@@ -20,7 +20,6 @@ const ItemTypeFilter: React.FC<ItemTypeFilterProps> = ({onSelectedItemTypeChange
                 setSelectedType(e.target.value);
                 onSelectedItemTypeChange(e.target.value);
             }}>
-                <option value="all">Wszystkie</option>
                 <option value="metronomeSettings">Ustawienia metronomu</option>
                 <option value="playlists">Playlisty</option>
             </Form.Select>

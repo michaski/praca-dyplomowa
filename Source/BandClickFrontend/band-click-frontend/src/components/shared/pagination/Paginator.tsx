@@ -12,31 +12,23 @@ interface PaginatorProps {
 
 const Paginator: React.FC<PaginatorProps> = ({page, totalPages, itemsFrom, itemsTo, totalItemsCount, onPageChanged}) => {
 
-    // const [pageNumber, setPageNumber] = useState(1);
-
     const goToPage = (page: number) => {
-        // setPageNumber(page);
         onPageChanged(page);
     }
 
     const goToNextPage = () => {
-        // setPageNumber(previous => {
         onPageChanged(page + 1);
-        //     return previous + 1;
-        // });
     }
 
     const goToPreviousPage = () => {
-        // setPageNumber(previous => {
         onPageChanged(page - 1);
-        //     return previous - 1;
-        // });
     }
 
     return (
     <>
     {
     page > 0 && page <= totalPages &&
+    <>
     <Pagination className="justify-content-center">
         <Pagination.First onClick={() => goToPage(1)} disabled={page === 1} />
         <Pagination.Prev onClick={goToPreviousPage} disabled={page === 1} />
@@ -69,7 +61,7 @@ const Paginator: React.FC<PaginatorProps> = ({page, totalPages, itemsFrom, items
             </>
         }
         {
-            totalPages - page < 3 &&
+            totalPages > 7 && totalPages - page < 3 &&
             <>
             <Pagination.Item>{1}</Pagination.Item>
             <Pagination.Ellipsis />
@@ -81,10 +73,18 @@ const Paginator: React.FC<PaginatorProps> = ({page, totalPages, itemsFrom, items
         <Pagination.Next onClick={goToNextPage} disabled={page === totalPages} />
         <Pagination.Last onClick={() => goToPage(totalPages)} disabled={page === totalPages} />
     </Pagination>
+    </>
     }
     {
         (page <= 0 || page > totalPages) &&
-        <p className="fw-bold text-danger">Podano zły numer strony</p>
+        <>
+        <Pagination className="justify-content-center">
+            <Pagination.First disabled />
+            <Pagination.Prev disabled />
+            <Pagination.Next disabled />
+            <Pagination.Last disabled />
+        </Pagination>
+        </>
     }
     </>
     );

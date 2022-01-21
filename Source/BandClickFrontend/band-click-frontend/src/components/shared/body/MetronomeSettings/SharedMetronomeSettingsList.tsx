@@ -7,13 +7,16 @@ import SharedMetronomeSettingsItem from "./SharedMetronomeSettingsItem";
 
 interface SharedMetronomeSettingsListProps {
     visible: boolean,
+    page: number,
+    pageSize: number,
     selectedMetronomeSettingsType: string,
     searchPhrase: string,
     orderBy?: OrderByValues,
-    orderByDirection?: OrderByDirection
+    orderByDirection?: OrderByDirection,
+    onPaginationDataCollected: Function
 }
 
-const SharedMetronomeSettingsList: React.FC<SharedMetronomeSettingsListProps> = ({visible, searchPhrase, selectedMetronomeSettingsType, orderBy, orderByDirection}) => {
+const SharedMetronomeSettingsList: React.FC<SharedMetronomeSettingsListProps> = ({visible, page, pageSize, searchPhrase, selectedMetronomeSettingsType, orderBy, orderByDirection, onPaginationDataCollected}) => {
 
     const [isActive, setIsActive] = useState(false);
     const [settings, setSettings] = useState({} as PagedMetronomeSettings);
@@ -30,11 +33,14 @@ const SharedMetronomeSettingsList: React.FC<SharedMetronomeSettingsListProps> = 
             search: searchPhrase === '' ? undefined : searchPhrase,
             type: selectedMetronomeSettingsType === 'all' ? undefined : selectedMetronomeSettingsType,
             orderBy: (orderByDirection && !orderBy) ? OrderByValues.DEFAULT : orderBy,
-            orderByDirection: (orderBy && !orderByDirection) ? OrderByDirection.DEFAULT : orderByDirection
+            orderByDirection: (orderBy && !orderByDirection) ? OrderByDirection.DEFAULT : orderByDirection,
+            page: page,
+            pageSize: pageSize
         })
         .then(result => {
             if (result && result.items.length >= 0) {
                 setSettings(result);
+                onPaginationDataCollected(result.totalPages, result.itemsFrom, result.itemsTo, result.totalItemsCount);
             }
         });
     }
