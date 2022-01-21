@@ -2,6 +2,7 @@ import { CommentTransfer } from "../../models/Comments/EditComment";
 import { Metre } from "../../models/Metre/Metre";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
 import { MetronomeSettingsType } from "../../models/MetronomeSettings/MetronomeSettingsType";
+import { PagedMetronomeSettings } from "../../models/MetronomeSettings/PagedMetronomeSettings";
 import { PostMetronomeSettings } from "../../models/MetronomeSettings/PostMetronomeSettings";
 import { UpdateMetronomeSettings } from "../../models/MetronomeSettings/UpdateMetronomeSettings";
 import { METRONOME_SETTINGS_COMMENTS, METRONOME_SETTINGS_CONTROLLER } from "../../utils/apiUrls";
@@ -20,8 +21,8 @@ const MetronomeSettingsService = {
         const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/${id}`, auth.getToken()) as MetronomeSettings;
         return result;
     },
-    getAllShared: async (): Promise<MetronomeSettings[]> => {
-        const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/shared`, auth.getToken()) as MetronomeSettings[];
+    getAllShared: async (): Promise<PagedMetronomeSettings> => {
+        const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/shared`, auth.getToken()) as PagedMetronomeSettings;
         return result;
     },
     getTypes: async (): Promise<MetronomeSettingsType[]> => {

@@ -20,7 +20,10 @@ export const metronomeSettingsInitialState: MetronomeSettings = {
     isShared: false,
     positiveRaitingCount: 0,
     negativeRaitingCount: 0,
-    comments: []
+    comments: [],
+    author: '',
+    commentsCount: 0,
+    created: new Date()
 }
 
 export const metronomeSettingsStoreReducer: Reducer<MetronomeSettings, MetronomeSettingsActions> = 

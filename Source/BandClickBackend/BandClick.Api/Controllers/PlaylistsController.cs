@@ -44,10 +44,6 @@ namespace BandClickBackend.Api.Controllers
         public async Task<IActionResult> GetAllSharedPlaylistsAsync([FromQuery] QueryFilters filters)
         {
             var result = await _service.GetAllSharedPlaylistsAsync(filters);
-            if (!result.Items.Any())
-            {
-                return NotFound();
-            }
             return Ok(result);
         }
 

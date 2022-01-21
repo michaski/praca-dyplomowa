@@ -24,7 +24,7 @@ const SharedSectionMainPage = () => {
         <SharedSectionFilters />
     </div>
     <Row>
-        <SharedMetronomeSettingsList />
+        <SharedMetronomeSettingsList visible={true} />
         <SharedPlaylistList />
     </Row>
     <Row>

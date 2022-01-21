@@ -58,10 +58,6 @@ namespace BandClickBackend.Api.Controllers
         public async Task<IActionResult> GetAllShared([FromQuery] QueryFilters filters)
         {
             var result = await _metronomeSettingsService.GetAllSharedAsync(filters);
-            if (!result.Items.Any())
-            {
-                return NotFound();
-            }
             return Ok(result);
         }
 

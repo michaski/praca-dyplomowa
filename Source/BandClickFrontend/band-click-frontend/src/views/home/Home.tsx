@@ -2,33 +2,13 @@ import React from 'react';
 import Header from '../../components/header/Header';
 import { Metronome } from '../../components/metronome/Metronome';
 import { MetronomeSettings } from '../../models/MetronomeSettings/MetronomeSettings';
+import { metronomeSettingsInitialState } from '../../store/reducers/metronomeSettings.reducer';
 
 const Home = () => {
-    const defaultSettings: MetronomeSettings = {
-        tempo: 80,
-        metre: {
-            beatsPerBar: 4,
-            rhythmicUnit: 4,
-            accentedBeats: [],
-            id: ''
-        },
-        numberOfMeasures: 4,
-        comments: [],
-        id: '',
-        isShared: false,
-        name: '',
-        negativeRaitingCount: 0,
-        positiveRaitingCount: 0,
-        type: {
-            id: '',
-            name: ''
-        }
-    }
-
     return (
         <div className="container-fluid">
             <Header />
-            <Metronome settings={defaultSettings} onBarFinished={() => {}} isAutoSwitchOn={false} />
+            <Metronome settings={metronomeSettingsInitialState} onBarFinished={() => {}} isAutoSwitchOn={false} />
         </div>
     );
 }
