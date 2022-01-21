@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ListGroup, Row, Col, Button, ButtonGroup } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { Playlist } from "../../../../models/Playlists/Playlist";
+import { useAction } from "../../../../hooks/useAction";
+import { PlaylistStoreService } from "../../../../services/playlists/playlistStoreService";
 
 interface SharedPlaylistItemProps {
     playlist: Playlist
@@ -11,6 +13,12 @@ interface SharedPlaylistItemProps {
 
 const SharedPlaylistItem: React.FC<SharedPlaylistItemProps> = ({playlist}) => {
     const history = useHistory();
+    const playlistStoreActions = useAction(PlaylistStoreService);
+
+    const loadPlaylist = () => {
+        playlistStoreActions.setSelectedPlaylist(playlist);
+        history.push('/app');
+    }
 
     return (
     <>
@@ -31,7 +39,7 @@ const SharedPlaylistItem: React.FC<SharedPlaylistItemProps> = ({playlist}) => {
             <Col sm="2" className="d-flex align-items-center">
                 <ButtonGroup size="sm">
                     <Button variant="secondary" onClick={() => {history.push(`/shared/playlist/${playlist.id}`);}}>Szczegóły</Button>
-                    <Button>Wczytaj</Button>
+                    <Button onClick={loadPlaylist}>Wczytaj</Button>
                 </ButtonGroup>
             </Col>
         </Row>

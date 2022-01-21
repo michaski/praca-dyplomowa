@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { ListGroup, Row, Col, Button, ButtonGroup } from "react-bootstrap";
 import { useHistory } from "react-router";
+import { useAction } from "../../../../hooks/useAction";
 import { MetronomeSettings } from "../../../../models/MetronomeSettings/MetronomeSettings";
+import { MetronomeSettingsStoreSerivce } from "../../../../services/metronomeSettings/metronomeSettingsStoreService";
 import "../sharedItem.css";
 
 interface SharedMetronomeSettingsItemProps {
@@ -12,7 +14,13 @@ interface SharedMetronomeSettingsItemProps {
 
 const SharedMetronomeSettingsItem: React.FC<SharedMetronomeSettingsItemProps> = ({metronomeSettings}) => {
     const history = useHistory();
+    const metronomeSettingsStoreActions = useAction(MetronomeSettingsStoreSerivce);
     
+    const loadMetronomeSettings = () => {
+        metronomeSettingsStoreActions.loadSettings(metronomeSettings);
+        history.push('/app');
+    }
+
     return (
     <>
     <ListGroup.Item className="shared-item">
@@ -32,7 +40,7 @@ const SharedMetronomeSettingsItem: React.FC<SharedMetronomeSettingsItemProps> = 
             <Col sm="2" className="d-flex align-items-center">
                 <ButtonGroup size="sm">
                     <Button variant="secondary" onClick={() => {history.push(`/shared/metronomeSettings/${metronomeSettings.id}`);}}>Szczegóły</Button>
-                    <Button>Wczytaj</Button>
+                    <Button onClick={loadMetronomeSettings}>Wczytaj</Button>
                 </ButtonGroup>
             </Col>
         </Row>
