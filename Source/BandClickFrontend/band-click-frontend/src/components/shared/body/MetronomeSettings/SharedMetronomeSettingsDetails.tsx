@@ -2,11 +2,14 @@ import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Button, Container, Table } from "react-bootstrap";
+import { useHistory } from "react-router";
 import AddComment from "../../comments/AddComment";
 import Comments from "../../comments/Comments";
 import "../sharedItem.css";
 
 const SharedMetronomeSettingsDetails = () => {
+    const history = useHistory();
+
     return (
     <>
     <h2>Nazwa ustawienia</h2>
@@ -51,6 +54,7 @@ const SharedMetronomeSettingsDetails = () => {
         </tbody>
     </Table>
     <Comments />
+    <Button onClick={() => {history.push('/shared');}}>Powrót</Button>
     </>
     );
 }

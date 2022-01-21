@@ -2,10 +2,13 @@ import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Table, Button, ListGroup } from "react-bootstrap";
+import { useHistory } from "react-router";
 import Comments from "../../comments/Comments";
 import SharedPlaylistItemsList from "./SharedPlaylistItemsList";
 
 const SharedPlaylistDetails = () => {
+    const history = useHistory();
+
     return (
     <>
     <h2>Nazwa playlisty</h2>
@@ -39,6 +42,7 @@ const SharedPlaylistDetails = () => {
     </Table>
     <SharedPlaylistItemsList />
     <Comments />
+    <Button onClick={() => {history.push('/shared');}}>Powrót</Button>
     </>
     );
 }

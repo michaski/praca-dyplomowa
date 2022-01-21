@@ -39,6 +39,7 @@ namespace BandClickBackend.Api.Controllers
         }
 
         [HttpGet("shared")]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Gets all playlists shared in app")]
         public async Task<IActionResult> GetAllSharedPlaylistsAsync([FromQuery] QueryFilters filters)
         {
@@ -51,6 +52,7 @@ namespace BandClickBackend.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Gets playlist with given id")]
         public async Task<IActionResult> GetPlaylistByIdAsync([FromRoute] Guid id)
         {

@@ -40,6 +40,7 @@ namespace BandClickBackend.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Gets metronome setting with specified id")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
@@ -52,6 +53,7 @@ namespace BandClickBackend.Api.Controllers
         }
 
         [HttpGet("shared")]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Gets all shared metronome settings")]
         public async Task<IActionResult> GetAllShared([FromQuery] QueryFilters filters)
         {
