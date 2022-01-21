@@ -37,6 +37,9 @@ const SharedSectionMainPage = () => {
         setOrderByDirection(orderByDirection);
     }
 
+    const handlePageChanged = (selectedPage: number) => {
+    }
+
     return (
     <>
     {
@@ -97,7 +100,13 @@ const SharedSectionMainPage = () => {
     </Row>
     <Row>
         <div>
-            <Paginator />
+            <Paginator
+                page={1}
+                totalPages={10}
+                itemsFrom={1}
+                itemsTo={15}
+                totalItemsCount={150}
+                onPageChanged={handlePageChanged} />
         </div>
     </Row>
     </>
