@@ -15,7 +15,10 @@ export const playlistIninialState: Playlist = {
     isShared: false,
     comments: [],
     positiveRaitingCount: 0,
-    negativeRaitingCount: 0
+    negativeRaitingCount: 0,
+    author: '',
+    commentsCount: 0,
+    created: new Date()
 }
 
 export const playlistListInitialState: PlaylistList = {

@@ -8,5 +8,8 @@ export interface Playlist {
     positiveRaitingCount: number,
     negativeRaitingCount: number,
     metronomeSettings: MetronomeSettings[],
-    comments: Comment[]
+    comments: Comment[],
+    author: string,
+    commentsCount: number,
+    created: Date
 }
