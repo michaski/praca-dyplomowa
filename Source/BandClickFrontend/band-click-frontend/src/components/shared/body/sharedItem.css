@@ -17,3 +17,33 @@
     content: '\2022';
     margin-left: 1em;
 }
+
+.item-details-info {
+    font-size: 0.7em;
+}
+
+.item-details-info li {
+    display: inline-block;
+    list-style-type: none;
+    margin-left: 1em;
+}
+
+.item-details-info li:nth-of-type(1) {
+    margin-left: 0;
+}
+
+.item-details-info li:not(:last-of-type)::after {
+    content: '\2022';
+    margin-left: 1em;
+}
+
+.item-info-label {
+    font-weight: bold;
+    margin-right: 1em;
+    text-align: left;
+}
+
+.item-info-data {
+    text-align: left;
+    margin-left: 0.5em;
+}
