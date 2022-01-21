@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { useHistory } from "react-router";
+import { useAction } from "../../../../hooks/useAction";
 import { MetronomeSettings } from "../../../../models/MetronomeSettings/MetronomeSettings";
 import MetronomeSettingsService from "../../../../services/metronomeSettings/metronomeSettingsService";
+import { MetronomeSettingsStoreSerivce } from "../../../../services/metronomeSettings/metronomeSettingsStoreService";
 import AddComment from "../../comments/AddComment";
 import Comments from "../../comments/Comments";
 import "../sharedItem.css";
@@ -18,6 +20,7 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
     const history = useHistory();
     const [metronomeSettingsData, setMetronomeSettingsData] = useState({} as MetronomeSettings);
     const [stateChanged, setStateChanged] = useState(false);
+    const metronomeSettingsStoreActions = useAction(MetronomeSettingsStoreSerivce);
 
     useEffect(() => {
         fetchSettingsData();
@@ -30,6 +33,11 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
                 setMetronomeSettingsData(result);
             }
         });
+    }
+
+    const loadMetronomeSettings = () => {
+        metronomeSettingsStoreActions.loadSettings(metronomeSettingsData);
+        history.push('/app');
     }
 
     return (
@@ -55,7 +63,7 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
                 <span>{new Date(metronomeSettingsData.created).toLocaleDateString()}</span>
             </li>
             <li>
-                <Button size="sm">Wczytaj</Button>
+                <Button size="sm" onClick={loadMetronomeSettings}>Wczytaj</Button>
             </li>
         </ul>
         <Table responsive="md" borderless className="d-flex justify-content-center">

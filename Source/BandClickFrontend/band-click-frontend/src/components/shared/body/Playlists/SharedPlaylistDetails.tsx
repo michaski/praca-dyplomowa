@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Table, Button, ListGroup } from "react-bootstrap";
 import { useHistory } from "react-router";
+import { useAction } from "../../../../hooks/useAction";
 import { Playlist } from "../../../../models/Playlists/Playlist";
 import PlaylistService from "../../../../services/playlists/playlistService";
+import { PlaylistStoreService } from "../../../../services/playlists/playlistStoreService";
 import Comments from "../../comments/Comments";
 import SharedPlaylistItemsList from "./SharedPlaylistItemsList";
 
@@ -17,6 +19,7 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
     const history = useHistory();
     const [playlistData, setPlaylistData] = useState({} as Playlist);
     const [stateChanged, setStateChanged] = useState(false);
+    const playlistStoreActions = useAction(PlaylistStoreService);
 
     useEffect(() => {
         fetchPlaylistData();
@@ -29,6 +32,11 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
                 setPlaylistData(result);
             }
         });
+    }
+
+    const loadPlaylist = () => {
+        playlistStoreActions.setSelectedPlaylist(playlistData);
+        history.push('/app');
     }
 
     return (
@@ -54,7 +62,7 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
                 <span>{new Date(playlistData.created).toLocaleDateString()}</span>
             </li>
             <li>
-                <Button size="sm">Wczytaj</Button>
+                <Button size="sm" onClick={loadPlaylist}>Wczytaj</Button>
             </li>
         </ul>
         <Table responsive="md" borderless className="d-flex justify-content-center">
