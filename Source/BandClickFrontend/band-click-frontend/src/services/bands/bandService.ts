@@ -6,13 +6,13 @@ import auth from "../auth/auth";
 
 const BandService = {
     getAll: async () => {
-        const result = await requests.get(BANDS_CONTROLLER, auth.getToken(), () => {
+        const result = await requests.get(BANDS_CONTROLLER, auth.getToken(), undefined, () => {
             return [];
         });
         return result;
     },
     getAllManaged: async () => {
-        const result = await requests.get(`${BANDS_CONTROLLER}/userIsLeader`, auth.getToken(), () => {
+        const result = await requests.get(`${BANDS_CONTROLLER}/userIsLeader`, auth.getToken(), undefined, () => {
             return [];
         });
         return result;

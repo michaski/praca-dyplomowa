@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
+import { OrderByDirection, OrderByValues } from "../../../../models/Filters/QueryFilters";
 import { PagedPlaylists } from "../../../../models/Playlists/PagedPlaylists";
 import PlaylistService from "../../../../services/playlists/playlistService";
 import SharedPlaylistItem from "./SharedPlaylistItem";
 
 interface SharedPlaylistListProps {
-    visible: boolean
+    visible: boolean,
+    searchPhrase: string,
+    orderBy?: OrderByValues,
+    orderByDirection?: OrderByDirection
 }
 
-const SharedPlaylistList: React.FC<SharedPlaylistListProps> = ({visible}) => {
+const SharedPlaylistList: React.FC<SharedPlaylistListProps> = ({visible, searchPhrase, orderBy, orderByDirection}) => {
 
     const [isActive, setIsActive] = useState(false);
     const [playlists, setPlaylists] = useState({} as PagedPlaylists);
@@ -18,12 +22,16 @@ const SharedPlaylistList: React.FC<SharedPlaylistListProps> = ({visible}) => {
         if (visible) {
             fetchPlaylists();
         }
-    }, [visible]);
+    }, [visible, searchPhrase, orderBy, orderByDirection]);
 
     const fetchPlaylists = () => {
-        PlaylistService.getAllShared()
+        PlaylistService.getAllShared({
+            search: searchPhrase === '' ? undefined : searchPhrase,
+            orderBy: (orderByDirection && !orderBy) ? OrderByValues.DEFAULT : orderBy,
+            orderByDirection: (orderBy && !orderByDirection) ? OrderByDirection.DEFAULT : orderByDirection
+        })
         .then(result => {
-            if (result && result.items.length > 0) {
+            if (result && result.items.length >= 0) {
                 setPlaylists(result);
             }
         });

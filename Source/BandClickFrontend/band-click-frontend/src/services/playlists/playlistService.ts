@@ -1,4 +1,5 @@
 import { CommentTransfer } from "../../models/Comments/EditComment";
+import { QueryFilters } from "../../models/Filters/QueryFilters";
 import { PostPlaylist } from "../../models/Playlists/PostPlaylist";
 import { UpdatePlaylist } from "../../models/Playlists/UpdatePlaylist";
 import { PLAYLISTS_CONTROLLER } from "../../utils/apiUrls";
@@ -7,7 +8,7 @@ import auth from "../auth/auth";
 
 const PlaylistService = {
     getAll: () => {
-        const result = requests.get(PLAYLISTS_CONTROLLER, auth.getToken(), () => {
+        const result = requests.get(PLAYLISTS_CONTROLLER, auth.getToken(), undefined, () => {
             return [];
         });
         return result;
@@ -16,8 +17,8 @@ const PlaylistService = {
         const result = await requests.get(`${PLAYLISTS_CONTROLLER}/${id}`, auth.getToken());
         return result;
     },
-    getAllShared: async () => {
-        const result = await requests.get(`${PLAYLISTS_CONTROLLER}/shared`, auth.getToken());
+    getAllShared: async (filters?: QueryFilters) => {
+        const result = await requests.get(`${PLAYLISTS_CONTROLLER}/shared`, auth.getToken(), filters);
         return result;
     },
     isUserRatingPositive: async (playlistId: string): Promise<boolean> => {

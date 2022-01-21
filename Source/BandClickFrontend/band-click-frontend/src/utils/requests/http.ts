@@ -32,7 +32,8 @@ const requestFunction = <R>(url: string,
     } else if (payload) {
         const query = Object
             .keys(payload)
-            .map((key: string) => `${key}=${payload}`)
+            .map((key: string) => payload[key] !== undefined ? `${key}=${payload[key]}` : '')
+            .filter(item => item !== '')
             .join('&');
         parsedUrl = `${url}?${query}`;
     }

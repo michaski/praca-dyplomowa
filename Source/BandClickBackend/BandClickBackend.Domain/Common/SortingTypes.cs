@@ -8,6 +8,7 @@ namespace BandClickBackend.Domain.Common
 {
     public enum SortingTypes
     {
+        Default,
         Name,
         Author,
         Date

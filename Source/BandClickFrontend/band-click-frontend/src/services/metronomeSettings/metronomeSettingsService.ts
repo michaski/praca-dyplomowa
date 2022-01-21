@@ -1,4 +1,5 @@
 import { CommentTransfer } from "../../models/Comments/EditComment";
+import { QueryFilters } from "../../models/Filters/QueryFilters";
 import { Metre } from "../../models/Metre/Metre";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
 import { MetronomeSettingsType } from "../../models/MetronomeSettings/MetronomeSettingsType";
@@ -12,7 +13,7 @@ import MetreService from "../metre/metreService";
 
 const MetronomeSettingsService = {
     getAllCreatedByUser: async (): Promise<MetronomeSettings[]> => {
-        const result = await requests.get(METRONOME_SETTINGS_CONTROLLER, auth.getToken(), () => {
+        const result = await requests.get(METRONOME_SETTINGS_CONTROLLER, auth.getToken(), undefined, () => {
              return []; 
         }) as MetronomeSettings[];
         return result;
@@ -21,8 +22,8 @@ const MetronomeSettingsService = {
         const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/${id}`, auth.getToken()) as MetronomeSettings;
         return result;
     },
-    getAllShared: async (): Promise<PagedMetronomeSettings> => {
-        const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/shared`, auth.getToken()) as PagedMetronomeSettings;
+    getAllShared: async (filters?: QueryFilters): Promise<PagedMetronomeSettings> => {
+        const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/shared`, auth.getToken(), filters) as PagedMetronomeSettings;
         return result;
     },
     getTypes: async (): Promise<MetronomeSettingsType[]> => {

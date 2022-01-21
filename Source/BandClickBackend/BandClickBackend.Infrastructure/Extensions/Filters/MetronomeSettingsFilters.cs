@@ -23,22 +23,22 @@ namespace BandClickBackend.Infrastructure.Extensions.Filters
                              ms.Type.Name.ToLower().Contains(typeLowered))
                 .Where(ms => filters.Search == null ||
                              ms.Name.ToLower().Contains(searchLowered));
-            if (filters.OrderBy is not null)
+            if (filters.OrderBy is not null && filters.OrderBy != SortingTypes.Default)
             {
                 switch (filters.OrderBy)
                 {
                     case SortingTypes.Name:
-                        query = filters.OrderByDirection is null || filters.OrderByDirection == SortingOrder.ASC
+                        query = filters.OrderByDirection == SortingOrder.DEFAULT || filters.OrderByDirection == SortingOrder.ASC
                             ? query.OrderBy(ms => ms.Name)
                             : query.OrderByDescending(ms => ms.Name);
                         break;
                     case SortingTypes.Author:
-                        query = filters.OrderByDirection is null || filters.OrderByDirection == SortingOrder.ASC
+                        query = filters.OrderByDirection == SortingOrder.DEFAULT || filters.OrderByDirection == SortingOrder.ASC
                             ? query.OrderBy(ms => ms.CreatedBy.Username)
                             : query.OrderByDescending(ms => ms.CreatedBy.Username);
                         break;
                     case SortingTypes.Date:
-                        query = filters.OrderByDirection is null || filters.OrderByDirection == SortingOrder.ASC
+                        query = filters.OrderByDirection == SortingOrder.DEFAULT || filters.OrderByDirection == SortingOrder.ASC
                             ? query.OrderBy(ms => ms.Created)
                             : query.OrderByDescending(ms => ms.Created);
                         break;

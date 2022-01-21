@@ -16,6 +16,8 @@ namespace BandClickBackend.Application.Dtos.Shared
         public int PositiveRaitingCount { get; set; }
         public int NegativeRaitingCount { get; set; }
         public int CommentsCount { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? LastModified { get; set; }
 
         public void Mapping(Profile profile)
         {
