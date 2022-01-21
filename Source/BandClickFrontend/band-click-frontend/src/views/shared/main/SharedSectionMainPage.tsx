@@ -11,7 +11,7 @@ import auth from "../../../services/auth/auth";
 
 const SharedSectionMainPage = () => {
 
-    const [selectedItemType, setSelectedItemType] = useState('all');
+    const [selectedItemType, setSelectedItemType] = useState('metronomeSettings');
     const [selectedMetronomeSettingsType, setSelectedMetronomeSettingsType] = useState('all');
     const [searchPhrase, setSearchPhrase] = useState('');
     const [orderBy, setOrderBy] = useState(undefined as OrderByValues | undefined);

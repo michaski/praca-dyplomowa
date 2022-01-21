@@ -1,4 +1,4 @@
-import { Comment } from "../../models/Comments/Comment";
+import { CommentInfo } from "../../models/Comments/Comment";
 import { Metre } from "../../models/Metre/Metre";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
 import { MetronomeSettingsType } from "../../models/MetronomeSettings/MetronomeSettingsType";
@@ -90,12 +90,12 @@ export interface SetTypeAction {
 
 export interface AddCommentAction {
     type: MetronomeSettingsStoreActions.ADD_COMMENT,
-    comment: Comment
+    comment: CommentInfo
 }
 
 export interface RemoveCommentAction {
     type: MetronomeSettingsStoreActions.REMOVE_COMMENT,
-    comment: Comment
+    comment: CommentInfo
 }
 
 export type MetronomeSettingsActions = 
@@ -169,11 +169,11 @@ export const metronomeSettingsAction = {
         type: MetronomeSettingsStoreActions.SET_TYPE,
         settingsType: settingsType
     }),
-    addComment: (comment: Comment): AddCommentAction => ({
+    addComment: (comment: CommentInfo): AddCommentAction => ({
         type: MetronomeSettingsStoreActions.ADD_COMMENT,
         comment: comment
     }),
-    removeComment: (comment: Comment): RemoveCommentAction => ({
+    removeComment: (comment: CommentInfo): RemoveCommentAction => ({
         type: MetronomeSettingsStoreActions.REMOVE_COMMENT,
         comment: comment
     })

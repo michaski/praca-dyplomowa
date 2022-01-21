@@ -1,3 +1,4 @@
+import { stringify } from "querystring";
 import React from "react";
 import { useParams } from "react-router";
 import Header from "../../../components/header/Header";
@@ -6,8 +7,14 @@ import SharedMetronomeSettingsDetails from "../../../components/shared/body/Metr
 import SharedPlaylistDetails from "../../../components/shared/body/Playlists/SharedPlaylistDetails";
 import auth from "../../../services/auth/auth";
 
+interface SharedItemDetailsPageParams {
+    type: string,
+    id: string
+}
+
 const SharedItemDetailsPage = () => {
-    // const { type, id } = useParams();
+    
+    const { type, id } = useParams<SharedItemDetailsPageParams>();
 
     return (
     <>
@@ -19,8 +26,14 @@ const SharedItemDetailsPage = () => {
         (!auth.getToken() || auth.getToken().length === 0) &&
         <Header />
     }
-    <SharedMetronomeSettingsDetails />
-    <SharedPlaylistDetails />
+    {
+        type === 'metronomeSettings' &&
+        <SharedMetronomeSettingsDetails id={id} />
+    }
+    {
+        type === 'playlist' &&
+        <SharedPlaylistDetails id ={id} />
+    }
     </>
     );
 }

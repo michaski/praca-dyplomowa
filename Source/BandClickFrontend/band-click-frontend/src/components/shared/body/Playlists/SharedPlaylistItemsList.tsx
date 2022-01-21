@@ -1,40 +1,46 @@
 import React from "react";
-import { Container, ListGroup } from "react-bootstrap";
+import { Accordion, Container, ListGroup } from "react-bootstrap";
+import { MetronomeSettings } from "../../../../models/MetronomeSettings/MetronomeSettings";
 
-const SharedPlaylistItemsList = () => {
+interface SharedPlaylistItemsListProps {
+    metronomeSettings: MetronomeSettings[]
+}
+
+const SharedPlaylistItemsList: React.FC<SharedPlaylistItemsListProps> = ({metronomeSettings}) => {
+
     return (
     <>
+    {
+        (!metronomeSettings || metronomeSettings.length === 0) &&
+        <p className="fst-italic">Playlista jest pusta</p>
+    }
     <Container>
-        <h3 className="text-start">Zawartość playlisty:</h3>
-        <ListGroup as="ol" numbered>
-            <ListGroup.Item
-                as="li"
-                className="d-flex justify-content-between align-items-start"
-            >
-                <div className="ms-2 me-auto">
-                <div className="fw-bold">Pozycja 1</div>
-                    4/4 120 Bpm
-                </div>
-            </ListGroup.Item>
-            <ListGroup.Item
-                as="li"
-                className="d-flex justify-content-between align-items-start"
-            >
-                <div className="ms-2 me-auto">
-                <div className="fw-bold">Pozycja 2</div>
-                    4/4 90 Bpm
-                </div>
-            </ListGroup.Item>
-            <ListGroup.Item
-                as="li"
-                className="d-flex justify-content-between align-items-start"
-            >
-                <div className="ms-2 me-auto">
-                <div className="fw-bold">Pozycja 3</div>
-                    8/8 150 Bpm
-                </div>
-            </ListGroup.Item>
-        </ListGroup>
+        <Accordion defaultActiveKey="0" flush>
+            <Accordion.Item eventKey="0">
+                <Accordion.Header><h3 className="text-start">Zawartość playlisty:</h3></Accordion.Header>
+                <Accordion.Body>
+                <ListGroup as="ol" numbered>
+                    {
+                        metronomeSettings.map((setting, index) => {
+                            return (
+                            <>
+                            <ListGroup.Item
+                                as="li"
+                                className="d-flex justify-content-between align-items-start"
+                            >
+                                <div className="ms-2 me-auto">
+                                <div className="fw-bold">{setting.name}</div>
+                                    {setting.metre.beatsPerBar}/{setting.metre.rhythmicUnit} {setting.tempo} Bpm
+                                </div>
+                            </ListGroup.Item>
+                            </>
+                            );
+                        })
+                    }
+                </ListGroup>
+                </Accordion.Body>
+            </Accordion.Item>
+        </Accordion>
     </Container>
     </>
     );

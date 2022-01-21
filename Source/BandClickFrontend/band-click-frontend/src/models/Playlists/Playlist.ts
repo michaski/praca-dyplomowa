@@ -1,4 +1,4 @@
-import { Comment } from "../Comments/Comment";
+import { CommentInfo } from "../Comments/Comment";
 import { MetronomeSettings } from "../MetronomeSettings/MetronomeSettings";
 
 export interface Playlist {
@@ -8,7 +8,7 @@ export interface Playlist {
     positiveRaitingCount: number,
     negativeRaitingCount: number,
     metronomeSettings: MetronomeSettings[],
-    comments: Comment[],
+    comments: CommentInfo[],
     author: string,
     commentsCount: number,
     created: Date

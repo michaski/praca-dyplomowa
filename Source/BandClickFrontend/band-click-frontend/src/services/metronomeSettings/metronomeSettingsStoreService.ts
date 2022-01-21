@@ -1,4 +1,4 @@
-import { Comment } from "../../models/Comments/Comment";
+import { CommentInfo } from "../../models/Comments/Comment";
 import { Metre } from "../../models/Metre/Metre";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
 import { MetronomeSettingsType } from "../../models/MetronomeSettings/MetronomeSettingsType";
@@ -48,10 +48,10 @@ export class MetronomeSettingsStoreSerivce {
     setType(settingsType: MetronomeSettingsType) {
         store.dispatch(metronomeSettingsAction.setType(settingsType));
     }
-    addComment(comment: Comment) {
+    addComment(comment: CommentInfo) {
         store.dispatch(metronomeSettingsAction.addComment(comment));
     }
-    removeComment(comment: Comment) {
+    removeComment(comment: CommentInfo) {
         store.dispatch(metronomeSettingsAction.removeComment(comment));
     }
 }
