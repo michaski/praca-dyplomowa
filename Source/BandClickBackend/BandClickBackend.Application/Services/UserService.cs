@@ -7,6 +7,7 @@ using AutoMapper;
 using BandClickBackend.Application.Dtos.User;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Entities;
+using BandClickBackend.Domain.Exceptions;
 using BandClickBackend.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
@@ -80,6 +81,15 @@ namespace BandClickBackend.Application.Services
             var entity = await _repository.GetUserByIdAsync(adminId);
             entity.SystemRole = _systemRoleRepository.User;
             await _repository.UpdateUserAsync(entity);
+        }
+
+        public async Task DeleteUserAsync(Guid userId)
+        {
+            if (userId != _userContextService.UserId && !_userContextService.IsAdmin)
+            {
+                throw new UserNotAllowedException("Konto może usunąć tylko właściciel konta lub administrator.");
+            }
+            await _repository.DeleteUserAsync(await _repository.GetUserByIdAsync(userId));
         }
     }
 }

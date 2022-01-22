@@ -90,5 +90,13 @@ namespace BandClickBackend.Api.Controllers
             await _service.DemoteAdminToUserAsync(adminId);
             return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Deletes user account")]
+        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
+        {
+            await _service.DeleteUserAsync(id);
+            return NoContent();
+        }
     }
 }

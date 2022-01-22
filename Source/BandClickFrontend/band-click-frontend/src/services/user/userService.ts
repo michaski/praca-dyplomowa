@@ -28,7 +28,10 @@ const UserService = {
     },
     demoteToUser: async(id: string) => {
         await requests.put(`${USER_CONTROLLER}/${id}/demoteToUser`, null, auth.getToken());
-    }
+    },
+    deleteUser: async(id: string) => {
+        await requests.delete(`${USER_CONTROLLER}/${id}`, null, auth.getToken());
+    },
 }
 
 export default UserService;

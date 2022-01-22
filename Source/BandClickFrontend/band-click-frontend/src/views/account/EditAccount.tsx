@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Form, Row, Col, ButtonGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import LoggedInHeader from "../../components/header/LoggedInHeader";
 import { useAction } from "../../hooks/useAction";
+import auth from "../../services/auth/auth";
 import { AuthService } from "../../services/auth/authService";
 import UserService from "../../services/user/userService";
 import authSelector from "../../store/selectors/auth.selector";
 
 const EditAccount = () => {
 
+    const history = useHistory();
     const authActions = useAction(AuthService);
     const [user, setUser] = useState(useSelector(authSelector.getUser));
     const [newPassword, setNewPassword] = useState('');
@@ -44,6 +47,14 @@ const EditAccount = () => {
         }).then(_ => {
             fetchUser();
             alert('Zaktualizowano');
+        });
+    }
+
+    const deleteUser = () => {
+        UserService.deleteUser(user.id)
+        .then(_ => {
+            auth.logout();
+            history.push('/');
         });
     }
 
@@ -118,6 +129,11 @@ const EditAccount = () => {
                     </Form>
                 </Container>
             </Col>
+        </Row>
+        <Row>
+            <Container>
+                <Button variant="danger" onClick={deleteUser}>Usuń konto</Button>
+            </Container>
         </Row>
     </Container>
     </>

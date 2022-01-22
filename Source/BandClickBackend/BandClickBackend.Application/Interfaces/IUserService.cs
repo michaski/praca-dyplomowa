@@ -14,5 +14,6 @@ namespace BandClickBackend.Application.Interfaces
         Task ChangePasswordAsync(ChangeUserPasswordDto dto);
         Task PromoteUserToAdminAsync(Guid userId);
         Task DemoteAdminToUserAsync(Guid adminId);
+        Task DeleteUserAsync(Guid userId);
     }
 }
