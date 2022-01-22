@@ -8,6 +8,7 @@ import { Playlist } from "../../../../models/Playlists/Playlist";
 import PlaylistService from "../../../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../../../services/playlists/playlistStoreService";
 import Comments from "../../comments/Comments";
+import RaitingButtons from "../raitings/RatingButtons";
 import SharedPlaylistItemsList from "./SharedPlaylistItemsList";
 
 interface SharedPlaylistDetailsProps {
@@ -30,6 +31,7 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
         .then(result => {
             if (result && result.id) {
                 setPlaylistData(result);
+                setStateChanged(false);
             }
         });
     }
@@ -37,6 +39,10 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
     const loadPlaylist = () => {
         playlistStoreActions.setSelectedPlaylist(playlistData);
         history.push('/app');
+    }
+
+    const handleUserHasGivenRaiting = () => {
+        setStateChanged(true);
     }
 
     return (
@@ -70,12 +76,12 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
             <tr>
                 <td className="item-info-label">Oceny:</td>
                 <td className="item-info-data">
-                    <span>
-                        <Button variant="outline-info" size="sm"><FontAwesomeIcon icon={faThumbsUp} /></Button> {playlistData.positiveRaitingCount}
-                    </span>
-                    <span>
-                        <Button variant="outline-danger" size="sm"><FontAwesomeIcon icon={faThumbsDown} /></Button> {playlistData.negativeRaitingCount}
-                    </span>
+                    <RaitingButtons
+                        subject="playlist"
+                        subjectId={playlistData.id}
+                        positiveRaitingCount={playlistData.positiveRaitingCount}
+                        negativeRaitingCount={playlistData.negativeRaitingCount}
+                        onUserHasGivenRaiting={handleUserHasGivenRaiting} />
                 </td>
             </tr>
             </tbody>

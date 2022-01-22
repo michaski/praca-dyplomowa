@@ -33,7 +33,7 @@ const RaitingButtons: React.FC<RaitingButtonsProps> = ({subject, subjectId, posi
         } else if (subject === 'playlist') {
             PlaylistService.isUserRatingPositive(subjectId)
             .then(result => {
-                if (result === undefined) {
+                if (result === -1) {
                     setUserHasGivenRaiting(false);
                     setIsUserRaitingPositive(undefined);
                 } else {
