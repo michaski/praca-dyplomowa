@@ -303,7 +303,7 @@ namespace BandClickBackend.Application.Services
         public async Task EditCommentAsync(UpdateMetronomeSettingsCommentDto comment)
         {
             var entity = await _metronomeSettingsCommentRepository.GetByIdAsync(comment.Id);
-            if (!_userContextService.IsEntityCreator(entity))
+            if (!_userContextService.IsEntityCreator(entity) || _userContextService.IsAdmin)
             {
                 throw new UserNotAllowedException("Komentarz może edytować tylko jego twórca.");
             }
@@ -314,7 +314,7 @@ namespace BandClickBackend.Application.Services
         public async Task DeleteCommentAsync(Guid id)
         {
             var entity = await _metronomeSettingsCommentRepository.GetByIdAsync(id);
-            if (!_userContextService.IsEntityCreator(entity))
+            if (!_userContextService.IsEntityCreator(entity) || _userContextService.IsAdmin)
             {
                 throw new UserNotAllowedException("Komentarz może usunąć tylko jego twórca.");
             }

@@ -4,11 +4,13 @@ import { CommentInfo } from "../../../models/Comments/Comment";
 import CommentComponent from "./CommentComponent";
 
 interface CommentListProps {
+    subject: string,
     comments: CommentInfo[],
-    commentsCount: number
+    commentsCount: number,
+    onCommentDeleted: Function
 }
 
-const CommentList: React.FC<CommentListProps> = ({comments, commentsCount}) => {
+const CommentList: React.FC<CommentListProps> = ({subject, comments, commentsCount, onCommentDeleted}) => {
     return (
     <>
     {
@@ -24,7 +26,10 @@ const CommentList: React.FC<CommentListProps> = ({comments, commentsCount}) => {
                                 return (
                                 <>
                                 <ListGroup.Item key={comment.id}>
-                                    <CommentComponent comment={comment} />
+                                    <CommentComponent 
+                                        subject={subject} 
+                                        comment={comment}
+                                        onCommentDeleted={onCommentDeleted} />
                                 </ListGroup.Item>
                                 </>
                                 );

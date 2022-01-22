@@ -240,7 +240,7 @@ namespace BandClickBackend.Application.Services
         public async Task EditCommentAsync(UpdatePlaylistCommentDto comment)
         {
             var entity = await _playlistCommentRepository.GetByIdAsync(comment.Id);
-            if (!_userContextService.IsEntityCreator(entity))
+            if (!_userContextService.IsEntityCreator(entity) || _userContextService.IsAdmin)
             {
                 throw new UserNotAllowedException("Komentarz może edytować tylko jego twórca.");
             }
@@ -251,7 +251,7 @@ namespace BandClickBackend.Application.Services
         public async Task DeleteCommentAsync(Guid commentId)
         {
             var entity = await _playlistCommentRepository.GetByIdAsync(commentId);
-            if (!_userContextService.IsEntityCreator(entity))
+            if (!_userContextService.IsEntityCreator(entity) || _userContextService.IsAdmin)
             {
                 throw new UserNotAllowedException("Komentarz może usunąć tylko jego twórca.");
             }

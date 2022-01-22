@@ -49,6 +49,10 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
         setStateChanged(true);
     }
 
+    const handleCommentDeleted = () => {
+        setStateChanged(true);
+    }
+
     return (
     <>
     {
@@ -96,7 +100,8 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
             subjectId={playlistData.id}
             comments={playlistData.comments} 
             commentsCount={playlistData.commentsCount}
-            onCommentAdded={handleCommentAdded} />
+            onCommentAdded={handleCommentAdded}
+            onCommentDeleted={handleCommentDeleted} />
         </>
     }
     <Button onClick={() => {history.push('/shared');}}>Powrót</Button>

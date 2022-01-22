@@ -50,6 +50,10 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
         setStateChanged(true);
     }
 
+    const handleCommentDeleted = () => {
+        setStateChanged(true);
+    }
+
     return (
     <>
     {
@@ -108,7 +112,8 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
             subjectId={metronomeSettingsData.id}
             comments={metronomeSettingsData.comments} 
             commentsCount={metronomeSettingsData.commentsCount}
-            onCommentAdded={handleCommentAdded} />
+            onCommentAdded={handleCommentAdded}
+            onCommentDeleted={handleCommentDeleted} />
         </>
     }
     <Button onClick={() => {history.push('/shared');}}>Powrót</Button>

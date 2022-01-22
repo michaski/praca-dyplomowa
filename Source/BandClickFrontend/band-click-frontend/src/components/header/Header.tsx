@@ -21,8 +21,8 @@ const Header = () => {
                         <div className="navbar">
                             {redirectTo('/', 'Home')}
                             {redirectTo('/shared', 'Udostępnione')}
-                            {redirectTo('login', 'Logowanie')}
-                            {redirectTo('register', 'Zarejestruj się')}
+                            {redirectTo('/login', 'Logowanie')}
+                            {redirectTo('/register', 'Zarejestruj się')}
                         </div>
                     </div>
                 </div>

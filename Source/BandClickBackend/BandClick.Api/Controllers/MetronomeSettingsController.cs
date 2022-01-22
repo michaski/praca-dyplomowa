@@ -232,7 +232,6 @@ namespace BandClickBackend.Api.Controllers
         }
 
         [HttpDelete("comments/delete/{id}")]
-        [Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Deletes existing comment")]
         public async Task<IActionResult> DeleteComment(Guid id)
         {

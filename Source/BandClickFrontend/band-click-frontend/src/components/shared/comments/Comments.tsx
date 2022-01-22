@@ -9,10 +9,11 @@ interface CommentsProps {
     commentsCount: number,
     subject: string,
     subjectId: string,
-    onCommentAdded: Function
+    onCommentAdded: Function,
+    onCommentDeleted: Function
 }
 
-const Comments: React.FC<CommentsProps> = ({comments, commentsCount, subject, subjectId, onCommentAdded}) => {
+const Comments: React.FC<CommentsProps> = ({comments, commentsCount, subject, subjectId, onCommentAdded, onCommentDeleted}) => {
     return (
     <>
     <Container>
@@ -21,7 +22,11 @@ const Comments: React.FC<CommentsProps> = ({comments, commentsCount, subject, su
             subject={subject}
             subjectId={subjectId}
             onCommentAdded={onCommentAdded} />
-        <CommentList comments={comments} commentsCount={commentsCount} />
+        <CommentList 
+            subject={subject}
+            comments={comments} 
+            commentsCount={commentsCount}
+            onCommentDeleted={onCommentDeleted} />
     </Container>
     </>
     );

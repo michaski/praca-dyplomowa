@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Col, Container, Nav, Navbar, NavbarBrand, NavDropdown, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import {useHistory} from "react-router";
+import { useAction } from "../../hooks/useAction";
 import auth from "../../services/auth/auth";
+import { AuthService } from "../../services/auth/authService";
+import UserService from "../../services/user/userService";
 import authSelector from "../../store/selectors/auth.selector";
 
 const LoggedInHeader = (props: any) => {
@@ -10,6 +13,18 @@ const LoggedInHeader = (props: any) => {
     const history = useHistory();
     const redirectTo = (path: string, name: string) =>
         <a className="p-2" href="" onClick={() => { history.push(path) }}>{name}</a>
+    
+    const authActions = useAction(AuthService);
+
+    useEffect(() => {
+        if (!user || user.id === '') {
+            UserService.getUserByEmail(localStorage.getItem('email') as string)
+            .then(result => {
+                authActions.setUser(result);
+            })
+        }
+    });
+
     return (
         <header className="row">
 

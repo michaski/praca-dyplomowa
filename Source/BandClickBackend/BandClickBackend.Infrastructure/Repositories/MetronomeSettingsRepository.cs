@@ -72,7 +72,7 @@ namespace BandClickBackend.Infrastructure.Repositories
 
         public async Task<MetronomeSettings> GetByIdAsync(Guid id)
         {
-            return await _context.MetronomeSettings
+            var setting = await _context.MetronomeSettings
                 .Include(ms => ms.CreatedBy)
                 .Include(ms => ms.Metre)
                 .ThenInclude(m => m.AccentedBeats)
@@ -81,6 +81,8 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .Include(ms => ms.Comments)
                 .ThenInclude(c => c.CreatedBy)
                 .SingleOrDefaultAsync(ms => ms.Id == id);
+            setting.Comments = setting.Comments.OrderBy(c => c.Created).ToList();
+            return setting;
         }
 
         public async Task<MetronomeSettings> GetByIdNoTrackingAsync(Guid id)
