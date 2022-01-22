@@ -59,9 +59,17 @@ namespace BandClickBackend.Api.Controllers
 
         [HttpPut]
         [SwaggerOperation(Summary = "Updates user info")]
-        public async Task<IActionResult> UpdateUser([FromBody] SingleUserDto dto)
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto dto)
         {
             await _service.UpdateUserAsync(dto);
+            return NoContent();
+        }
+
+        [HttpPut("changePassword")]
+        [SwaggerOperation(Summary = "Updates user info")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangeUserPasswordDto dto)
+        {
+            await _service.ChangePasswordAsync(dto);
             return NoContent();
         }
 

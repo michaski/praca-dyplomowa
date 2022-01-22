@@ -17,14 +17,21 @@ namespace BandClickBackend.Application.Services
         private readonly IUserRepository _repository;
         private readonly ISystemRoleRepository _systemRoleRepository;
         private readonly IUserContextService _userContextService;
+        private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository repository, IMapper mapper, ISystemRoleRepository systemRoleRepository, IUserContextService userContextService)
+        public UserService(
+            IUserRepository repository,
+            IMapper mapper,
+            ISystemRoleRepository systemRoleRepository,
+            IUserContextService userContextService, 
+            IPasswordHasher<User> passwordHasher)
         {
             _repository = repository;
             _mapper = mapper;
             _systemRoleRepository = systemRoleRepository;
             _userContextService = userContextService;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<SingleUserDto> GetUserByEmailAsync(string email)
@@ -45,13 +52,20 @@ namespace BandClickBackend.Application.Services
                 await _repository.GetUserByIdAsync(id));
         }
 
-        public async Task UpdateUserAsync(SingleUserDto dto)
+        public async Task UpdateUserAsync(UpdateUserDto dto)
         {
             var entity = await _repository.GetUserByIdAsync(dto.Id);
             entity.Username = dto.Username;
             entity.Email = dto.Email;
-            entity.SystemRole = await _systemRoleRepository.GetSystemRoleByNameAsync(dto.SystemRole);
             await _repository.UpdateUserAsync(entity);
+        }
+
+        public async Task ChangePasswordAsync(ChangeUserPasswordDto dto)
+        {
+            var user = await _repository.GetUserByIdAsync(dto.Id);
+            var hashedPassword = _passwordHasher.HashPassword(user, dto.NewPassword);
+            user.PasswordHash = hashedPassword;
+            await _repository.UpdateUserAsync(user);
         }
 
         public async Task PromoteUserToAdminAsync(Guid userId)

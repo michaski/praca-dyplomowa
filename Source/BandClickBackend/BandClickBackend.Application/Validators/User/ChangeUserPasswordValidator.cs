@@ -11,9 +11,9 @@ using FluentValidation;
 
 namespace BandClickBackend.Application.Validators.User
 {
-    public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
+    public class ChangeUserPasswordValidator : AbstractValidator<ChangeUserPasswordDto>
     {
-        public UpdateUserValidator(IUserRepository userRepository, ISystemRoleRepository systemRoleRepository, IUserContextService userContextService)
+        public ChangeUserPasswordValidator(IUserRepository userRepository, ISystemRoleRepository systemRoleRepository, IUserContextService userContextService)
         {
             Guid userId = Guid.Empty;
             RuleFor(dto => dto.Id)
@@ -25,21 +25,19 @@ namespace BandClickBackend.Application.Validators.User
                 {
                     userId = id;
                     var user = await userRepository.GetUserByIdAsync(id);
-                    if (userId != userContextService.UserId && 
+                    if (userId != userContextService.UserId &&
                         user.SystemRole != systemRoleRepository.Admin)
                     {
                         throw new UserNotAllowedException("Brak uprawnień.");
                     }
                 });
-            RuleFor(dto => dto.Username)
+            RuleFor(dto => dto.NewPassword)
                 .NotEmpty()
-                .MinimumLength(1)
-                .MaximumLength(64);
-            RuleFor(dto => dto.Email)
+                .MinimumLength(6);
+            RuleFor(dto => dto.ConfirmNewPassword)
                 .NotEmpty()
-                .EmailAddress()
-                .MinimumLength(5)
-                .MaximumLength(64);
+                .MinimumLength(6)
+                .Matches(dto => dto.NewPassword);
         }
     }
 }

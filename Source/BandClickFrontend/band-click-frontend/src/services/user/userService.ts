@@ -1,3 +1,4 @@
+import { ChangePassword } from "../../models/Auth/ChangePassword";
 import { User } from "../../models/Auth/User";
 import { USER_CONTROLLER } from "../../utils/apiUrls";
 import requests from "../../utils/requests/requests";
@@ -18,6 +19,9 @@ const UserService = {
     },
     update: async(userData: User) => {
         await requests.put(USER_CONTROLLER, userData, auth.getToken());
+    },
+    changePassword: async(changePasswordData: ChangePassword) => {
+        await requests.put(`${USER_CONTROLLER}/changePassword`, changePasswordData, auth.getToken());
     },
     promoteToAdmin: async(id: string) => {
         await requests.put(`${USER_CONTROLLER}/${id}/promoteToAdmin`, null, auth.getToken());

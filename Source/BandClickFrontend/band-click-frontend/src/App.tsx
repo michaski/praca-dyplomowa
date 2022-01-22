@@ -12,6 +12,7 @@ import AllBands from './views/bands/all/AllBands';
 import ManagedBands from './views/bands/managed/ManagedBands';
 import SharedSectionMainPage from './views/shared/main/SharedSectionMainPage';
 import SharedItemDetailsPage from './views/shared/details/SharedItemDetailsPage';
+import EditAccount from './views/account/EditAccount';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <BrowserRouter>
         <Provider store={store}>
           <Switch>
+            <ProtectedRoute path="/account/edit" component={EditAccount} />
             <Route path="/shared/:type/:id" component={SharedItemDetailsPage} />
             <Route path="/shared" component={SharedSectionMainPage} />
             <ProtectedRoute path="/bands/managed" component={ManagedBands} />

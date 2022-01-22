@@ -10,7 +10,8 @@ namespace BandClickBackend.Application.Interfaces
         Task<SingleUserDto> GetUserByEmailAsync(string email);
         Task<SingleUserDto> GetUserByUsernameAsync(string username);
         Task<SingleUserDto> GetUserByIdAsync(Guid id);
-        Task UpdateUserAsync(SingleUserDto dto);
+        Task UpdateUserAsync(UpdateUserDto dto);
+        Task ChangePasswordAsync(ChangeUserPasswordDto dto);
         Task PromoteUserToAdminAsync(Guid userId);
         Task DemoteAdminToUserAsync(Guid adminId);
     }
