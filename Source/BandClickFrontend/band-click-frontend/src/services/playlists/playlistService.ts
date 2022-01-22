@@ -21,7 +21,7 @@ const PlaylistService = {
         const result = await requests.get(`${PLAYLISTS_CONTROLLER}/shared`, auth.getToken(), filters);
         return result;
     },
-    isUserRatingPositive: async (playlistId: string): Promise<boolean> => {
+    isUserRatingPositive: async (playlistId: string): Promise<number> => {
         const result = await requests.get(`${PLAYLISTS_CONTROLLER}/${playlistId}/raitings/user`, auth.getToken());
         return result.isPositive;
     },

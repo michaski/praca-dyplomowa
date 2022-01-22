@@ -8,6 +8,6 @@ namespace BandClickBackend.Application.Dtos.Raitings
 {
     public class RaitingTypeDto
     {
-        public bool? IsPositive { get; set; }
+        public int IsPositive { get; set; }
     }
 }

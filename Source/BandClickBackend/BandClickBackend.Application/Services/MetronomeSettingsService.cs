@@ -100,14 +100,16 @@ namespace BandClickBackend.Application.Services
 
         public async Task<RaitingTypeDto> IsUserRaitingPositiveAsync(Guid settingId)
         {
-            bool? result;
+            int result;
             if (!await _metronomeSettingsRaitingsRepository.HasUserGivenRaitingAsync(settingId))
             {
-                result = null;
+                result = -1;
             }
             else
             {
-                result = await _metronomeSettingsRaitingsRepository.IsUserRaitingPositiveAsync(settingId);
+                result = await _metronomeSettingsRaitingsRepository.IsUserRaitingPositiveAsync(settingId)
+                    ? 1
+                    : 0;
             }
             return new RaitingTypeDto() { IsPositive = result };
         }

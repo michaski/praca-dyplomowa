@@ -81,14 +81,16 @@ namespace BandClickBackend.Application.Services
 
         public async Task<RaitingTypeDto> GetIsUserRaitingPositiveAsync(Guid playlistId)
         {
-            bool? result;
+            int result;
             if (!await _playlistRaitingsRepository.HasUserGivenRaitingAsync(playlistId))
             {
-                result = null;
+                result = -1;
             }
             else
             {
-                result = await _playlistRaitingsRepository.IsUserRaitingPositive(playlistId);
+                result = await _playlistRaitingsRepository.IsUserRaitingPositive(playlistId) 
+                    ? 1 
+                    : 0;
             }
             return new RaitingTypeDto() { IsPositive = result };
         }

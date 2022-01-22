@@ -9,6 +9,7 @@ import MetronomeSettingsService from "../../../../services/metronomeSettings/met
 import { MetronomeSettingsStoreSerivce } from "../../../../services/metronomeSettings/metronomeSettingsStoreService";
 import AddComment from "../../comments/AddComment";
 import Comments from "../../comments/Comments";
+import RaitingButtons from "../raitings/RatingButtons";
 import "../sharedItem.css";
 
 interface SharedMetronomeSettingsDetailsProps {
@@ -31,6 +32,7 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
         .then(result => {
             if (result && result.id) {
                 setMetronomeSettingsData(result);
+                setStateChanged(false);
             }
         });
     }
@@ -38,6 +40,10 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
     const loadMetronomeSettings = () => {
         metronomeSettingsStoreActions.loadSettings(metronomeSettingsData);
         history.push('/app');
+    }
+
+    const handleUserHasGivenRaiting = () => {
+        setStateChanged(true);
     }
 
     return (
@@ -83,12 +89,12 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
             <tr>
                 <td className="item-info-label">Oceny:</td>
                 <td className="item-info-data">
-                    <span>
-                        <Button variant="outline-info" size="sm"><FontAwesomeIcon icon={faThumbsUp} /></Button> {metronomeSettingsData.positiveRaitingCount}
-                    </span>
-                    <span>
-                        <Button variant="outline-danger" size="sm"><FontAwesomeIcon icon={faThumbsDown} /></Button> {metronomeSettingsData.negativeRaitingCount}
-                    </span>
+                    <RaitingButtons
+                        subject="metronomeSettings"
+                        subjectId={metronomeSettingsData.id}
+                        positiveRaitingCount={metronomeSettingsData.positiveRaitingCount}
+                        negativeRaitingCount={metronomeSettingsData.negativeRaitingCount}
+                        onUserHasGivenRaiting={handleUserHasGivenRaiting} />
                 </td>
             </tr>
             </tbody>

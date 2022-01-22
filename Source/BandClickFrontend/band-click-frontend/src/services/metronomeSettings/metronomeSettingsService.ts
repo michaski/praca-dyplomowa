@@ -30,7 +30,7 @@ const MetronomeSettingsService = {
         const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/types`, auth.getToken()) as MetronomeSettingsType[];
         return result;
     },
-    isUserRatingPositive: async (metronomeSettingId: string): Promise<boolean> => {
+    isUserRatingPositive: async (metronomeSettingId: string): Promise<number> => {
         const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/raitings/user`, auth.getToken());
         return result.isPositive;
     },
@@ -56,7 +56,7 @@ const MetronomeSettingsService = {
         await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/raitings/negative/add`, null, auth.getToken());
     },
     removeUserRaiting: async (metronomeSettingId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/reitings/remove`, null, auth.getToken());
+        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/raitings/remove`, null, auth.getToken());
     },
     addToPlaylist: async (metronomeSettingId: string, playlistId: string) => {
         await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/addToPlaylist/${playlistId}`, null, auth.getToken());

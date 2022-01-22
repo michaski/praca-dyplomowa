@@ -70,14 +70,10 @@ namespace BandClickBackend.Api.Controllers
 
         [HttpGet("{id}/raitings/user")]
         [SwaggerOperation(Summary =
-            "Returns true if user has given positive raiting, false otherwise. If user hasn't given raiting, returns 404")]
+            "Returns 1 if user has given positive raiting, 0 otherwise. If user hasn't given raiting, returns -1")]
         public async Task<IActionResult> GetUserRaitingTypeAsync(Guid id)
         {
             var result = await _metronomeSettingsService.IsUserRaitingPositiveAsync(id);
-            if (result.IsPositive is null)
-            {
-                return NotFound();
-            }
             return Ok(result);
         }
 
