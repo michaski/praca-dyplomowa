@@ -2,11 +2,13 @@ import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { useAction } from "../../../../hooks/useAction";
 import { MetronomeSettings } from "../../../../models/MetronomeSettings/MetronomeSettings";
 import MetronomeSettingsService from "../../../../services/metronomeSettings/metronomeSettingsService";
 import { MetronomeSettingsStoreSerivce } from "../../../../services/metronomeSettings/metronomeSettingsStoreService";
+import authSelector from "../../../../store/selectors/auth.selector";
 import AddComment from "../../comments/AddComment";
 import Comments from "../../comments/Comments";
 import RaitingButtons from "../raitings/RatingButtons";
@@ -22,6 +24,7 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
     const [metronomeSettingsData, setMetronomeSettingsData] = useState({} as MetronomeSettings);
     const [stateChanged, setStateChanged] = useState(false);
     const metronomeSettingsStoreActions = useAction(MetronomeSettingsStoreSerivce);
+    const user = useSelector(authSelector.getUser);
 
     useEffect(() => {
         fetchSettingsData();
@@ -54,6 +57,13 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
         setStateChanged(true);
     }
 
+    const deleteItem = () => {
+        MetronomeSettingsService.removeFromSharedInApp(id)
+        .then(_ => {
+            history.push('/shared');
+        });
+    }
+
     return (
     <>
     {
@@ -79,6 +89,14 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
             <li>
                 <Button size="sm" onClick={loadMetronomeSettings}>Wczytaj</Button>
             </li>
+            {
+                user && user.systemRole === 'Admin' &&
+                <>
+                <li>
+                    <Button size="sm" variant="danger" onClick={deleteItem}>Usuń</Button>
+                </li>
+                </>
+            }
         </ul>
         <Table responsive="md" borderless className="d-flex justify-content-center">
             <tbody>

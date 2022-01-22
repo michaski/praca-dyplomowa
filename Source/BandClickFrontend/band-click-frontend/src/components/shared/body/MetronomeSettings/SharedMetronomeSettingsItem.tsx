@@ -2,23 +2,35 @@ import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { ListGroup, Row, Col, Button, ButtonGroup } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { useAction } from "../../../../hooks/useAction";
 import { MetronomeSettings } from "../../../../models/MetronomeSettings/MetronomeSettings";
+import MetronomeSettingsService from "../../../../services/metronomeSettings/metronomeSettingsService";
 import { MetronomeSettingsStoreSerivce } from "../../../../services/metronomeSettings/metronomeSettingsStoreService";
+import authSelector from "../../../../store/selectors/auth.selector";
 import "../sharedItem.css";
 
 interface SharedMetronomeSettingsItemProps {
-    metronomeSettings: MetronomeSettings
+    metronomeSettings: MetronomeSettings,
+    onItemDeleted: Function
 }
 
-const SharedMetronomeSettingsItem: React.FC<SharedMetronomeSettingsItemProps> = ({metronomeSettings}) => {
+const SharedMetronomeSettingsItem: React.FC<SharedMetronomeSettingsItemProps> = ({metronomeSettings, onItemDeleted}) => {
     const history = useHistory();
     const metronomeSettingsStoreActions = useAction(MetronomeSettingsStoreSerivce);
+    const user = useSelector(authSelector.getUser);
     
     const loadMetronomeSettings = () => {
         metronomeSettingsStoreActions.loadSettings(metronomeSettings);
         history.push('/app');
+    }
+
+    const deleteItem = () => {
+        MetronomeSettingsService.removeFromSharedInApp(metronomeSettings.id)
+        .then(_ => {
+            onItemDeleted();
+        });
     }
 
     return (
@@ -41,6 +53,10 @@ const SharedMetronomeSettingsItem: React.FC<SharedMetronomeSettingsItemProps> = 
                 <ButtonGroup size="sm">
                     <Button variant="secondary" onClick={() => {history.push(`/shared/metronomeSettings/${metronomeSettings.id}`);}}>Szczegóły</Button>
                     <Button onClick={loadMetronomeSettings}>Wczytaj</Button>
+                    {
+                        user && user.systemRole === 'Admin' &&
+                        <Button variant="danger" onClick={deleteItem}>Usuń</Button>
+                    }
                 </ButtonGroup>
             </Col>
         </Row>

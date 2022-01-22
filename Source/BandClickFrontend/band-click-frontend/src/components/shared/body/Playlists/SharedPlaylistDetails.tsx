@@ -2,11 +2,13 @@ import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Table, Button, ListGroup } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { useAction } from "../../../../hooks/useAction";
 import { Playlist } from "../../../../models/Playlists/Playlist";
 import PlaylistService from "../../../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../../../services/playlists/playlistStoreService";
+import authSelector from "../../../../store/selectors/auth.selector";
 import Comments from "../../comments/Comments";
 import RaitingButtons from "../raitings/RatingButtons";
 import SharedPlaylistItemsList from "./SharedPlaylistItemsList";
@@ -21,6 +23,7 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
     const [playlistData, setPlaylistData] = useState({} as Playlist);
     const [stateChanged, setStateChanged] = useState(false);
     const playlistStoreActions = useAction(PlaylistStoreService);
+    const user = useSelector(authSelector.getUser);
 
     useEffect(() => {
         fetchPlaylistData();
@@ -53,6 +56,13 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
         setStateChanged(true);
     }
 
+    const deleteItem = () => {
+        PlaylistService.removeFromSharedInApp(id)
+        .then(_ => {
+            history.push('/shared');
+        });
+    }
+
     return (
     <>
     {
@@ -78,6 +88,14 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
             <li>
                 <Button size="sm" onClick={loadPlaylist}>Wczytaj</Button>
             </li>
+            {
+                user && user.systemRole === 'Admin' &&
+                <>
+                <li>
+                    <Button size="sm" variant="danger" onClick={deleteItem}>Usuń</Button>
+                </li>
+                </>
+            }
         </ul>
         <Table responsive="md" borderless className="d-flex justify-content-center">
             <tbody>

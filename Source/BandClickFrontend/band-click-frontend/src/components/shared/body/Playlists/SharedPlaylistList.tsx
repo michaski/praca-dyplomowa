@@ -50,7 +50,7 @@ const SharedPlaylistList: React.FC<SharedPlaylistListProps> = ({visible, page, p
         <ListGroup variant="flush">
             {
                 playlists.items.map((playlist, index) => {
-                    return <SharedPlaylistItem key={playlist.id} playlist={playlist} />
+                    return <SharedPlaylistItem key={playlist.id} playlist={playlist} onItemDeleted={fetchPlaylists} />
                 })
             }
         </ListGroup>

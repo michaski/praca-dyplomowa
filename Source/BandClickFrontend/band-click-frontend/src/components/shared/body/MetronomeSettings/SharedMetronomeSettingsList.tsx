@@ -52,7 +52,7 @@ const SharedMetronomeSettingsList: React.FC<SharedMetronomeSettingsListProps> = 
         <ListGroup variant="flush">
             {
                 settings.items.map((setting, index) => {
-                    return <SharedMetronomeSettingsItem key={setting.id} metronomeSettings={setting} />
+                    return <SharedMetronomeSettingsItem key={setting.id} metronomeSettings={setting} onItemDeleted={fetchSettings} />
                 })
             }
         </ListGroup>
