@@ -52,6 +52,7 @@ namespace BandClickBackend.Infrastructure.Repositories
             var entity = await _context.Playlists
                 .Include(p => p.CreatedBy)
                 .Include(p => p.Comments)
+                .ThenInclude(c => c.CreatedBy)
                 .Include(p => p.MetronomeSettings)
                 .ThenInclude(e => e.MetronomeSettings)
                 .ThenInclude(ms => ms.Metre)

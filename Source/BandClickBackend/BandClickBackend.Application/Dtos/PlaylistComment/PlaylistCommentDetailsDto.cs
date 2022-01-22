@@ -12,14 +12,15 @@ namespace BandClickBackend.Application.Dtos.PlaylistComment
     {
         public Guid Id { get; set; }
         public string Text { get; set; }
-        public DateTime Created { get; set; }
-        public Guid CreatedById { get; set; }
+        public string Author { get; set; }
+        public Guid CreatedBy { get; set; }
         public DateTime? LastModified { get; set; }
         public Guid LastModifiedById { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Domain.Entities.PlaylistComment, PlaylistCommentDetailsDto>();
+            profile.CreateMap<Domain.Entities.PlaylistComment, PlaylistCommentDetailsDto>()
+                .ForMember(dto => dto.Author, cfg => cfg.MapFrom(c => c.CreatedBy.Username));
         }
     }
 }

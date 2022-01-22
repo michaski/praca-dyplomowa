@@ -2,7 +2,7 @@ export interface CommentInfo {
     id: string,
     text: string,
     created: Date,
-    createdBy: string,
+    author: string,
     lastModified: Date,
     lastModifiedBy: string
 }

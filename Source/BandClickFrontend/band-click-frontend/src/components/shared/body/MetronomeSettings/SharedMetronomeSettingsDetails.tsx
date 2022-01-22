@@ -46,6 +46,10 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
         setStateChanged(true);
     }
 
+    const handleCommentAdded = () => {
+        setStateChanged(true);
+    }
+
     return (
     <>
     {
@@ -99,7 +103,12 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
             </tr>
             </tbody>
         </Table>
-        <Comments comments={metronomeSettingsData.comments} commentsCount={metronomeSettingsData.commentsCount} />
+        <Comments 
+            subject="metronomeSettings"
+            subjectId={metronomeSettingsData.id}
+            comments={metronomeSettingsData.comments} 
+            commentsCount={metronomeSettingsData.commentsCount}
+            onCommentAdded={handleCommentAdded} />
         </>
     }
     <Button onClick={() => {history.push('/shared');}}>Powrót</Button>

@@ -6,15 +6,21 @@ import CommentList from "./CommentList";
 
 interface CommentsProps {
     comments: CommentInfo[],
-    commentsCount: number
+    commentsCount: number,
+    subject: string,
+    subjectId: string,
+    onCommentAdded: Function
 }
 
-const Comments: React.FC<CommentsProps> = ({comments, commentsCount}) => {
+const Comments: React.FC<CommentsProps> = ({comments, commentsCount, subject, subjectId, onCommentAdded}) => {
     return (
     <>
     <Container>
         <h3 className="text-start">Komentarze</h3>
-        <AddComment />
+        <AddComment
+            subject={subject}
+            subjectId={subjectId}
+            onCommentAdded={onCommentAdded} />
         <CommentList comments={comments} commentsCount={commentsCount} />
     </Container>
     </>

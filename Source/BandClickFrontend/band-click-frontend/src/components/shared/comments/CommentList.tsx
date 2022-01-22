@@ -15,7 +15,7 @@ const CommentList: React.FC<CommentListProps> = ({comments, commentsCount}) => {
         comments && comments.length > 0 &&
         <Accordion defaultActiveKey="0" flush>
             <Accordion.Item eventKey="0">
-                <Accordion.Header><h4 className="text-start">Wszystkie komentarze ({commentsCount})</h4></Accordion.Header>
+                <Accordion.Header><h4 className="text-start">Wszystkie komentarze ({comments.length})</h4></Accordion.Header>
                 <Accordion.Body>
                     <ListGroup>
                         {

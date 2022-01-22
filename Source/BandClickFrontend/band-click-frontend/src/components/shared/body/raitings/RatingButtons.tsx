@@ -19,6 +19,10 @@ const RaitingButtons: React.FC<RaitingButtonsProps> = ({subject, subjectId, posi
     const [isUserRaitingPositive, setIsUserRaitingPositive] = useState(undefined as boolean | undefined);
 
     useEffect(() => {
+        const token = localStorage.getItem('jwt');
+        if (!token || token === '') {
+            return;
+        }
         if (subject === 'metronomeSettings') {
             MetronomeSettingsService.isUserRatingPositive(subjectId)
             .then(result => {

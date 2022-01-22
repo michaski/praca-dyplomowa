@@ -1,3 +1,4 @@
+import { AddMetronomeSettingsComment } from "../../models/Comments/AddMetronomeSettingsComment";
 import { CommentTransfer } from "../../models/Comments/EditComment";
 import { QueryFilters } from "../../models/Filters/QueryFilters";
 import { Metre } from "../../models/Metre/Metre";
@@ -38,7 +39,7 @@ const MetronomeSettingsService = {
         const result = await requests.post(`${METRONOME_SETTINGS_CONTROLLER}`, metronomeSettingData, auth.getToken());
         return result;
     },
-    addComment: async (comment: CommentTransfer) => {
+    addComment: async (comment: AddMetronomeSettingsComment) => {
         const result = await requests.post(`${METRONOME_SETTINGS_COMMENTS}/add`, comment, auth.getToken());
         return result;
     },

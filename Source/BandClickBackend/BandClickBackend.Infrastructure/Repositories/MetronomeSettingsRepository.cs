@@ -79,6 +79,7 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .Include(ms => ms.Metre.RhythmicUnit)
                 .Include(ms => ms.Type)
                 .Include(ms => ms.Comments)
+                .ThenInclude(c => c.CreatedBy)
                 .SingleOrDefaultAsync(ms => ms.Id == id);
         }
 

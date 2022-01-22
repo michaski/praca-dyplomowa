@@ -11,7 +11,7 @@ const CommentComponent: React.FC<CommentComponentProps> = ({comment}) => {
     return (
     <>
     <Container className="text-start">
-        <p>{comment.createdBy}</p>
+        <p>{comment.author}</p>
         <p>{comment.text}</p>
     </Container>
     </>

@@ -1,3 +1,4 @@
+import { AddPlaylistComment } from "../../models/Comments/AddPlaylistComment";
 import { CommentTransfer } from "../../models/Comments/EditComment";
 import { QueryFilters } from "../../models/Filters/QueryFilters";
 import { PostPlaylist } from "../../models/Playlists/PostPlaylist";
@@ -29,7 +30,7 @@ const PlaylistService = {
         const result = await requests.post(`${PLAYLISTS_CONTROLLER}`, playlist, auth.getToken());
         return result;
     },
-    addComment: async (comment: CommentTransfer) => {
+    addComment: async (comment: AddPlaylistComment) => {
         const result = await requests.post(`${PLAYLISTS_CONTROLLER}/comments/add`, comment, auth.getToken());
         return result;
     },

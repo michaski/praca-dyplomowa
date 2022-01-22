@@ -45,6 +45,10 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
         setStateChanged(true);
     }
 
+    const handleCommentAdded = () => {
+        setStateChanged(true);
+    }
+
     return (
     <>
     {
@@ -87,7 +91,12 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
             </tbody>
         </Table>
         <SharedPlaylistItemsList metronomeSettings={playlistData.metronomeSettings} />
-        <Comments comments={playlistData.comments} commentsCount={playlistData.commentsCount} />
+        <Comments 
+            subject="playlist"
+            subjectId={playlistData.id}
+            comments={playlistData.comments} 
+            commentsCount={playlistData.commentsCount}
+            onCommentAdded={handleCommentAdded} />
         </>
     }
     <Button onClick={() => {history.push('/shared');}}>Powrót</Button>
