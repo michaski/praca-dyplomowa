@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, FormGroup, FormSelect, Modal, Row } from "react-bootstrap";
 import AccentPicker from "../accentPicker/AccentPicker";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
 import { MetronomeSettingsType } from "../../models/MetronomeSettings/MetronomeSettingsType";
 import MetronomeSettingsService from "../../services/metronomeSettings/metronomeSettingsService";
 import { mapAccentMapToAccentedBeats } from "../../utils/metronomeSettings/mapAccents";
+import { useSelector } from "react-redux";
+import metronomeSettingsSelector from "../../store/selectors/metronomeSettings.selector";
 
 interface MetronomeSettingsOptionsProps {
     settings: MetronomeSettings,
@@ -15,6 +17,7 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
     const [showModal, setShowModal] = useState(false);
     const [modifiedSettings, setModifiedSettings] = useState(settings);
     const [settingsTypes, setSettingsTypes] = useState([] as MetronomeSettingsType[]);
+    const storeIsSharedState = useSelector(metronomeSettingsSelector.getIsShared);
 
     useEffect(() => {
         setModifiedSettings(settings);
@@ -42,7 +45,7 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
             typeId: settingsStatus.type.id
         }, settingsStatus.metre) 
             .then(response => {
-                if (settings.isShared != settingsStatus.isShared) {
+                if (storeIsSharedState !== settingsStatus.isShared) {
                     MetronomeSettingsService.shareInApp(settingsStatus.id);
                 }
             });

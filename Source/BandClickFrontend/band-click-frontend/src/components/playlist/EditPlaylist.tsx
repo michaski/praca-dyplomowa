@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, FormGroup, Modal, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Playlist } from "../../models/Playlists/Playlist";
 import PlaylistService from "../../services/playlists/playlistService";
+import playlistSelector from "../../store/selectors/playlist.selector";
 
 interface EditPlaylistProps {
     playlist: Playlist,
@@ -12,6 +14,7 @@ const EditPlaylist: React.FC<EditPlaylistProps> = ({playlist, onPlaylistModified
     const [showModal, setShowModal] = useState(false);
     const [modifiedName, setModifiedName] = useState(playlist.name);
     const [isShared, setIsShared] = useState(playlist.isShared);
+    const storeState = useSelector(playlistSelector.getSelectedPlaylist);
 
     useEffect(() => {
         setModifiedName(playlist.name);
@@ -29,13 +32,13 @@ const EditPlaylist: React.FC<EditPlaylistProps> = ({playlist, onPlaylistModified
     const onSave = () => {
         let modifiedPlaylist = playlist;
         modifiedPlaylist.name = modifiedName;
-        modifiedPlaylist.isShared = isShared;
+        // modifiedPlaylist.isShared = isShared;
         PlaylistService.update({
             id: playlist.id,
             name: modifiedName
         })
         .then(_ => {
-            if (isShared != playlist.isShared) {
+            if (isShared !== storeState.isShared) {
                 PlaylistService.shareInApp(playlist.id)
                 .then(_ => {
                     onPlaylistModified(modifiedPlaylist);

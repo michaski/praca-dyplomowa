@@ -18,6 +18,7 @@ namespace BandClickBackend.Application.Dtos.MetronomeSettings
         public MetreViewDto Metre { get; set; }
         public int NumberOfMeasures { get; set; }
         public MetronomeSettingsType Type { get; set; }
+        public bool IsShared { get; set; }
 
         public void Mapping(Profile profile)
         {

@@ -75,10 +75,10 @@ const MetronomeSettingsService = {
         await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/moveDownInPlaylist/${playlistId}`, null, auth.getToken());
     },
     shareInApp: async (metronomeSettingId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/shareInApp/${metronomeSettingId}`);
+        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/shareInApp/${metronomeSettingId}`, null, auth.getToken());
     },
     removeFromSharedInApp: async (metronomeSettingId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/removeFromSharedInApp`);
+        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/removeFromSharedInApp`, null, auth.getToken());
     },
     editComment: async (commentData: CommentTransfer) => {
         await requests.put(`${METRONOME_SETTINGS_COMMENTS}/edit`, commentData, auth.getToken());
