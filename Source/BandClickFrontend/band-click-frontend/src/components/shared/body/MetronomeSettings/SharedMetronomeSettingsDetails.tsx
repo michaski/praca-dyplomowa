@@ -76,8 +76,10 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
     {
         metronomeSettingsData && metronomeSettingsData.id &&
         <>
-        <h2>{metronomeSettingsData.name}</h2>
-        <ul className="item-details-info">
+        <h1 className="mt-4">
+            <span ><span className="px-4">{metronomeSettingsData.name}</span></span>
+        </h1>
+        <ul className="item-details-info underlined mb-4 pb-2">
             <li>
                 <span className="item-info-label">Autor:</span>
                 <span>{metronomeSettingsData.author}</span>
@@ -134,7 +136,7 @@ const SharedMetronomeSettingsDetails: React.FC<SharedMetronomeSettingsDetailsPro
             onCommentDeleted={handleCommentDeleted} />
         </>
     }
-    <Button onClick={() => {history.push('/shared');}}>Powrót</Button>
+    <Button variant="secondary" className="my-4" onClick={() => {history.push('/shared');}}>Powrót</Button>
     </>
     );
 }

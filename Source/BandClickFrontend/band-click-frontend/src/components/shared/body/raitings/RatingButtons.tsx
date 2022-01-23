@@ -126,8 +126,8 @@ const RaitingButtons: React.FC<RaitingButtonsProps> = ({subject, subjectId, posi
 
     return (
     <>
-    <span>
-        <Button variant={userHasGivenRaiting && isUserRaitingPositive ? "info" : "outline-info"} size="sm" onClick={postitiveRaitingToggle}>
+    <span className="me-2">
+        <Button variant={userHasGivenRaiting && isUserRaitingPositive ? "succedd" : "outline-success"} size="sm" onClick={postitiveRaitingToggle}>
             <FontAwesomeIcon icon={faThumbsUp} />
         </Button> {positiveRaitingCount}
     </span>

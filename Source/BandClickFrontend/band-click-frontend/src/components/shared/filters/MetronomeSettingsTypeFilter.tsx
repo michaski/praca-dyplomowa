@@ -11,12 +11,12 @@ const MetronomeSettingsTypeFilter: React.FC<MetronomeSettingsTypeFilterProps> = 
 
     return (
     <>
-    <FormGroup as={Row}>
-        <Form.Label column sm="5">
+    <FormGroup as={Row} className="mt-2">
+        <Form.Label column sm="5" className="mx-0 px-0">
             Typ ustawień
         </Form.Label>
-        <Col sm="7">
-            <Form.Select id={'type-select'} aria-label="Rodzaj" value={selectedMetronomeSettingsType} onChange={e => {
+        <Col sm="7" className="px-0">
+            <Form.Select className="mx-0" id={'type-select'} aria-label="Rodzaj" value={selectedMetronomeSettingsType} onChange={e => {
                 setSelectedMetronomeSettingsType(e.target.value);
                 onSelectedMetronomeSettingsTypeChange(e.target.value);
             }}>

@@ -28,6 +28,14 @@
     margin-left: 1em;
 }
 
+.underlined::after {
+    display: block;
+    margin: 0.5rem auto 0 auto;
+    border-bottom: 1px solid #dee2e6;
+    width: 35%;
+    content: '';
+}
+
 .item-details-info li:nth-of-type(1) {
     margin-left: 0;
 }
@@ -46,4 +54,18 @@
 .item-info-data {
     text-align: left;
     margin-left: 0.5em;
+}
+
+.accordion-flush-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.accordion-flush-header .accordion-button:not(.collapsed) {
+    background-color: #fff !important;
+    color: #000 !important;
+}
+
+.accordion-flush-header .accordion-button:focus {
+    outline: none !important;
+    box-shadow: none !important;
 }

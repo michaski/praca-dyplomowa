@@ -50,7 +50,7 @@ const SharedPlaylistItem: React.FC<SharedPlaylistItemProps> = ({playlist, onItem
             </Col>
             <Col sm="2" className="d-flex align-items-center">
                 <ButtonGroup size="sm">
-                    <Button variant="secondary" onClick={() => {history.push(`/shared/playlist/${playlist.id}`);}}>Szczegóły</Button>
+                    <Button className="mx-2" variant="secondary" onClick={() => {history.push(`/shared/playlist/${playlist.id}`);}}>Szczegóły</Button>
                     <Button onClick={loadPlaylist}>Wczytaj</Button>
                     {
                         user && user.systemRole === 'Admin' &&

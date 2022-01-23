@@ -33,9 +33,9 @@ const AddComment: React.FC<AddCommentProps> = ({subject, subjectId, onCommentAdd
 
     return (
     <>
-    <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+    <Form.Group className="mb-3 mt-4" controlId="exampleForm.ControlTextarea1">
         <Form.Label className="d-flex">Dodaj komentarz</Form.Label>
-        <Form.Control as="textarea" placeholder="Treść komentarza..." onChange={e => {
+        <Form.Control className="mb-2" as="textarea" placeholder="Treść komentarza..." onChange={e => {
             setCommentText(e.target.value);
         }} />
         <Button onClick={addComment}>Dodaj</Button>

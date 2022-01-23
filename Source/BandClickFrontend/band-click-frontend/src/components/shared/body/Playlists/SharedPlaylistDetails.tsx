@@ -75,8 +75,10 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
     {
         playlistData && playlistData.id &&
         <>
-        <h2>{playlistData.name}</h2>
-        <ul className="item-details-info">
+        <h1 className="mt-4">
+            <span ><span className="px-4">{playlistData.name}</span></span>
+        </h1>
+        <ul className="item-details-info underlined mb-4 pb-2">
             <li>
                 <span className="item-info-label">Autor:</span>
                 <span>{playlistData.author}</span>
@@ -122,7 +124,7 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
             onCommentDeleted={handleCommentDeleted} />
         </>
     }
-    <Button onClick={() => {history.push('/shared');}}>Powrót</Button>
+    <Button variant="secondary" className="my-4" onClick={() => {history.push('/shared');}}>Powrót</Button>
     </>
     );
 }

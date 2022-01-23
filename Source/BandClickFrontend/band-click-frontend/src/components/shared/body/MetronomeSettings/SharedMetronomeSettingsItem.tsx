@@ -37,7 +37,7 @@ const SharedMetronomeSettingsItem: React.FC<SharedMetronomeSettingsItemProps> = 
     <>
     <ListGroup.Item className="shared-item">
         <Row>
-            <Col sm="10">
+            <Col sm="9" className="pt-1">
                 <h3>{metronomeSettings.name}</h3>
                 <Row>
                     <ul className="item-info">
@@ -49,9 +49,9 @@ const SharedMetronomeSettingsItem: React.FC<SharedMetronomeSettingsItemProps> = 
                     </ul>
                 </Row>
             </Col>
-            <Col sm="2" className="d-flex align-items-center">
+            <Col sm="3" className="d-flex align-items-center justify-content-end">
                 <ButtonGroup size="sm">
-                    <Button variant="secondary" onClick={() => {history.push(`/shared/metronomeSettings/${metronomeSettings.id}`);}}>Szczegóły</Button>
+                    <Button className="me-2" variant="secondary" onClick={() => {history.push(`/shared/metronomeSettings/${metronomeSettings.id}`);}}>Szczegóły</Button>
                     <Button onClick={loadMetronomeSettings}>Wczytaj</Button>
                     {
                         user && user.systemRole === 'Admin' &&

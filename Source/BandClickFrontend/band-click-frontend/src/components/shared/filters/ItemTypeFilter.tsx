@@ -12,11 +12,11 @@ const ItemTypeFilter: React.FC<ItemTypeFilterProps> = ({onSelectedItemTypeChange
     return (
     <>
     <FormGroup as={Row}>
-        <Form.Label column sm="5">
+        <Form.Label column sm="4" className="mx-0 px-0">
             Rodzaj pozycji
         </Form.Label>
-        <Col sm="7">
-            <Form.Select id={'type-select'} aria-label="Rodzaj" value={selectedType} onChange={e => {
+        <Col sm="8" className="px-0">
+            <Form.Select className="mx-0" id={'type-select'} aria-label="Rodzaj" value={selectedType} onChange={e => {
                 setSelectedType(e.target.value);
                 onSelectedItemTypeChange(e.target.value);
             }}>

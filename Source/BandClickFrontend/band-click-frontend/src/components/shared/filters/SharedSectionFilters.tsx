@@ -6,6 +6,7 @@ import MetronomeSettingsTypeFilter from "./MetronomeSettingsTypeFilter";
 import OrderByDirectionFilter from "./OrderByDirectionFilter";
 import OrderByFilter from "./OrderByFilter";
 import SearchFilter from "./SearchFilter";
+import './filters.css';
 
 interface SharedSectionFiltersProps {
     onSelectedItemTypeChange: Function,
@@ -46,18 +47,18 @@ const SharedSectionFilters: React.FC<SharedSectionFiltersProps> = ({onSelectedIt
 
     return (
     <>
-    <div className="d-flex justify-content-around">
-            <div>
+    <div className="row justify-content-between text-start mb-4">
+            <div className="col-md-4 filter">
                 <ItemTypeFilter onSelectedItemTypeChange={handleSelectedItemTypeChanged} />
                 {
                     isMetronomeSettingsTypeFilterVisible &&
                     <MetronomeSettingsTypeFilter onSelectedMetronomeSettingsTypeChange={handleSelectedMetronomeSettingsTypeChanged} />
                 }
             </div>
-            <div>
+            <div className="col-md-4 filter">
                 <SearchFilter onSearchPhraseChanged={handleSearchPhraseChanged} />
             </div>
-            <div>
+            <div className="col-md-4 filter">
                 <OrderByFilter onOrderByValueChange={handleOrderByValueChange} />
                 <OrderByDirectionFilter onOrderByDirectionChanged={handleOrderByDirectionChanged} />
             </div>

@@ -12,12 +12,21 @@ const SharedPlaylistItemsList: React.FC<SharedPlaylistItemsListProps> = ({metron
     <>
     {
         (!metronomeSettings || metronomeSettings.length === 0) &&
-        <p className="fst-italic">Playlista jest pusta</p>
+        <Container>
+            <Accordion defaultActiveKey="0" flush>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header className="accordion-flush-header"><h3 className="text-start">Zawartość playlisty:</h3></Accordion.Header>
+                    <Accordion.Body>
+                        <p className="fst-italic">Playlista jest pusta</p>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+        </Container>
     }
     <Container>
         <Accordion defaultActiveKey="0" flush>
             <Accordion.Item eventKey="0">
-                <Accordion.Header><h3 className="text-start">Zawartość playlisty:</h3></Accordion.Header>
+                <Accordion.Header className="accordion-flush-header"><h3 className="text-start">Zawartość playlisty:</h3></Accordion.Header>
                 <Accordion.Body>
                 <ListGroup as="ol" numbered>
                     {

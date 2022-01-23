@@ -64,7 +64,9 @@ const SharedSectionMainPage = () => {
         (!auth.getToken() || auth.getToken().length === 0) &&
         <Header />
     }
-    <h2>Udostępnione</h2>
+    <h1 className="mt-2 mb-4">
+        <span className="border-bottom pb-2"><span className="px-4">Udostępnione</span></span>
+    </h1>
     <div>
         <SharedSectionFilters 
             onSelectedItemTypeChange={handleSelectedItemTypeChanged}
@@ -73,7 +75,7 @@ const SharedSectionMainPage = () => {
             onOrderByValueChange={handleOrderByValueChange}
             onOrderByDirectionChanged={handleOrderByDirectionChanged} />
     </div>
-    <Row>
+    <Row className="mb-4">
         {
             selectedItemType === 'metronomeSettings' &&
             <>

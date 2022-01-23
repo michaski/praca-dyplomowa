@@ -17,7 +17,7 @@ const CommentList: React.FC<CommentListProps> = ({subject, comments, commentsCou
         comments && comments.length > 0 &&
         <Accordion defaultActiveKey="0" flush>
             <Accordion.Item eventKey="0">
-                <Accordion.Header><h4 className="text-start">Wszystkie komentarze ({comments.length})</h4></Accordion.Header>
+                <Accordion.Header className="accordion-flush-header"><h4 className="text-start">Wszystkie komentarze ({comments.length})</h4></Accordion.Header>
                 <Accordion.Body>
                     <ListGroup>
                         {
@@ -42,7 +42,14 @@ const CommentList: React.FC<CommentListProps> = ({subject, comments, commentsCou
     }
     {
         (!comments || comments.length === 0) &&
-        <p className="fst-italic">Brak komentarzy</p>
+        <Accordion defaultActiveKey="0" flush>
+            <Accordion.Item eventKey="0">
+                <Accordion.Header className="accordion-flush-header"><h4 className="text-start">Wszystkie komentarze (0)</h4></Accordion.Header>
+                <Accordion.Body>
+                    <p className="fst-italic">Brak komentarzy</p>
+                </Accordion.Body>
+            </Accordion.Item>
+        </Accordion>
     }
     </>
     );
