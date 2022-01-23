@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, FormGroup, Row, Col } from "react-bootstrap";
+import auth from "../../../services/auth/auth";
 
 interface ItemTypeFilterProps {
     onSelectedItemTypeChange: Function
@@ -21,7 +22,14 @@ const ItemTypeFilter: React.FC<ItemTypeFilterProps> = ({onSelectedItemTypeChange
                 onSelectedItemTypeChange(e.target.value);
             }}>
                 <option value="metronomeSettings">Ustawienia metronomu</option>
-                <option value="playlists">Playlisty</option>
+                {
+                    auth.getToken() && auth.getToken !== '' &&
+                    <option value="playlists">Playlisty</option>
+                }
+                {
+                    (!auth.getToken() || auth.getToken === '') &&
+                    <option className="fst-italic" disabled>Playlisty dostępne są po zalogowaniu</option>
+                }
             </Form.Select>
         </Col>
     </FormGroup>

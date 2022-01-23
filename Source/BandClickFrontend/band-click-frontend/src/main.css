@@ -18,8 +18,9 @@
 }
 
 .btn-warning {
-    background-color: #FCF27E !important;
+    background-color: #fcf27e !important;
     color: #636250 !important;
+    border: 1px solid #beb760;
 }
 
 .btn-danger {
