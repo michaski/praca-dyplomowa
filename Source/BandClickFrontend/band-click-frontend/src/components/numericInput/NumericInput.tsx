@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface NumericInputProps {
     value: number,
@@ -10,19 +10,28 @@ interface NumericInputProps {
 
 const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, step, onValueChange}) => {
     const [currentValue, setValue] = useState(0);
+    const [userInputValue, setUserInputValue] = useState(value.toString());
+    const intervalId = useRef(-1);
 
     useEffect(() => {
         setValue(value);
+        setUserInputValue(value.toString());
     }, [value]);
     
     const increment = () => {
         if (currentValue + step > maxValue) {
             setValue(maxValue);
-            onValueChange(maxValue);
+            setUserInputValue(maxValue.toString());
+            // onValueChange(maxValue);
+            if (intervalId.current !== -1) {
+                window.clearInterval(intervalId.current);
+                intervalId.current = -1;
+            }
         } else {
             setValue(lastValue => {
                 const newValue = lastValue + step;
-                onValueChange(newValue);
+                // onValueChange(newValue);
+                setUserInputValue(newValue.toString());
                 return newValue;
             });
         }
@@ -31,52 +40,84 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
     const decrement = () => {
         if (currentValue - step < minValue) {
             setValue(minValue);
-            onValueChange(minValue);
+            setUserInputValue(minValue.toString());
+            // onValueChange(minValue);
+            if (intervalId.current !== -1) {
+                window.clearInterval(intervalId.current);
+                intervalId.current = -1;
+            }
         } else {
             setValue(lastValue => {
                 const newValue = lastValue - step;
-                onValueChange(newValue);
+                // onValueChange(newValue);
+                setUserInputValue(newValue.toString());
                 return newValue;
             });
         }
     }
 
+    const setCustomValue = () => {
+        let customValue = parseInt(userInputValue);
+        if (customValue === undefined || isNaN(customValue) || customValue === Infinity) {
+            setUserInputValue(currentValue.toString());
+            return;
+        }
+        if (customValue > maxValue) {
+            customValue = maxValue;
+        } else if (customValue < minValue) {
+            customValue = minValue;
+        }
+        console.log(customValue);
+        setValue(customValue);
+        onValueChange(customValue);
+    }
+
     return (
         <div>
             <div>
-                <input className="form-control" type="number" value={currentValue} onChange={e => {
-                    if (e.target.value.trim().length === 0) {
-                        setValue(0);
-                        return;
+                <input id="tempo" className="form-control" type="number" value={userInputValue} onChange={e => {
+                    setUserInputValue(e.target.value);
+                }} 
+                onKeyDown={e => {
+                    if (e.code === 'Enter') {
+                        setCustomValue();
                     }
-                    let parsedValue = parseInt(e.target.value);
-                    if (parsedValue === undefined || isNaN(parsedValue) || parsedValue === Infinity || parsedValue < minValue || parsedValue > maxValue) {
-                        return;
-                    }
-                    if (parsedValue > currentValue) {
-                        if (currentValue + step <= maxValue) {
-                            parsedValue = currentValue + step;
-                        } else {
-                            return;
-                        }
-                    } else if (parsedValue < currentValue) {
-                        if (currentValue - step >= minValue) {
-                            parsedValue = currentValue - step;
-                        } else {
-                            return;
-                        }
-                    }
-                    setValue(parsedValue);
-                    onValueChange(parsedValue);
-                }} />
+                }}
+                onBlur={e => {
+                    setCustomValue();
+                }}/>
             </div>
             <div>
                 <button 
                     className="btn btn-outline-dark" 
-                    onClick={() => decrement()}>-</button>
+                    onMouseDown={() => {
+                        if (intervalId.current === -1) {
+                            decrement();
+                            intervalId.current = window.setInterval(decrement, 100);
+                        }
+                    }}
+                    onMouseUp={() => {
+                        if (intervalId.current !== -1) {
+                            window.clearInterval(intervalId.current);
+                            intervalId.current = -1;
+                            onValueChange(currentValue);
+                        }
+                    }} >-</button>
                 <button 
                     className="btn btn-outline-dark" 
-                    onClick={() => increment()}>+</button>
+                    onMouseDown={() => {
+                        if (intervalId.current === -1) {
+                            increment();
+                            intervalId.current = window.setInterval(increment, 100);
+                        }
+                    }}
+                    onMouseUp={() => {
+                        if (intervalId.current !== -1) {
+                            window.clearInterval(intervalId.current);
+                            intervalId.current = -1;
+                            onValueChange(currentValue);
+                        }
+                    }}>+</button>
             </div>
         </div>
     );
