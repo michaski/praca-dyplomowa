@@ -26,7 +26,7 @@
     margin: 0 0.5rem;
 }
 
-.nav-items a:hover {
+.nav-items a:not(.dropdown-item):hover {
     text-decoration: underline;
 }
 
@@ -36,4 +36,18 @@
 
 .navbar-toggler:focus {
     box-shadow: none !important;
+}
+
+.dropdown-menu {
+    padding: 0 !important;
+}
+
+.dropdown-item {
+    margin: 0 !important;
+    display: block;
+    padding: 0.8rem !important;
+}
+
+.dropdown-item:hover {
+    background-color: #7A3F2D !important;
 }
