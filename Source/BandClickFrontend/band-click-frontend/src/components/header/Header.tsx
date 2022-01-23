@@ -1,4 +1,5 @@
 import React from "react";
+import { Container, Navbar, Nav } from "react-bootstrap";
 import {useHistory} from "react-router";
 
 const Header = () => {
@@ -7,26 +8,22 @@ const Header = () => {
         <a className="nav-link text-light p-2" onClick={() => { history.push(path) }}>{name}</a>
     return (
         <header className="row">
-            <nav className="navbar navbar-dark bg-dark navbar-expand-lg ">
-                <div className="container-fluid justify-content-between">
-                    <div className="d-flex">
-                        <a className="navbar-brand d-inline-flex" href="/">
-                            <span className="fw-bold">Band Click</span>
-                        </a>
-                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                            <span className="navbar-toggler-icon"></span>
-                        </button>
-                    </div>
-                    <div className="collapse navbar-collapse d-inline-flex justify-content-end" id="navbarNavAltMarkup">
-                        <div className="navbar">
-                            {redirectTo('/', 'Home')}
-                            {redirectTo('/shared', 'Udostępnione')}
-                            {redirectTo('/login', 'Logowanie')}
-                            {redirectTo('/register', 'Zarejestruj się')}
-                        </div>
-                    </div>
-                </div>
-            </nav>
+            <Container className="px-0">
+                <Navbar collapseOnSelect expand="lg" className="px-3 py-4 mb-4 border-bottom sticky-top app-header navbar-dark">
+                    <Navbar.Brand href="/">Band Click</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
+                        <Nav className="mx-auto nav-items homepage-nav-items align-items-stretch">
+                            <Nav.Link href="/">Metronom</Nav.Link>
+                            <Nav.Link href="/shared">Udostępnione</Nav.Link>
+                        </Nav>
+                        <Nav className="nav-items">
+                            <Nav.Link href="/login">Logowanie</Nav.Link>
+                            <Nav.Link href="/register">Zarejestruj się</Nav.Link>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+            </Container>
         </header>
     );
 }

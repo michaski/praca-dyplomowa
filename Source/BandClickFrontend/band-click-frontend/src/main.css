@@ -7,3 +7,37 @@
 .App {
     text-align: center;
 }
+
+.form-control:focus {
+    box-shadow: 0 0 0.6rem rgba(206, 212, 218, 0.6) !important;
+    border-color: #ae5a41;
+}
+
+.btn-success {
+    background-color: #7bc043 !important;
+}
+
+.btn-warning {
+    background-color: #FCF27E !important;
+    color: #636250 !important;
+}
+
+.btn-danger {
+    background-color: #ee4035 !important;
+}
+
+.form-switch .form-check-input {
+    border-radius: 0.8rem !important;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0.6rem rgba(206, 212, 218, 0.6) !important;
+    border-color: #ae5a41 !important;
+}
+
+.form-check-input:checked {
+    box-shadow: 0 0 0.6rem rgba(206, 212, 218, 0.6) !important;
+    background-color: #ae5a41;
+    border-color: #ae5a41 !important;
+}
+

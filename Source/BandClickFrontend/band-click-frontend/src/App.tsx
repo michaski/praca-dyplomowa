@@ -17,7 +17,7 @@ import './main.css';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App container-fluid">
       <BrowserRouter>
         <Provider store={store}>
           <Switch>

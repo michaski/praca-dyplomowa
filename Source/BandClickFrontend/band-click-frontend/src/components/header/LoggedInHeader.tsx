@@ -7,6 +7,7 @@ import auth from "../../services/auth/auth";
 import { AuthService } from "../../services/auth/authService";
 import UserService from "../../services/user/userService";
 import authSelector from "../../store/selectors/auth.selector";
+import './header.css';
 
 const LoggedInHeader = (props: any) => {
     const user = useSelector(authSelector.getUser);
@@ -27,71 +28,34 @@ const LoggedInHeader = (props: any) => {
 
     return (
         <header className="row">
-
-        <div className="container">
-            <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-                <a href="/" className="navbar-brand d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-                    <span className="fw-bold">Band Click</span>
-                </a>
-
-                <ul className="nav col-12 col-md-auto mb-2 justify-content-center align-items-center mb-md-0">
-                    <li className="nav-item">{redirectTo('/app', 'Metronom')}</li>
-                    <li className="nav-item">{redirectTo('/shared', 'Udostępnione')}</li>        
-                    <li className="nav-item dropdown">
-                        <a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Zespoły
-                        </a>
-                        <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('/bands/all') }}>Wszystkie zespoły</a></li>
-                            <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('/bands/managed') }}>Zarządzane zespoły</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <div className="col-md-3 text-end">
-                    <button type="button" className="btn btn-outline-primary me-2">Login</button>
-                    <button type="button" className="btn btn-primary">Sign-up</button>
-                </div>
-            </header>
-        </div>
-
-            <nav className="navbar navbar-dark bg-dark navbar-expand-lg ">
-                <div className="container-fluid justify-content-between">
-                    <div className="d-flex">
-                        <a className="navbar-brand d-inline-flex" href="/">
-                            <span className="fw-bold">Band Click</span>
-                        </a>
-                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                            <span className="navbar-toggler-icon"></span>
-                        </button>
-                    </div>
-                    <div className="collapse navbar-collapse d-inline-flex justify-content-center flex-row" id="navbarNavAltMarkup">
-                        <div className="navbar">
-                            {redirectTo('/app', 'Metronom')}
-                            {redirectTo('/shared', 'Udostępnione')}
-                            <div className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Zespoły
-                                </a>
-                                <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('/bands/all') }}>Wszystkie zespoły</a></li>
-                                    <li><a className="dropdown-item p-2" href="" onClick={() => { history.push('/bands/managed') }}>Zarządzane zespoły</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="collapse navbar-collapse d-inline-flex justify-content-end flex-row" id="navbarNavAltMarkup">
-                        <span className="fw-bold">{user.username}</span>
-                        <button className="btn btn-primary" onClick={async () => {
-                            await auth.logout()
-                            .then(() => {
-                                history.push('/');
-                            });
-                        }}>Wyloguj</button>
-                    </div>
-                </div>
-            </nav>
+            <Container className="px-0">
+                <Navbar collapseOnSelect expand="lg" className="px-3 py-4 mb-4 border-bottom sticky-top app-header navbar-dark">
+                    <Navbar.Brand href="/app">Band Click</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
+                        <Nav className="mx-auto nav-items app-nav-items align-items-stretch">
+                            <Nav.Link href="/app">Metronom</Nav.Link>
+                            <NavDropdown title="Zespoły" id="collasible-nav-dropdown">
+                                <NavDropdown.Item href="/bands/all">Wszystkie zespoły</NavDropdown.Item>
+                                <NavDropdown.Item href="/bands/managed">Zarządzane zespoły</NavDropdown.Item>
+                            </NavDropdown>
+                            <Nav.Link href="/shared">Udostępnione</Nav.Link>
+                        </Nav>
+                        <Nav>
+                            <NavDropdown title={user.username} className="user-dropdown nav-items" id="collasible-nav-dropdown">
+                                <NavDropdown.Item href="/account/edit">Zarządzaj kontem</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item onClick={async () => {
+                                await auth.logout()
+                                .then(() => {
+                                    history.push('/');
+                                });
+                            }}>Wyloguj</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+            </Container>
         </header>
     );
 }

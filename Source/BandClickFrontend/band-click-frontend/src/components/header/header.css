@@ -1,0 +1,39 @@
+@media screen and (min-width: 992px) {
+    .user-dropdown .dropdown-menu {
+        left: -100% !important;
+    }
+}
+
+.app-header {
+    background-color: #ae5a41;
+    font-weight: 500;
+}
+
+.app-header * {
+    color: #fff !important;
+    background-color: #ae5a41 !important;
+}
+
+.homepage-nav-items {
+    padding-left: 6em !important;
+}
+
+.app-nav-items {
+    padding-left: 0.5em !important;
+}
+
+.nav-items div {
+    margin: 0 0.5rem;
+}
+
+.nav-items a:hover {
+    text-decoration: underline;
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none !important;
+}

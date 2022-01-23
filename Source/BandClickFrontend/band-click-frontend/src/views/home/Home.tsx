@@ -7,7 +7,7 @@ import { metronomeSettingsInitialState } from '../../store/reducers/metronomeSet
 
 const Home = () => {
     return (
-        <div className="container-fluid">
+        <div className="container-fluid px-0">
             <Header />
             <Container>
                 <Metronome settings={metronomeSettingsInitialState} onBarFinished={() => {}} isAutoSwitchOn={false} />
