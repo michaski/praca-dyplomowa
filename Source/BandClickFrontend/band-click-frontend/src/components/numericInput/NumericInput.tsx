@@ -18,19 +18,27 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
     const increment = () => {
         if (currentValue + step > maxValue) {
             setValue(maxValue);
+            onValueChange(maxValue);
         } else {
-            setValue(currentValue + step);
+            setValue(lastValue => {
+                const newValue = lastValue + step;
+                onValueChange(newValue);
+                return newValue;
+            });
         }
-        onValueChange(currentValue);
     }
 
     const decrement = () => {
         if (currentValue - step < minValue) {
             setValue(minValue);
+            onValueChange(minValue);
         } else {
-            setValue(currentValue - step);
+            setValue(lastValue => {
+                const newValue = lastValue - step;
+                onValueChange(newValue);
+                return newValue;
+            });
         }
-        onValueChange(currentValue);
     }
 
     return (
@@ -63,8 +71,12 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
                 }} />
             </div>
             <div>
-                <button className="btn btn-outline-dark" onClick={() => decrement()}>-</button>
-                <button className="btn btn-outline-dark" onClick={() => increment()}>+</button>
+                <button 
+                    className="btn btn-outline-dark" 
+                    onClick={() => decrement()}>-</button>
+                <button 
+                    className="btn btn-outline-dark" 
+                    onClick={() => increment()}>+</button>
             </div>
         </div>
     );

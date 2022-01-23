@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { Col } from "react-bootstrap";
 import LoggedInHeader from "../../components/header/LoggedInHeader";
 import { Metronome } from "../../components/metronome/Metronome";
 import PlaylistPicker from "../../components/playlist/PlaylistPicker";
@@ -37,26 +38,30 @@ const Main = (props: any) => {
         <div className="containter-fluid">
             <LoggedInHeader />
             <div className="row">
-                <Metronome 
-                    settings={selectedSettings} 
-                    playlistId={selectedPlaylistId} 
-                    onSettingsAdded={() => setForcePlaylistRefresh(true)} 
-                    onBarFinished={handleFinishedBar}
-                    isAutoSwitchOn={autoSwitchState}
-                />
-                <PlaylistPicker 
-                    onSelectedPlaylistChange={handleSelectedPlaylistChanged} 
-                    onSelectedSettingsChanged={handleSelectedSettingsChanged} 
-                    forcePlaylistRefresh={forcePlaylistRefresh} 
-                    onPlaylistRefreshed={() => {
-                        setForcePlaylistRefresh(false);
-                    }}
-                    refreshPlaylist={() => {
-                        setForcePlaylistRefresh(!forcePlaylistRefresh);
-                    }}
-                    barCount={barCount}
-                    onAutoSwitchToggle={handleAutoSwitchToggle}
-                />
+                <Col md="8">
+                    <Metronome 
+                        settings={selectedSettings} 
+                        playlistId={selectedPlaylistId} 
+                        onSettingsAdded={() => setForcePlaylistRefresh(true)} 
+                        onBarFinished={handleFinishedBar}
+                        isAutoSwitchOn={autoSwitchState}
+                    />
+                </Col>
+                <Col md="4">
+                    <PlaylistPicker 
+                        onSelectedPlaylistChange={handleSelectedPlaylistChanged} 
+                        onSelectedSettingsChanged={handleSelectedSettingsChanged} 
+                        forcePlaylistRefresh={forcePlaylistRefresh} 
+                        onPlaylistRefreshed={() => {
+                            setForcePlaylistRefresh(false);
+                        }}
+                        refreshPlaylist={() => {
+                            setForcePlaylistRefresh(!forcePlaylistRefresh);
+                        }}
+                        barCount={barCount}
+                        onAutoSwitchToggle={handleAutoSwitchToggle}
+                    />
+                </Col>
             </div>
         </div>
     );

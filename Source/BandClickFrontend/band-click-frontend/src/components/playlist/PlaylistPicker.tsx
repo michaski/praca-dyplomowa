@@ -109,7 +109,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
     }
 
     return (
-        <div className="col-md-4">
+        <>
             <h2>Playlista</h2>
             {
             playlists && playlists.length > 0 && selectedPlaylist && selectedPlaylist.id &&
@@ -146,7 +146,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
                 <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
                 </>
             }
-        </div>
+        </>
     );
 }
 

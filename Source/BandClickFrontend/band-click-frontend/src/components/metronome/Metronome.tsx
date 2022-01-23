@@ -104,7 +104,7 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
     }
 
     return (
-        <div className="col-md-8">
+        <>
             <NumericInput value={metronomeSettings.tempo} minValue={MIN_TEMPO} maxValue={MAX_TEMPO} step={1} onValueChange={handleTempoChange} />
             <div>
                 <button className="btn btn-outline-dark" onClick={toggleMetronome}>Start</button>
@@ -125,7 +125,7 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
                         }
                     } />
             }
-        </div>
+        </>
     );
 }
 
