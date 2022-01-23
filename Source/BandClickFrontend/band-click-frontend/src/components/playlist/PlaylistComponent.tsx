@@ -131,7 +131,28 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
                                 <div className="d-inline-flex flex-column">
                                     <span className="setting-name">{setting.name}</span>
                                     <span className="setting-info">{setting.metre.beatsPerBar}/{setting.metre.rhythmicUnit} {setting.tempo} Bpm</span>
-                                    <span className="setting-info">{setting.numberOfMeasures} takty</span>
+                                    <span className="setting-info">
+                                        {setting.numberOfMeasures}
+                                        {
+                                            setting.numberOfMeasures % 10 === 1 &&
+                                            ' takt'
+                                        }
+                                        {
+                                            (setting.numberOfMeasures % 10 === 2 ||
+                                            setting.numberOfMeasures % 10 === 3 ||
+                                            setting.numberOfMeasures % 10 === 4) &&
+                                            ' takty'
+                                        }
+                                        {
+                                            (setting.numberOfMeasures % 10 === 5 ||
+                                            setting.numberOfMeasures % 10 === 6 ||
+                                            setting.numberOfMeasures % 10 === 7 ||
+                                            setting.numberOfMeasures % 10 === 8 ||
+                                            setting.numberOfMeasures % 10 === 9 ||
+                                            setting.numberOfMeasures % 10 === 0) &&
+                                            ' taktów'
+                                        }
+                                    </span>
                                 </div>
                                 <div className="d-inline-flex align-items-center settings-action-buttons">
                                     <PositionSwitch

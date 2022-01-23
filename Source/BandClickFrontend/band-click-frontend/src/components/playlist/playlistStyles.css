@@ -39,3 +39,12 @@
     box-shadow: 0 0 0.6rem rgba(206, 212, 218, 0.6) !important;
     border-color: #ae5a41;
 }
+
+.auto-switch-progress {
+    height: 110%;
+}
+
+.auto-switch-progress * {
+    font-size: 0.8em !important;
+    padding: 0.2rem;
+}

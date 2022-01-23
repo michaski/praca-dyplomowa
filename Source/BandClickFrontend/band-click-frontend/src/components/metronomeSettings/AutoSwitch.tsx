@@ -21,6 +21,7 @@ const AutoSwitch: React.FC<AutoSwitchProps> = ({onToggle, totalBars, barsFinishe
     }, [totalBars, barsFinished]);
 
     return (
+    <>
     <Container className="d-flex justify-content-center m-2">
     <Form>
         <Form.Check 
@@ -33,11 +34,14 @@ const AutoSwitch: React.FC<AutoSwitchProps> = ({onToggle, totalBars, barsFinishe
             }}
         />
     </Form>
-    {
-        isOn &&
-        <ProgressBar now={progress} label={`${barsFinished}/${totalBars}`} />
-    }
     </Container>
+    <Container className="mb-2">
+        {
+            isOn &&
+            <ProgressBar className="auto-switch-progress" now={progress} label={`${barsFinished}/${totalBars}`} />
+        }
+    </Container>
+    </>
     );
 }
 
