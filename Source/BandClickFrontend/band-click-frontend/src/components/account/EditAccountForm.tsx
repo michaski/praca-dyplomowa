@@ -132,7 +132,7 @@ const EditAccountForm = () => {
             </Col>
         </Row>
         <Row className="my-4">
-            <Button variant="danger" onClick={deleteUser}>Usuń konto</Button>
+            <Button className="" variant="danger" onClick={deleteUser}>Usuń konto</Button>
         </Row>
     </Container>
     </>

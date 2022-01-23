@@ -27,7 +27,7 @@ const AllBands = () => {
     return (
     <>
     <LoggedInHeader />
-    <Container fluid>
+    <Container fluid className="mt-4">
         <p className="mb-2">Wybierz zespół:</p>
         {
         bands && bands.length > 0 && selectedBand && selectedBand.id &&

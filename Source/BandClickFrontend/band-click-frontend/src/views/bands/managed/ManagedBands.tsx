@@ -38,8 +38,8 @@ const ManagedBands = () => {
     return (
     <>
     <LoggedInHeader />
-    <Container fluid>
-    <AddBand onBandCreated={handleBandCreated} />
+    <Container fluid className="mt-4">
+        <AddBand onBandCreated={handleBandCreated} />
         {
         bands && bands.length > 0 && selectedBand && selectedBand.id &&
         <>

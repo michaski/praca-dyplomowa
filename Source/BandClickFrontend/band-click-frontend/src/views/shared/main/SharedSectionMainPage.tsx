@@ -64,7 +64,7 @@ const SharedSectionMainPage = () => {
         (!auth.getToken() || auth.getToken().length === 0) &&
         <Header />
     }
-    <h1 className="mt-2 mb-4">
+    <h1 className="mt-4 mb-4">
         <span className="border-bottom pb-2"><span className="px-4">Udostępnione</span></span>
     </h1>
     <div>
