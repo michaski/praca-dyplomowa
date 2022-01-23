@@ -63,7 +63,6 @@ const AccentPicker: React.FC<AccentPickerProps> = ({onAccentPatternChange}) => {
 
     return (
         <div>
-            <h2>Akcenty</h2>
             {
             accentMap.map((isAccented, index) => {
                 return <input key={index} type={'checkbox'} checked={isAccented} className="accent" onChange={e => {

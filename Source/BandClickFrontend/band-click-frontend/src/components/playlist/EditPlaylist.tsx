@@ -71,7 +71,7 @@ const EditPlaylist: React.FC<EditPlaylistProps> = ({playlist, onPlaylistModified
                     <Form.Control type="text" defaultValue={playlist.name} onChange={e => {
                         setModifiedName(e.target.value);
                     }} />
-                <h4>Społecznościowe</h4>
+                <h4 className="mt-4">Społecznościowe</h4>
                 <Form.Check type="switch" label="Udostępnij w aplikacji" defaultChecked={playlist.isShared} onChange={e => {
                     setIsShared(e.target.checked);
                 }} />

@@ -1,6 +1,6 @@
 import { settings } from "cluster";
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Form, FormControl, Modal } from "react-bootstrap";
+import { Button, Col, Form, FormControl, Modal, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAction } from "../../hooks/useAction";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
@@ -84,16 +84,22 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
                         <FormControl id="settingName" type="text" placeholder="Nazwa..." onChange={e => {
                             setSettingsName(e.target.value);
                         }} />
-                        <Form.Label htmlFor="type-select">Typ:</Form.Label>
-                        <Form.Select id={'type-select'} aria-label="Rodzaj" onChange={e => {
-                                    selectedTypeChanged(e.currentTarget.value);
-                                }}>
-                            {
-                                settingsTypes.map((type, index) => {
-                                    return <option key={index} value={type.id}>{type.name}</option>
-                                })
-                            }
-                        </Form.Select>
+                        <Row className="mt-3">
+                            <Col md="1">
+                                <Form.Label className="mt-2" htmlFor="type-select">Typ:</Form.Label>
+                            </Col>
+                            <Col md="11">
+                                <Form.Select id={'type-select'} aria-label="Rodzaj" onChange={e => {
+                                        selectedTypeChanged(e.currentTarget.value);
+                                    }}>
+                                {
+                                    settingsTypes.map((type, index) => {
+                                        return <option key={index} value={type.id}>{type.name}</option>
+                                    })
+                                }
+                                </Form.Select>
+                            </Col>
+                        </Row>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

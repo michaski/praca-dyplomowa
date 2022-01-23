@@ -134,6 +134,7 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
                     <NumericInput value={metronomeSettings.metre.rhythmicUnit} minValue={4} maxValue={16} step={4} onValueChange={handleMetreRhythmicUnitChange} />
                 </Col>
                 <Col lg="6" className="mt-2">
+                    <h2>Akcenty</h2>
                     <AccentPicker accentedBeats={accentMap} beatsPerBar={metronomeSettings.metre.beatsPerBar} onAccentPatternChange={handleAccentPatternChange} />
                 </Col>
             </Row>

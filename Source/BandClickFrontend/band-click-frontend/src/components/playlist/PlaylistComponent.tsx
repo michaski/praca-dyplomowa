@@ -120,7 +120,7 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
     }
 
     return (
-        <div className="my-0 border">
+        <div className="mb-4 border">
             <ul className="playlist-list p-0 mb-0 text-start">
                 {
                     playlistData.metronomeSettings?.map((setting, index) => {

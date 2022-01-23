@@ -74,7 +74,7 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
                 <div className="container">
                     <FormGroup>
                         <h4>Metronom</h4>
-                        <FormGroup as={Row}>
+                        <FormGroup as={Row} className="mb-2">
                             <Form.Label column sm="2">Nazwa</Form.Label>
                             <Col sm="10">
                                 <Form.Control type="text" defaultValue={settings.name} onChange={e => {
@@ -84,7 +84,7 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
                                 }} />
                             </Col>
                         </FormGroup>
-                        <FormGroup as={Row}>
+                        <FormGroup as={Row} className="mb-2">
                             <Form.Label column sm="2">Tempo</Form.Label>
                             <Col sm="10">
                                 <Form.Control type="number" defaultValue={settings.tempo} onChange={e => {
@@ -94,7 +94,7 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
                                 }} />
                             </Col>
                         </FormGroup>
-                        <FormGroup as={Row}>
+                        <FormGroup as={Row} className="mb-2">
                             <Form.Label column sm="2">Liczba taktów</Form.Label>
                             <Col sm="10">
                                 <Form.Control type="number" defaultValue={settings.numberOfMeasures} onChange={e => {
@@ -104,7 +104,7 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
                                 }} />
                             </Col>
                         </FormGroup>
-                        <FormGroup as={Row}>
+                        <FormGroup as={Row} className="mb-2">
                             <Form.Label column sm="2">Rodzaj</Form.Label>
                             <Col sm="10">
                                 <FormSelect defaultValue={settings.type.id} onChange={e => {
@@ -121,9 +121,9 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
                             </Col>
                         </FormGroup>
                     </FormGroup>
-                    <FormGroup as={Row}>
+                    <FormGroup as={Row} className="mt-4">
                         <h4>Metrum</h4>
-                        <Form.Control type="number" defaultValue={settings.metre.beatsPerBar} min={1} onChange={e => {
+                        <Form.Control className="mb-2" type="number" defaultValue={settings.metre.beatsPerBar} min={1} onChange={e => {
                             let newSettings = modifiedSettings;
                             modifiedSettings.metre.beatsPerBar = parseInt(e.target.value);
                             setModifiedSettings(newSettings);
@@ -133,14 +133,14 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
                             modifiedSettings.metre.rhythmicUnit = parseInt(e.target.value);
                             setModifiedSettings(newSettings);
                         }} />
-                        <h5>Akcenty</h5>
+                        <h5 className="mt-4">Akcenty</h5>
                         <AccentPicker beatsPerBar={settings.metre.beatsPerBar} onAccentPatternChange={(accentMap: boolean[]) => {
                             let newSettings = modifiedSettings;
                             modifiedSettings.metre.accentedBeats = mapAccentMapToAccentedBeats(accentMap);
                             setModifiedSettings(newSettings);
                         }} />
                     </FormGroup>
-                    <FormGroup as={Row}>
+                    <FormGroup as={Row} className="mt-4">
                         <h4>Społecznościowe</h4>
                         <Form.Check type="switch" label="Udostępnij w aplikacji" defaultChecked={settings.isShared} onChange={e => {
                             let newSettings = modifiedSettings;

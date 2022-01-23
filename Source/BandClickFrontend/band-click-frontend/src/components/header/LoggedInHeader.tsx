@@ -44,7 +44,6 @@ const LoggedInHeader = (props: any) => {
                         <Nav>
                             <NavDropdown title={user.username} className="user-dropdown nav-items" id="collasible-nav-dropdown">
                                 <NavDropdown.Item href="/account/edit">Zarządzaj kontem</NavDropdown.Item>
-                                <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={async () => {
                                 await auth.logout()
                                 .then(() => {
