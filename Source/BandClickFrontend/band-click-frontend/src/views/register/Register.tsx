@@ -16,7 +16,7 @@ const Register = (props: any) => {
         <div className="container-fluid px-0">
             <Header />
             <Container>
-                <Form className="register-form text-md-end text-start" onSubmit={async (e) => {
+                <Form className="register-form text-md-end text-start border" onSubmit={async (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     await auth.register({
@@ -52,7 +52,7 @@ const Register = (props: any) => {
                         <Col sm="9">
                             <Form.Control type="password" className="form-control" id="passwordInput" placeholder="Hasło" onChange={(e) => password = e.target.value} />   
                         </Col>
-                        <Form.Text muted>Hasło musi się składać z minimum 6 znaków, w tym conajmniej jednej wielkiej litery, jednej małej litery, znaku i cyfry.</Form.Text>
+                        <Form.Text muted>Hasło musi się składać z minimum 6 znaków, w tym conajmniej jednej wielkiej litery, jednej małej litery, znaku i cyfry</Form.Text>
                     </Row>
                     <Row className="mb-3">
                         <Form.Label htmlFor="confirmPasswordInput" className="col-sm-3 col-form-label">Potwierdź hasło</Form.Label>

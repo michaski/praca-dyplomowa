@@ -121,7 +121,6 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
 
     return (
         <div>
-            <button className="btn btn-warning">Ustawienia</button>
             <ul>
                 {
                     playlistData.metronomeSettings?.map((setting, index) => {

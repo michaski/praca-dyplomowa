@@ -12,7 +12,7 @@ const Home = () => {
     return (
         <div className="container-fluid px-0">
             <Header />
-            <div className="jumbotron bg-cover mb-4">
+            <div className="jumbotron bg-cover mb-4 border-bottom">
                 <div className="container py-5 text-center">
                     <h1 className="display-4 font-weight-bold">Witaj w Band Click</h1>
                     <p className="mb-0">Ćwicz poczucie rytmu korzystając z naszej aplikacji, dołączaj i twórz swoje zespoły oraz korzystaj z ustawień stworzonych przez naszych użytkowników</p>

@@ -29,7 +29,7 @@ const LoggedInHeader = (props: any) => {
     return (
         <header className="row">
             <Container className="px-0">
-                <Navbar collapseOnSelect expand="lg" className="px-3 py-4 mb-4 border-bottom sticky-top app-header navbar-dark">
+                <Navbar collapseOnSelect expand="lg" className="px-3 py-4 border-bottom sticky-top app-header navbar-dark">
                     <Navbar.Brand href="/app">Band Click</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">

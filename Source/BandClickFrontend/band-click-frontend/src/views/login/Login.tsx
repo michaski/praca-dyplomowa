@@ -20,7 +20,7 @@ const Login = (props: any) => {
         <div className="container-fluid px-0">
             <Header />
             <div className="container">
-                <Form className="login-form" onSubmit={async (e) => {
+                <Form className="login-form border" onSubmit={async (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     await auth.login(email, password)
