@@ -36,22 +36,22 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
     }, []);
 
     const getPlaylists = () => {
-        PlaylistService.getAll()
-        .then(result => {
-            if(result && result.length > 0) {
-                setPlaylists(result);
-                playlistActions.addPlaylists(result);
-                if (selectedPlaylist && selectedPlaylist.id.length > 0) {
-                    fetchPlaylistInfo(selectedPlaylist.id);
-                    setSelectedPlaylistId(selectedPlaylist.id);
-                    playlistIndex.current = playlistsStore.indexOf(selectedPlaylist);
-                    onSelectedPlaylistChange(selectedPlaylist.id);
-                } else {
+        if (!selectedPlaylist) {
+            PlaylistService.getAll()
+            .then(result => {
+                if(result && result.length > 0) {
+                    setPlaylists(result);
+                    playlistActions.addPlaylists(result);
                     fetchPlaylistInfo(result[playlistIndex.current].id);
                     setSelectedPlaylistId(result[playlistIndex.current].id);
                 }
-            }
-        });;
+            });
+        } else {
+            fetchPlaylistInfo(selectedPlaylist.id);
+            setSelectedPlaylistId(selectedPlaylist.id);
+            playlistIndex.current = playlistsStore.indexOf(selectedPlaylist);
+            onSelectedPlaylistChange(selectedPlaylist.id);
+        }
     }
 
     const handleSelectedSettingsChanged = (settings: MetronomeSettings) => {
@@ -142,7 +142,31 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
             </>
             }
             {
-                (!playlists || playlists.length === 0) &&
+                selectedPlaylist && selectedPlaylist.id &&
+                <>
+                <Container className="d-flex justify-content-center border py-2">
+                    <Form.Select className="ms-3 me-2" name="playlists" id="playlist-select" value={selectedPlaylist.id}>
+                        <option value={selectedPlaylist.id}>{selectedPlaylist.name}</option>
+                    </Form.Select>
+                    <ButtonGroup size="sm">
+                        <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
+                        <EditPlaylist playlist={selectedPlaylist} onPlaylistModified={handlePlaylistEdit} />
+                        <Button className="" variant="danger" onClick={deletePlaylist}>&#10006;</Button>
+                    </ButtonGroup>
+                </Container>
+                <PlaylistComponent 
+                    id={selectedPlaylistId} 
+                    onSelectedSettingsChanged={handleSelectedSettingsChanged} 
+                    refreshPlaylist={forcePlaylistRefresh} 
+                    onPlaylistRefreshed={onPlaylistRefreshed}
+                    forceRefresh={refreshPlaylist}
+                    barsFinished={barCount}
+                    onAutoSwitchToggle={onAutoSwitchToggle}
+                />
+                </>
+            }
+            {
+                (!playlists || playlists.length === 0) && (!selectedPlaylist || !selectedPlaylist.id) &&
                 <>
                 <p className="fst-italic">Brak playlist</p>
                 <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />

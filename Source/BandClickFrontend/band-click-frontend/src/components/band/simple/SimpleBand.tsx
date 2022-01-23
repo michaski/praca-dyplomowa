@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Container, Tab, Tabs } from "react-bootstrap";
+import { useHistory } from "react-router";
+import { useAction } from "../../../hooks/useAction";
 import { User } from "../../../models/Auth/User";
 import { Band } from "../../../models/Bands/Band";
 import { UserInBandInfo } from "../../../models/Bands/UserInBandInfo";
+import { Playlist } from "../../../models/Playlists/Playlist";
 import BandService from "../../../services/bands/bandService";
+import { PlaylistStoreService } from "../../../services/playlists/playlistStoreService";
 import UserService from "../../../services/user/userService";
 import SimpleMemberList from "./SimpleMemberList";
 import SimplePlaylistList from "./SimplePlaylistList";
@@ -14,6 +18,8 @@ interface SimpleBandProps {
 
 const SimpleBand: React.FC<SimpleBandProps> = ({band}) => {
     const [bandInfo, setBandInfo] = useState(band);
+    const playlistStoreActions = useAction(PlaylistStoreService);
+    const history = useHistory();
 
     useEffect(() => {
         if (band.id) {
@@ -23,6 +29,11 @@ const SimpleBand: React.FC<SimpleBandProps> = ({band}) => {
             });
         }
     }, [band]);
+
+    const handlePlaylistLoaded = (playlist: Playlist) => {
+        playlistStoreActions.setSelectedPlaylist(playlist);
+        history.push('/app');
+    }
 
     return (
     <>
@@ -35,7 +46,7 @@ const SimpleBand: React.FC<SimpleBandProps> = ({band}) => {
                 <SimpleMemberList members={bandInfo && bandInfo.members} />
             </Tab>
             <Tab eventKey="playlists" title="Playlisty">
-                <SimplePlaylistList playlists={bandInfo && bandInfo.playlists} />
+                <SimplePlaylistList playlists={bandInfo && bandInfo.playlists} onPlaylistLoad={handlePlaylistLoaded} />
             </Tab>
         </Tabs>
     </Container>

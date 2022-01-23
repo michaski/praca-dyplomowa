@@ -3,10 +3,16 @@ import { Accordion, Button, Container, ListGroup } from "react-bootstrap";
 import { Playlist } from "../../../models/Playlists/Playlist";
 
 interface SimplePlaylistListProps {
-    playlists: Playlist[]
+    playlists: Playlist[],
+    onPlaylistLoad: Function
 }
 
-const SimplePlaylistList: React.FC<SimplePlaylistListProps> = ({playlists}) => {
+const SimplePlaylistList: React.FC<SimplePlaylistListProps> = ({playlists, onPlaylistLoad}) => {
+
+    const handlePlaylistLoad = (playlist: Playlist) => {
+        onPlaylistLoad(playlist);
+    }
+
     return (
         <>
             <Container>
@@ -22,7 +28,7 @@ const SimplePlaylistList: React.FC<SimplePlaylistListProps> = ({playlists}) => {
                             <Accordion.Item key={parentIndex} eventKey={`${parentIndex}`}>
                             <Accordion.Header>
                                 <span>{playlist.name}</span>
-                                <Button size="sm" className="ms-3">Wczytaj</Button>
+                                <Button size="sm" className="ms-3" onClick={() => handlePlaylistLoad(playlist)}>Wczytaj</Button>
                             </Accordion.Header>
                             <Accordion.Body>
                                 <ListGroup as="ol" numbered>
