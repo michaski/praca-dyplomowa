@@ -14,17 +14,21 @@
 }
 
 .btn-success {
-    background-color: #7bc043 !important;
+    background-color: #339900 !important;
 }
 
 .btn-warning {
-    background-color: #fcf27e !important;
-    color: #636250 !important;
+    background-color: #ffcc00 !important;
+    color: #000;
     border: 1px solid #beb760;
 }
 
+.btn-warning:hover {
+    color: #000;
+}
+
 .btn-danger {
-    background-color: #ee4035 !important;
+    background-color: #cc3300 !important;
 }
 
 .form-switch .form-check-input {
