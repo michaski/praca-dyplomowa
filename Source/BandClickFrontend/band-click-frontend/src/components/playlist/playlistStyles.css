@@ -1,13 +1,41 @@
 .playlist-item {
     cursor: pointer;
-    transition-duration: 200ms;
+    transition-duration: 300ms;
 }
 
 .playlist-item:not(.selected-setting):hover {
-    background-color: #f3f3f3;
+    background-color: #fafafa;
+    color: #ae5a41;
 }
 
 .selected-setting {
-    background-color: lightgrey;
-    color: red;
+    background-color: #f1f1f1;
+    color: #ae5a41;
+}
+
+.settings-action-buttons {
+    opacity: 0;
+    transition-duration: 300ms;
+}
+
+.selected-setting .settings-action-buttons {
+    opacity: 1 !important;
+}
+
+.playlist-item:hover .settings-action-buttons {
+    opacity: 1;
+}
+
+.setting-name {
+    font-size: 1.1em;
+}
+
+.setting-info {
+    font-size: 0.8em;
+    font-weight: 300;
+}
+
+#playlist-select:focus {
+    box-shadow: 0 0 0.6rem rgba(206, 212, 218, 0.6) !important;
+    border-color: #ae5a41;
 }

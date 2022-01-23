@@ -120,20 +120,20 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
     }
 
     return (
-        <div>
-            <ul>
+        <div className="my-0 border">
+            <ul className="playlist-list p-0 mb-0 text-start">
                 {
                     playlistData.metronomeSettings?.map((setting, index) => {
                         return (
-                            <li className="d-flex align-items-center playlist-item" key={index} id={`metronome-setting-${index}`} onClick={e => {
+                            <li className="d-flex align-items-center justify-content-between playlist-item border-bottom px-4 py-2" key={index} id={`metronome-setting-${index}`} onClick={e => {
                                 changedMetronomeSetting(setting, index);
                             }}>
                                 <div className="d-inline-flex flex-column">
-                                    <span>{setting.name}</span>
-                                    <span>{setting.metre.beatsPerBar}/{setting.metre.rhythmicUnit} {setting.tempo} Bpm</span>
+                                    <span className="setting-name">{setting.name}</span>
+                                    <span className="setting-info">{setting.metre.beatsPerBar}/{setting.metre.rhythmicUnit} {setting.tempo} Bpm</span>
+                                    <span className="setting-info">{setting.numberOfMeasures} takty</span>
                                 </div>
-                                <div className="d-inline-flex">
-                                    <MetronomeSettingsOptions settings={selectedMetronomeSettings} onSettingsChanged={forceRefresh} />
+                                <div className="d-inline-flex align-items-center settings-action-buttons">
                                     <PositionSwitch
                                         playlist={playlistData}
                                         metronomeSettings={selectedMetronomeSettings}
@@ -149,21 +149,29 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
                                                     forceRefresh();
                                                 });
                                         }} />
-                                    <button className="btn btn-sm btn-danger" onClick={() => {
-                                        removeSettingFromPlaylist(setting);
-                                    }}>&#10006;</button>
+                                        <MetronomeSettingsOptions settings={selectedMetronomeSettings} onSettingsChanged={forceRefresh} />
+                                        <button className="btn btn-sm btn-danger" onClick={() => {
+                                            removeSettingFromPlaylist(setting);
+                                        }}>&#10006;</button>
                                 </div>
                             </li>
                         );
                     })
                 }
+                {
+                    (!playlistData.metronomeSettings || playlistData.metronomeSettings.length === 0) &&
+                    <p className="fst-italic text-center mt-2">Brak zapisanych ustawień</p>
+                }
             </ul>
-            <AutoSwitch 
-                onToggle={handleAutoSwitchToggle}
-                barsFinished={barsFinished}
-                totalBars={selectedMetronomeSettings.numberOfMeasures}
-                onSwitchRequested={handleSwitchRequested}
-            />
+            {
+                playlistData && playlistData.metronomeSettings && playlistData.metronomeSettings.length > 0 &&
+                <AutoSwitch 
+                    onToggle={handleAutoSwitchToggle}
+                    barsFinished={barsFinished}
+                    totalBars={selectedMetronomeSettings.numberOfMeasures}
+                    onSwitchRequested={handleSwitchRequested}
+                />
+            }
         </div>
     );
 }

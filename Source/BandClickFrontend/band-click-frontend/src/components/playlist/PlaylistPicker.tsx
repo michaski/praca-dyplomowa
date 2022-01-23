@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, ButtonGroup } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Container, Dropdown, Form, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAction } from "../../hooks/useAction";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
@@ -109,25 +109,27 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
     }
 
     return (
-        <>
+        <Container className="mt-4">
             <h2>Playlista</h2>
             {
             playlists && playlists.length > 0 && selectedPlaylist && selectedPlaylist.id &&
             <>
-            <select name="playlists" id="playlist-select" value={selectedPlaylist.id} onChange={e => {
-                handleSelectedPlaylistChanged(e.target.value);
-            }}>
-                {
-                    playlists.map((playlist, index) => {
-                        return <option key={index} value={playlist.id}>{playlist.name}</option>
-                    })
-                }
-            </select>
-            <ButtonGroup size="sm">
-                <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
-                <EditPlaylist playlist={selectedPlaylist} onPlaylistModified={handlePlaylistEdit} />
-                <Button variant="danger" onClick={deletePlaylist}>&#10006;</Button>
-            </ButtonGroup>
+            <Container className="d-flex justify-content-center border py-2">
+                <Form.Select className="ms-3 me-2" name="playlists" id="playlist-select" value={selectedPlaylist.id} onChange={e => {
+                    handleSelectedPlaylistChanged(e.target.value);
+                }}>
+                    {
+                        playlists.map((playlist, index) => {
+                            return <option key={index} value={playlist.id}>{playlist.name}</option>
+                        })
+                    }
+                </Form.Select>
+                <ButtonGroup size="sm">
+                    <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
+                    <EditPlaylist playlist={selectedPlaylist} onPlaylistModified={handlePlaylistEdit} />
+                    <Button className="" variant="danger" onClick={deletePlaylist}>&#10006;</Button>
+                </ButtonGroup>
+            </Container>
             <PlaylistComponent 
                 id={selectedPlaylistId} 
                 onSelectedSettingsChanged={handleSelectedSettingsChanged} 
@@ -146,7 +148,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
                 <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
                 </>
             }
-        </>
+        </Container>
     );
 }
 

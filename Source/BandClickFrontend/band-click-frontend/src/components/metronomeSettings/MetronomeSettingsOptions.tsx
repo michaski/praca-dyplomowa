@@ -55,7 +55,7 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
 
     return (
         <>
-        <Button variant="warning" size="sm" onClick={openModal}>&#9998;</Button>
+        <Button className="me-1" variant="warning" size="sm" onClick={openModal}>&#9998;</Button>
         {
             settings.type &&
             <Modal

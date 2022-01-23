@@ -52,7 +52,7 @@ const EditPlaylist: React.FC<EditPlaylistProps> = ({playlist, onPlaylistModified
 
     return (
     <>
-    <Button variant="warning" size="sm" onClick={openModal}>&#9998;</Button>
+    <Button className="mx-1" variant="warning" size="sm" onClick={openModal}>&#9998;</Button>
     <Modal
         show={showModal}
         onHide={onHide}

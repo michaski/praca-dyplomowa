@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, ProgressBar } from "react-bootstrap";
+import { Container, Form, ProgressBar } from "react-bootstrap";
 
 interface AutoSwitchProps {
     onToggle: Function;
@@ -21,7 +21,7 @@ const AutoSwitch: React.FC<AutoSwitchProps> = ({onToggle, totalBars, barsFinishe
     }, [totalBars, barsFinished]);
 
     return (
-    <>
+    <Container className="d-flex justify-content-center m-2">
     <Form>
         <Form.Check 
             checked={isOn}
@@ -37,7 +37,7 @@ const AutoSwitch: React.FC<AutoSwitchProps> = ({onToggle, totalBars, barsFinishe
         isOn &&
         <ProgressBar now={progress} label={`${barsFinished}/${totalBars}`} />
     }
-    </>
+    </Container>
     );
 }
 

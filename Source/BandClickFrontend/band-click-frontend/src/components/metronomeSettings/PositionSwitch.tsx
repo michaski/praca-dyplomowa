@@ -23,8 +23,8 @@ const PositionSwitch: React.FC<PositionSwitchProps> = ({ playlist, metronomeSett
 
     return (
         <>
-            <ButtonGroup vertical size="sm">
-                <Button onClick={e => moveUp()}>&#9650;</Button>
+            <ButtonGroup className="me-1" vertical size="sm">
+                <Button className="mb-1" onClick={e => moveUp()}>&#9650;</Button>
                 <Button onClick={e => moveDown()}>&#9660;</Button>
             </ButtonGroup>
         </>
