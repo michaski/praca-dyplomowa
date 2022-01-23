@@ -23,11 +23,11 @@ const ItemTypeFilter: React.FC<ItemTypeFilterProps> = ({onSelectedItemTypeChange
             }}>
                 <option value="metronomeSettings">Ustawienia metronomu</option>
                 {
-                    auth.getToken() && auth.getToken !== '' &&
+                    auth.getToken() && auth.getToken() !== '' &&
                     <option value="playlists">Playlisty</option>
                 }
                 {
-                    (!auth.getToken() || auth.getToken === '') &&
+                    (!auth.getToken() || auth.getToken() === '') &&
                     <option className="fst-italic" disabled>Playlisty dostępne są po zalogowaniu</option>
                 }
             </Form.Select>

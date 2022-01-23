@@ -1,0 +1,35 @@
+.metronome-play-button {
+    border-radius: 100% !important;
+    text-align: center !important;
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+    border: 2px solid #ae5a41 !important;
+    color: #ae5a41 !important;
+    font-size: 1.3em !important;
+}
+
+.metronome-play-button:not(.running) {
+    padding-left: 0.9rem !important;
+    padding-right: 0.8rem !important;
+}
+
+.metronome-play-button .running {
+    padding-right: 0.9rem !important;
+    padding-left: 0.9rem !important;
+}
+
+.metronome-play-button:hover {
+    background-color: #ae5a41 !important;
+    color: #fff !important;
+}
+
+.metronome-play-button:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.accent {
+    margin: 0 0.2rem;
+    width: 1rem !important;
+    height: 1rem !important;
+}

@@ -72,7 +72,7 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
     return (
         <div>
             <Button variant="primary" onClick={handleShow}>
-                Zapisz &gt;&gt;
+                Dodaj do playlisty
             </Button>
 
             <Modal show={show} onHide={handleClose}>

@@ -9,6 +9,10 @@ import AccentPicker from "../accentPicker/AccentPicker";
 import NumericInput from "../numericInput/NumericInput";
 import SaveSettingsToPlaylist from "../metronomeSettings/SaveSettingsToPlaylist";
 import { mapAccentedBeatsToAccentMap, mapAccentMapToAccentedBeats } from "../../utils/metronomeSettings/mapAccents";
+import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import './metronome.css';
+import { Col, Container, Row } from "react-bootstrap";
 
 interface MetronomeProps {
     settings: MetronomeSettings,
@@ -41,6 +45,7 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
     const [accentMap, setAccentMap] = useState([] as boolean[]);
     let autoSwitchState = useRef(isAutoSwitchOn);
     const metronome = useRef(new MetronomePlayer(tempo, beatsPerBar, [], handleFinishedBar));
+    const [isRunning, setIsRunning] = useState(false);
 
     useEffect(() => {
         autoSwitchState.current = isAutoSwitchOn;
@@ -101,20 +106,37 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
         } else {
             metronome.current.stop();
         }
+        setIsRunning(previous => !previous);
     }
 
     return (
         <>
-            <NumericInput value={metronomeSettings.tempo} minValue={MIN_TEMPO} maxValue={MAX_TEMPO} step={1} onValueChange={handleTempoChange} />
-            <div>
-                <button className="btn btn-outline-dark" onClick={toggleMetronome}>Start</button>
-            </div>
-            <div>
-                <h2>Metrum</h2>
-                <NumericInput value={metronomeSettings.metre.beatsPerBar} minValue={1} maxValue={32} step={1} onValueChange={handleBeatsPerBarChange} />
-                <NumericInput value={metronomeSettings.metre.rhythmicUnit} minValue={4} maxValue={16} step={4} onValueChange={handleMetreRhythmicUnitChange} />
-            </div>
-            <AccentPicker accentedBeats={accentMap} beatsPerBar={metronomeSettings.metre.beatsPerBar} onAccentPatternChange={handleAccentPatternChange} />
+            <Row>
+                <NumericInput value={metronomeSettings.tempo} minValue={MIN_TEMPO} maxValue={MAX_TEMPO} step={1} onValueChange={handleTempoChange} />
+                <div className="mt-2">
+                    <button className={`btn btn-outline-dark metronome-play-button ${isRunning ? 'running' : ''}`} onClick={toggleMetronome}>
+                        {
+                            isRunning &&
+                            <FontAwesomeIcon icon={faPause} />
+                        }
+                        {
+                            !isRunning &&
+                            <FontAwesomeIcon icon={faPlay} />
+                        }
+                    </button>
+                </div>
+            </Row>
+            <Row className="my-4 pt-2 pb-4 border-top border-bottom">
+                <Col lg="6" className="mt-2">
+                    <h2>Metrum</h2>
+                    <NumericInput value={metronomeSettings.metre.beatsPerBar} minValue={1} maxValue={32} step={1} onValueChange={handleBeatsPerBarChange} />
+                    <NumericInput value={metronomeSettings.metre.rhythmicUnit} minValue={4} maxValue={16} step={4} onValueChange={handleMetreRhythmicUnitChange} />
+                </Col>
+                <Col lg="6" className="mt-2">
+                    <AccentPicker accentedBeats={accentMap} beatsPerBar={metronomeSettings.metre.beatsPerBar} onAccentPatternChange={handleAccentPatternChange} />
+                </Col>
+            </Row>
+            
             {
                 playlistId !== null && playlistId !== undefined &&
                     <SaveSettingsToPlaylist 

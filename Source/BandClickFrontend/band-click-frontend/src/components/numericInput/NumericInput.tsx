@@ -75,7 +75,7 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
     }
 
     return (
-        <Container className="d-flex numericInput justify-content-center">
+        <Container className="d-flex numericInput justify-content-center mb-2">
             <Form.Control type="number" id="tempo" className="number me-2 text-center" value={userInputValue} onChange={e => {
                 setUserInputValue(e.target.value);
             }} 
