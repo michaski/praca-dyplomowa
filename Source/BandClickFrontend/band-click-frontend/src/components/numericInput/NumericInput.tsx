@@ -1,4 +1,8 @@
+import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
+import { Button, ButtonGroup, Container, Form, Row, Col } from "react-bootstrap";
+import './numericInput.css';
 
 interface NumericInputProps {
     value: number,
@@ -71,40 +75,20 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
     }
 
     return (
-        <div>
-            <div>
-                <input id="tempo" className="form-control" type="number" value={userInputValue} onChange={e => {
-                    setUserInputValue(e.target.value);
-                }} 
-                onKeyDown={e => {
-                    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-                        setCustomValue();
-                    }
-                }}
-                onBlur={e => {
+        <Container className="d-flex numericInput justify-content-center">
+            <Form.Control type="number" id="tempo" className="number me-2 text-center" value={userInputValue} onChange={e => {
+                setUserInputValue(e.target.value);
+            }} 
+            onKeyDown={e => {
+                if (e.code === 'Enter' || e.code === 'NumpadEnter') {
                     setCustomValue();
-                }}/>
-            </div>
-            <div>
-                <button 
-                    className="btn btn-outline-dark" 
-                    onMouseDown={() => {
-                        if (intervalId.current === -1) {
-                            decrement();
-                            intervalId.current = window.setInterval(decrement, 100);
-                        }
-                    }}
-                    onMouseUp={() => {
-                        if (intervalId.current !== -1) {
-                            window.clearInterval(intervalId.current);
-                            intervalId.current = -1;
-                            const newValue = parseInt(userInputValue);
-                            setValue(newValue);
-                            onValueChange(newValue);
-                        }
-                    }} >-</button>
-                <button 
-                    className="btn btn-outline-dark" 
+                }
+            }}
+            onBlur={e => {
+                setCustomValue();
+            }} />
+            <ButtonGroup size="sm" className="d-flex flex-column text-center">
+                <Button variant="" className="numeric-input-button mb-1 border"
                     onMouseDown={() => {
                         if (intervalId.current === -1) {
                             increment();
@@ -119,9 +103,31 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
                             setValue(newValue);
                             onValueChange(newValue);
                         }
-                    }}>+</button>
-            </div>
-        </div>
+                    }}
+                >
+                    <FontAwesomeIcon icon={faAngleUp} />
+                </Button>
+                <Button variant="" className="numeric-input-button border"
+                    onMouseDown={() => {
+                        if (intervalId.current === -1) {
+                            decrement();
+                            intervalId.current = window.setInterval(decrement, 100);
+                        }
+                    }}
+                    onMouseUp={() => {
+                        if (intervalId.current !== -1) {
+                            window.clearInterval(intervalId.current);
+                            intervalId.current = -1;
+                            const newValue = parseInt(userInputValue);
+                            setValue(newValue);
+                            onValueChange(newValue);
+                        }
+                    }}
+                >
+                    <FontAwesomeIcon icon={faAngleDown} />
+                </Button>
+            </ButtonGroup>
+        </Container>
     );
 }
 

@@ -1,0 +1,47 @@
+.numericInput {
+    
+}
+
+.numericInput .number {
+    width: 10%;    
+    padding: 0;
+    border: none;
+    background-color: #f6f6f6;
+    color: #ae5a41;
+}
+
+.numericInput .number:focus {
+    box-shadow: 0 0 0.5rem rgba(174, 90, 65, 0.2) inset !important;
+    background-color: #f6f6f6;
+    color: #ae5a41;
+}
+
+.numericInput .number::-webkit-outer-spin-button,
+.numericInput .number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.numericInput .number[type=number] {
+  -moz-appearance: textfield;
+}
+
+.numeric-input-button {
+    width: 150%;
+    height: 150%;
+    margin: 0 !important;
+    padding: 0.3rem !important;
+}
+
+.numeric-input-button:hover {
+    background-color: #f6f6f6;
+}
+
+.numeric-input-button:focus {
+    box-shadow: none !important;
+    background-color: #f6f6f6;
+}
+
+.numeric-input-button * {
+    color: #ae5a41;
+}
