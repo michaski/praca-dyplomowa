@@ -1,16 +1,18 @@
 import { useEffect } from "react";
 import { Col, FloatingLabel, Form, Row } from "react-bootstrap";
+import { useHistory } from "react-router";
 import Header from "../../components/header/Header";
 import auth from "../../services/auth/auth";
 import './login.css';
 
 const Login = (props: any) => {
+    const history = useHistory();
     let email = '';
     let password = '';
 
     useEffect(() => {
         if (auth.getToken() !== '') {
-            props.history.push('/app');
+            history.push('/app');
         }
     });
 
@@ -18,10 +20,12 @@ const Login = (props: any) => {
         <div className="container-fluid px-0">
             <Header />
             <div className="container">
-                <Form className="login-form" onSubmit={() => {
-                    auth.login(email, password)
+                <Form className="login-form" onSubmit={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    await auth.login(email, password)
                     .then(() => {
-                        props.history.push('/app');
+                        history.push('/app');
                     });
                 }}>
                     <Row>
