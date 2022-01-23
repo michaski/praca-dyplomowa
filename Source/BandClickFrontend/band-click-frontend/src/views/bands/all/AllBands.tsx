@@ -28,15 +28,16 @@ const AllBands = () => {
     <>
     <LoggedInHeader />
     <Container fluid>
+        <p className="mb-2">Wybierz zespół:</p>
         {
         bands && bands.length > 0 && selectedBand && selectedBand.id &&
         <>
-        <Row>
+        <Row className="">
             <BandSelector bands={bands} selectedBand={selectedBand} onSelectedBandChange={(band: Band) => {
                 handleSelectedBandChanged(band);
             }} />
         </Row>
-        <Row>
+        <Row className="mt-4">
             <Container>
                 <SimpleBand band={selectedBand} />
             </Container>

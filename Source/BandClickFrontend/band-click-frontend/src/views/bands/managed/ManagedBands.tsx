@@ -39,17 +39,16 @@ const ManagedBands = () => {
     <>
     <LoggedInHeader />
     <Container fluid>
+    <AddBand onBandCreated={handleBandCreated} />
         {
         bands && bands.length > 0 && selectedBand && selectedBand.id &&
         <>
-        <Row>
-            <Col md={10}>
+        <span className="mb-1 ms-3">lub wybierz z listy:</span>
+        <Row className="mt-0">
+            <Col md={12}>
                 <BandSelector bands={bands} selectedBand={selectedBand} onSelectedBandChange={(band: Band) => {
                     handleSelectedBandChanged(band);
                 }} />
-            </Col>
-            <Col md={2}>
-                <AddBand onBandCreated={handleBandCreated} />
             </Col>
         </Row>
         <Row>

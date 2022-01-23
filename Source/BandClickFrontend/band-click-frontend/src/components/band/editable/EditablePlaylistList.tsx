@@ -61,7 +61,7 @@ const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, b
                         })
                     }
                 </Accordion>
-                <Row>
+                <Row className="mt-3">
                     <AddPlaylistToBand band={band} onPlaylistAdded={handleBandInfoChanged} />
                 </Row>
             </Container>

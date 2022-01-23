@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Row, Col } from "react-bootstrap";
+import { Form, Row, Col, Container } from "react-bootstrap";
 import { Band } from "../../models/Bands/Band";
 import BandService from "../../services/bands/bandService";
 
@@ -16,12 +16,9 @@ const BandSelector: React.FC<BandSelectorProps> = ({bands, selectedBand, onSelec
     }
 
     return (
-    <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-        <Form.Label column sm="2">
-            Wybierz zespół:
-        </Form.Label>
-        <Col sm="10">
-            <Form.Select size="lg" value={selectedBand.id} onChange={e => handleSelectedBandChanged(e.target.value)}>
+    <Form.Group as={Row} className="d-flex mb-3 align-items-center justify-content-center">
+        <Col sm="4" className="px-0 mx-0">
+            <Form.Select className="mx-0" value={selectedBand.id} onChange={e => handleSelectedBandChanged(e.target.value)}>
                 {
                     bands && bands.length > 0 &&
                     bands.map((band, index) => {

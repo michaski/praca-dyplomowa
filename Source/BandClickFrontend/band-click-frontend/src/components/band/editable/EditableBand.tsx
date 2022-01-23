@@ -46,8 +46,10 @@ const EditableBand: React.FC<EditableBandProps> = ({band, onBandDeleted}) => {
     return (
     <>
     <Container>
-        <h1>{bandInfo && bandInfo.name}</h1>
-        <BandActionButtons band={bandInfo} onBandUpdated={handleBandInfoChanged} onBandDeleted={onBandDeleted} />
+        <div className="underlined my-4">
+            <h1>{bandInfo && bandInfo.name}</h1>
+            <BandActionButtons band={bandInfo} onBandUpdated={handleBandInfoChanged} onBandDeleted={onBandDeleted} />
+        </div>
         <Tabs defaultActiveKey="members" className="mb-3">
             <Tab eventKey="members" title="Członkowie">
                 <EditableMemberList 

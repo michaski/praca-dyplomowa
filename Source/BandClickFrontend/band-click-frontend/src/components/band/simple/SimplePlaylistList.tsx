@@ -22,7 +22,7 @@ const SimplePlaylistList: React.FC<SimplePlaylistListProps> = ({playlists}) => {
                             <Accordion.Item key={parentIndex} eventKey={`${parentIndex}`}>
                             <Accordion.Header>
                                 <span>{playlist.name}</span>
-                                <Button>Wczytaj</Button>
+                                <Button size="sm" className="ms-3">Wczytaj</Button>
                             </Accordion.Header>
                             <Accordion.Body>
                                 <ListGroup as="ol" numbered>

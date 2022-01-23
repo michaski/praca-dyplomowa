@@ -30,11 +30,11 @@ const EditableMemberList: React.FC<EditableMemberListProps> = ({members, band, h
                 leaders &&
                 leaders.map((leader, index) => {
                     return (
-                    <ListGroup.Item key={index} as="li" className="d-flex justify-content-between align-items-start">
+                    <ListGroup.Item key={index} as="li" className="d-flex justify-content-between align-items-start p-3">
                         <div className="ms-2 me-auto">
                             <div className="fw-bold">
                                 {leader.member.username}
-                                <Badge pill>Lider</Badge>
+                                <Badge pill className='ms-2'>Lider</Badge>
                             </div>
                             <span className="fst-italic">{}</span>
                         </div>
@@ -70,7 +70,7 @@ const EditableMemberList: React.FC<EditableMemberListProps> = ({members, band, h
                 })
             }
         </ListGroup>
-        <Row>
+        <Row className="mt-3">
             <AddBandMember band={band} onBandMemberAdded={handleBandInfoChanged} />
         </Row>
         </>

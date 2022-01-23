@@ -27,7 +27,9 @@ const SimpleBand: React.FC<SimpleBandProps> = ({band}) => {
     return (
     <>
     <Container>
-        <h1>{bandInfo && bandInfo.name}</h1>
+        <h1 className="mt-3 mb-4">
+            <span className="border-bottom pb-2"><span className="px-4">{bandInfo && bandInfo.name}</span></span>
+        </h1>
         <Tabs defaultActiveKey="members" className="mb-3">
             <Tab eventKey="members" title="Członkowie">
                 <SimpleMemberList members={bandInfo && bandInfo.members} />

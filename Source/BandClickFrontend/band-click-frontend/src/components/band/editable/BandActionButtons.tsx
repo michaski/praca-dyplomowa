@@ -40,8 +40,8 @@ const BandActionButtons: React.FC<BandActionButtonsProps> = ({band, onBandUpdate
     return (
     <>
     <ButtonGroup size="sm">
-        <Button variant="warning" onClick={openModal}>Zmień nazwę</Button>
-        <Button variant="danger" onClick={deleteBand}>Usuń</Button>
+        <Button className="me-2" variant="warning" onClick={openModal}>Zmień nazwę</Button>
+        <Button className="me-2" variant="danger" onClick={deleteBand}>Usuń</Button>
     </ButtonGroup>
     <Modal
         show={showModal}

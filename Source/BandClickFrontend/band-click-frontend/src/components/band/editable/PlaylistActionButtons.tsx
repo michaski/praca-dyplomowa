@@ -25,8 +25,8 @@ const PlaylistActionButtons: React.FC<PlaylistActionButtonsProps> = ({playlist, 
     }
 
     return (
-    <ButtonGroup size="sm">
-        <Button onClick={handlePlaylistLoad}>Wczytaj</Button>
+    <ButtonGroup size="sm" className="ms-3">
+        <Button className="me-2" onClick={handlePlaylistLoad}>Wczytaj</Button>
         <Button variant="danger" onClick={handleDeletePlaylist}>Usuń z zespołu</Button>
     </ButtonGroup>
     );

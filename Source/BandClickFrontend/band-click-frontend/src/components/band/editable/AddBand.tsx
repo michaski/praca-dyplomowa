@@ -27,7 +27,7 @@ const AddBand: React.FC<AddBandProps> = ({onBandCreated}) => {
     
     return (
     <>
-    <Button variant="success" onClick={openModal}>Stwórz nowy</Button>
+    <Button variant="success" onClick={openModal} className="mb-2">Stwórz zespół</Button>
     <Modal
         show={showModal}
         onHide={onHide}
