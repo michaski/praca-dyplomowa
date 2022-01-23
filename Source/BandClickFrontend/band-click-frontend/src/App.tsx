@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import Home from './views/home/Home';
 import Login from './views/login/Login';
@@ -13,6 +12,8 @@ import ManagedBands from './views/bands/managed/ManagedBands';
 import SharedSectionMainPage from './views/shared/main/SharedSectionMainPage';
 import SharedItemDetailsPage from './views/shared/details/SharedItemDetailsPage';
 import EditAccount from './views/account/EditAccount';
+import './bootstrap.min.css';
+import './main.css';
 
 function App() {
   return (
