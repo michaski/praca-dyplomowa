@@ -12,6 +12,7 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
     const [currentValue, setValue] = useState(0);
     const [userInputValue, setUserInputValue] = useState(value.toString());
     const intervalId = useRef(-1);
+    const tempoInterval = useRef(value);
 
     useEffect(() => {
         setValue(value);
@@ -19,39 +20,37 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
     }, [value]);
     
     const increment = () => {
-        if (currentValue + step > maxValue) {
+        if (tempoInterval.current + step >= maxValue) {
             setValue(maxValue);
-            setUserInputValue(maxValue.toString());
-            // onValueChange(maxValue);
+            setUserInputValue(lastValue => maxValue.toString());
+            tempoInterval.current = maxValue;
             if (intervalId.current !== -1) {
                 window.clearInterval(intervalId.current);
                 intervalId.current = -1;
             }
         } else {
-            setValue(lastValue => {
-                const newValue = lastValue + step;
-                // onValueChange(newValue);
-                setUserInputValue(newValue.toString());
-                return newValue;
+            setUserInputValue(lastValue => {
+                const newValue = (parseInt(lastValue) + step);
+                tempoInterval.current = newValue;
+                return newValue.toString();
             });
         }
     }
 
     const decrement = () => {
-        if (currentValue - step < minValue) {
+        if (tempoInterval.current - step <= minValue) {
             setValue(minValue);
-            setUserInputValue(minValue.toString());
-            // onValueChange(minValue);
+            setUserInputValue(lastValue => minValue.toString());
+            tempoInterval.current = minValue;
             if (intervalId.current !== -1) {
                 window.clearInterval(intervalId.current);
                 intervalId.current = -1;
             }
         } else {
-            setValue(lastValue => {
-                const newValue = lastValue - step;
-                // onValueChange(newValue);
-                setUserInputValue(newValue.toString());
-                return newValue;
+            setUserInputValue(lastValue => {
+                const newValue = (parseInt(lastValue) - step);
+                tempoInterval.current = newValue;
+                return newValue.toString();
             });
         }
     }
@@ -67,7 +66,6 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
         } else if (customValue < minValue) {
             customValue = minValue;
         }
-        console.log(customValue);
         setValue(customValue);
         onValueChange(customValue);
     }
@@ -79,7 +77,7 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
                     setUserInputValue(e.target.value);
                 }} 
                 onKeyDown={e => {
-                    if (e.code === 'Enter') {
+                    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
                         setCustomValue();
                     }
                 }}
@@ -100,7 +98,9 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
                         if (intervalId.current !== -1) {
                             window.clearInterval(intervalId.current);
                             intervalId.current = -1;
-                            onValueChange(currentValue);
+                            const newValue = parseInt(userInputValue);
+                            setValue(newValue);
+                            onValueChange(newValue);
                         }
                     }} >-</button>
                 <button 
@@ -115,7 +115,9 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
                         if (intervalId.current !== -1) {
                             window.clearInterval(intervalId.current);
                             intervalId.current = -1;
-                            onValueChange(currentValue);
+                            const newValue = parseInt(userInputValue);
+                            setValue(newValue);
+                            onValueChange(newValue);
                         }
                     }}>+</button>
             </div>
