@@ -15,7 +15,9 @@ const EditAccount = () => {
     return (
     <>
     <LoggedInHeader />
-    <h1>Dane użytkownika</h1>
+    <h1 className="mt-2 mb-4">
+        <span className="border-bottom pb-2"><span className="px-4">Dane użytkownika</span></span>
+    </h1>
     <EditAccountForm />
     </>
     );

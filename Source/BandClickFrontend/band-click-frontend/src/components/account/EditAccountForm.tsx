@@ -60,10 +60,14 @@ const EditAccountForm = () => {
     return (
     <>
     <Container>
-        <Row>
-            <Col md={6}>
+        <Row className="text-start">
+            <Col lg={6}>
                 <Container>
-                    <Form>
+                    <Form className="border p-4 mt-2" onSubmit={e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        updateUserInfo();
+                    }}>
                         <Form.Group className="mb-3" as={Row}>
                             <Col md={4}>
                                 <Form.Label>Nazwa użytownika</Form.Label>
@@ -90,16 +94,18 @@ const EditAccountForm = () => {
                                 }} />
                             </Col>
                         </Form.Group>
-                        <Button variant="primary" type="submit" onClick={updateUserInfo}>
-                            Zapisz
-                        </Button>
+                        <Form.Control className="btn btn-primary" type="submit" onClick={updateUserInfo} value="Zapisz" />
                     </Form>
                 </Container>
             </Col>
 
-            <Col md={6}>
+            <Col lg={6}>
                 <Container>
-                    <Form>
+                    <Form className="border p-4 mt-2" onSubmit={e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        changePassword();
+                    }}>
                         <Form.Group className="mb-3" as={Row}>
                             <Col md={4}>
                                 <Form.Label>Nowe hasło</Form.Label>
@@ -115,22 +121,18 @@ const EditAccountForm = () => {
                                 <Form.Label>Powtórz hasło</Form.Label>
                             </Col>
                             <Col md={8}>
-                                <Form.Control type="password" placeholder="Hasło" onChange={e => {
+                                <Form.Control type="password" placeholder="Powtórz hasło" onChange={e => {
                                     setConfirmPassword(e.target.value);
                                 }} />
                             </Col>
                         </Form.Group>
-                        <Button variant="secondary" type="submit" onClick={changePassword}>
-                            Zmień hasło
-                        </Button>
+                        <Form.Control className="btn btn-secondary" type="submit" onClick={changePassword} value="Zmień hasło" />
                     </Form>
                 </Container>
             </Col>
         </Row>
-        <Row>
-            <Container>
-                <Button variant="danger" onClick={deleteUser}>Usuń konto</Button>
-            </Container>
+        <Row className="my-4">
+            <Button variant="danger" onClick={deleteUser}>Usuń konto</Button>
         </Row>
     </Container>
     </>
