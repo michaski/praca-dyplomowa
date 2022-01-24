@@ -9,17 +9,23 @@ import { useSelector } from "react-redux";
 import metronomeSettingsSelector from "../../store/selectors/metronomeSettings.selector";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import http from "../../utils/requests/http";
+import auth from "../../services/auth/auth";
+import { METRONOME_SETTINGS_CONTROLLER } from "../../utils/apiUrls";
+import authSelector from "../../store/selectors/auth.selector";
 
 interface MetronomeSettingsOptionsProps {
     settings: MetronomeSettings,
-    onSettingsChanged: Function
+    onSettingsChanged: Function,
+    bandId?: string
 }
 
-const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({settings, onSettingsChanged}) => {
+const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({settings, onSettingsChanged, bandId}) => {
     const [showModal, setShowModal] = useState(false);
     const [modifiedSettings, setModifiedSettings] = useState(settings);
     const [settingsTypes, setSettingsTypes] = useState([] as MetronomeSettingsType[]);
     const storeIsSharedState = useSelector(metronomeSettingsSelector.getIsShared);
+    const user = useSelector(authSelector.getUser);
 
     useEffect(() => {
         setModifiedSettings(settings);
@@ -39,6 +45,7 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
 
     const onSave = () => {
         let settingsStatus = modifiedSettings;
+        if (!bandId) {
         MetronomeSettingsService.update({
             id: settingsStatus.id,
             name: settingsStatus.name,
@@ -51,6 +58,19 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
                     MetronomeSettingsService.shareInApp(settingsStatus.id);
                 }
             });
+        } else {
+            http.put(`${METRONOME_SETTINGS_CONTROLLER}/?bandId=${bandId}`, {
+                id: settingsStatus.id,
+                name: settingsStatus.name,
+                tempo: settingsStatus.tempo,
+                numberOfMeasures: settingsStatus.numberOfMeasures,
+                typeId: settingsStatus.type.id
+            }, auth.getToken()).then(_ => {
+                if (storeIsSharedState !== settingsStatus.isShared && settingsStatus.author === user.username) {
+                    MetronomeSettingsService.shareInApp(settingsStatus.id);
+                }
+            });
+        }
         onSettingsChanged();
         setShowModal(false);
     }

@@ -26,7 +26,7 @@ function App() {
             <Route path="/shared" component={SharedSectionMainPage} />
             <ProtectedRoute path="/bands/managed" component={ManagedBands} />
             <ProtectedRoute path="/bands/all" component={AllBands} />
-            <ProtectedRoute path="/app" component={Main} />
+            <ProtectedRoute path="/app/:bandId?/:playlistId?" component={Main} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <Route path="/" component={Home} />

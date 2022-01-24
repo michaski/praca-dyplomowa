@@ -22,10 +22,12 @@ interface PlaylistComponentProps {
     onSelectedSettingsChanged: Function,
     forceRefresh: Function,
     barsFinished: number,
-    onAutoSwitchToggle: Function
+    onAutoSwitchToggle: Function,
+    bandId?: string
 }
 
-const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylist, onPlaylistRefreshed, onSelectedSettingsChanged, forceRefresh, barsFinished, onAutoSwitchToggle}) => {
+const PlaylistComponent: React.FC<PlaylistComponentProps> = ({
+    id, refreshPlaylist, onPlaylistRefreshed, onSelectedSettingsChanged, forceRefresh, barsFinished, onAutoSwitchToggle, bandId}) => {
     const playlistData = useSelector(playlistSelector.getSelectedPlaylist);
     const [refresh, setRefresh] = useState(refreshPlaylist);
     const [selectedMetronomeSettings, setSelectedMetronomeSettings] = useState(metronomeSettingsInitialState);
@@ -172,7 +174,7 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
                                                     forceRefresh();
                                                 });
                                         }} />
-                                        <MetronomeSettingsOptions settings={selectedMetronomeSettings} onSettingsChanged={forceRefresh} />
+                                        <MetronomeSettingsOptions settings={selectedMetronomeSettings} onSettingsChanged={forceRefresh} bandId={bandId} />
                                         <button className="btn btn-sm btn-danger" onClick={() => {
                                             removeSettingFromPlaylist(setting);
                                         }}>

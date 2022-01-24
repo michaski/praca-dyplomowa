@@ -1,10 +1,16 @@
 import React, { useRef, useState } from "react";
 import { Col } from "react-bootstrap";
+import { useParams } from "react-router";
 import LoggedInHeader from "../../components/header/LoggedInHeader";
 import { Metronome } from "../../components/metronome/Metronome";
 import PlaylistPicker from "../../components/playlist/PlaylistPicker";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
 import { metronomeSettingsInitialState } from "../../store/reducers/metronomeSettings.reducer";
+
+interface MainRouteParams {
+    bandId?: string,
+    playlistId?: string
+} 
 
 const Main = (props: any) => {
     const [selectedSettings, setSelectedSettings] = useState(metronomeSettingsInitialState);
@@ -12,6 +18,7 @@ const Main = (props: any) => {
     const [forcePlaylistRefresh, setForcePlaylistRefresh] = useState(false);
     const [barCount, setBarCount] = useState(0);
     const [autoSwitchState, setAutoSwitchState] = useState(false);
+    const { bandId, playlistId } = useParams<MainRouteParams>();
 
     const handleSelectedSettingsChanged = (settings: MetronomeSettings) => {
         setSelectedSettings(settings);
@@ -60,6 +67,8 @@ const Main = (props: any) => {
                         }}
                         barCount={barCount}
                         onAutoSwitchToggle={handleAutoSwitchToggle}
+                        bandId={bandId}
+                        playlistId={playlistId}
                     />
                 </Col>
             </div>

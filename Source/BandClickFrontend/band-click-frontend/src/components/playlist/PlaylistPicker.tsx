@@ -20,18 +20,28 @@ interface PlaylistPickerProps {
     onSelectedSettingsChanged: Function,
     refreshPlaylist: Function,
     barCount: number,
-    onAutoSwitchToggle: Function
+    onAutoSwitchToggle: Function,
+    bandId?: string,
+    playlistId?: string
 }
 
-const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, onPlaylistRefreshed, onSelectedPlaylistChange, onSelectedSettingsChanged, refreshPlaylist, barCount, onAutoSwitchToggle}) => {
+const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
+    forcePlaylistRefresh, onPlaylistRefreshed, onSelectedPlaylistChange, onSelectedSettingsChanged, refreshPlaylist, barCount, onAutoSwitchToggle, bandId, playlistId}) => {
     const [playlists, setPlaylists] = useState([] as Playlist[]);
     const [selectedPlaylistId, setSelectedPlaylistId] = useState('');
     const playlistActions = useAction(PlaylistStoreService);
     const playlistsStore = useSelector(playlistSelector.getAll);
     const selectedPlaylist = useSelector(playlistSelector.getSelectedPlaylist);
     let playlistIndex = useRef(0);
-
+        
     useEffect(() => {
+        // if (playlistId) {
+        //     fetchPlaylistInfo(playlistId);
+        //     setSelectedPlaylistId(selectedPlaylist.id);
+        //     playlistIndex.current = playlistsStore.indexOf(selectedPlaylist);
+        //     onSelectedPlaylistChange(selectedPlaylist.id);
+        //     return;
+        // }
         if (playlists.length === 0) {
             getPlaylists();
         }
@@ -128,7 +138,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
                 </Form.Select>
                 <ButtonGroup size="sm">
                     <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
-                    <EditPlaylist playlist={selectedPlaylist} onPlaylistModified={handlePlaylistEdit} />
+                    <EditPlaylist playlist={selectedPlaylist} onPlaylistModified={handlePlaylistEdit} bandId={bandId} />
                     <Button className="" variant="danger" onClick={deletePlaylist}>
                         <FontAwesomeIcon icon={faTimes} />
                     </Button>
@@ -142,6 +152,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
                 forceRefresh={refreshPlaylist}
                 barsFinished={barCount}
                 onAutoSwitchToggle={onAutoSwitchToggle}
+                bandId={bandId}
             />
             </>
             }
@@ -154,7 +165,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
                     </Form.Select>
                     <ButtonGroup size="sm">
                         <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
-                        <EditPlaylist playlist={selectedPlaylist} onPlaylistModified={handlePlaylistEdit} />
+                        <EditPlaylist playlist={selectedPlaylist} onPlaylistModified={handlePlaylistEdit} bandId={bandId} />
                         <Button className="" variant="danger" onClick={deletePlaylist}>&#10006;</Button>
                     </ButtonGroup>
                 </Container>
@@ -166,6 +177,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
                     forceRefresh={refreshPlaylist}
                     barsFinished={barCount}
                     onAutoSwitchToggle={onAutoSwitchToggle}
+                    bandId={bandId}
                 />
                 </>
             }

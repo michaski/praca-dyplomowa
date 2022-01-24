@@ -32,7 +32,7 @@ const SimpleBand: React.FC<SimpleBandProps> = ({band}) => {
 
     const handlePlaylistLoaded = (playlist: Playlist) => {
         playlistStoreActions.setSelectedPlaylist(playlist);
-        history.push('/app');
+        history.push(`/app/${band.id}/${playlist.id}`);
     }
 
     return (
