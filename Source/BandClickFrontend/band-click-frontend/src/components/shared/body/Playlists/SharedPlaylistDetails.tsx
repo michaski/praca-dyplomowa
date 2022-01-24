@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { useAction } from "../../../../hooks/useAction";
 import { Playlist } from "../../../../models/Playlists/Playlist";
+import auth from "../../../../services/auth/auth";
 import PlaylistService from "../../../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../../../services/playlists/playlistStoreService";
 import authSelector from "../../../../store/selectors/auth.selector";
@@ -41,7 +42,11 @@ const SharedPlaylistDetails: React.FC<SharedPlaylistDetailsProps> = ({id}) => {
 
     const loadPlaylist = () => {
         playlistStoreActions.setSelectedPlaylist(playlistData);
-        history.push('/app');
+        if (auth.getToken() !== '') {
+            history.push('/app');
+        } else {
+            history.push('/');
+        }
     }
 
     const handleUserHasGivenRaiting = () => {

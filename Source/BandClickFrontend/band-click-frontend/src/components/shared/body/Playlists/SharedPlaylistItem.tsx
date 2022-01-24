@@ -9,6 +9,7 @@ import { PlaylistStoreService } from "../../../../services/playlists/playlistSto
 import PlaylistService from "../../../../services/playlists/playlistService";
 import { useSelector } from "react-redux";
 import authSelector from "../../../../store/selectors/auth.selector";
+import auth from "../../../../services/auth/auth";
 
 interface SharedPlaylistItemProps {
     playlist: Playlist,
@@ -22,7 +23,11 @@ const SharedPlaylistItem: React.FC<SharedPlaylistItemProps> = ({playlist, onItem
 
     const loadPlaylist = () => {
         playlistStoreActions.setSelectedPlaylist(playlist);
-        history.push('/app');
+        if (auth.getToken() !== '') {
+            history.push('/app');
+        } else {
+            history.push('/');
+        }
     }
 
     const deleteItem = () => {

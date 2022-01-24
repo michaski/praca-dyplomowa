@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { useAction } from "../../../../hooks/useAction";
 import { MetronomeSettings } from "../../../../models/MetronomeSettings/MetronomeSettings";
+import auth from "../../../../services/auth/auth";
 import MetronomeSettingsService from "../../../../services/metronomeSettings/metronomeSettingsService";
 import { MetronomeSettingsStoreSerivce } from "../../../../services/metronomeSettings/metronomeSettingsStoreService";
 import authSelector from "../../../../store/selectors/auth.selector";
@@ -23,7 +24,11 @@ const SharedMetronomeSettingsItem: React.FC<SharedMetronomeSettingsItemProps> = 
     
     const loadMetronomeSettings = () => {
         metronomeSettingsStoreActions.loadSettings(metronomeSettings);
-        history.push('/app');
+        if (auth.getToken() !== '') {
+            history.push('/app');
+        } else {
+            history.push('/');
+        }
     }
 
     const deleteItem = () => {
