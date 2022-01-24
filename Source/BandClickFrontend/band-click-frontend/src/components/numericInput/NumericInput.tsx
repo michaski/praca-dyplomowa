@@ -9,10 +9,11 @@ interface NumericInputProps {
     minValue: number,
     maxValue: number,
     step: number,
+    multiply?: boolean,
     onValueChange: Function
 } 
 
-const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, step, onValueChange}) => {
+const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, step, multiply, onValueChange}) => {
     const [currentValue, setValue] = useState(0);
     const [userInputValue, setUserInputValue] = useState(value.toString());
     const intervalId = useRef(-1);
@@ -24,7 +25,13 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
     }, [value]);
     
     const increment = () => {
-        if (tempoInterval.current + step >= maxValue) {
+        let incrementValue = tempoInterval.current;
+        if (multiply) {
+            incrementValue *= step;
+        } else {
+            incrementValue += step;
+        }
+        if (incrementValue >= maxValue) {
             setValue(maxValue);
             setUserInputValue(lastValue => maxValue.toString());
             tempoInterval.current = maxValue;
@@ -34,15 +41,36 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
             }
         } else {
             setUserInputValue(lastValue => {
-                const newValue = (parseInt(lastValue) + step);
+                const newValue = incrementValue;
                 tempoInterval.current = newValue;
                 return newValue.toString();
             });
         }
+        // if (tempoInterval.current + step >= maxValue) {
+        //     setValue(maxValue);
+        //     setUserInputValue(lastValue => maxValue.toString());
+        //     tempoInterval.current = maxValue;
+        //     if (intervalId.current !== -1) {
+        //         window.clearInterval(intervalId.current);
+        //         intervalId.current = -1;
+        //     }
+        // } else {
+        //     setUserInputValue(lastValue => {
+        //         const newValue = (parseInt(lastValue) + step);
+        //         tempoInterval.current = newValue;
+        //         return newValue.toString();
+        //     });
+        // }
     }
 
     const decrement = () => {
-        if (tempoInterval.current - step <= minValue) {
+        let decrementValue = tempoInterval.current;
+        if (multiply) {
+            decrementValue /= step;
+        } else {
+            decrementValue -= step;
+        }
+        if (decrementValue <= minValue) {
             setValue(minValue);
             setUserInputValue(lastValue => minValue.toString());
             tempoInterval.current = minValue;
@@ -52,11 +80,26 @@ const NumericInput: React.FC<NumericInputProps> = ({ value, minValue, maxValue, 
             }
         } else {
             setUserInputValue(lastValue => {
-                const newValue = (parseInt(lastValue) - step);
+                const newValue = decrementValue;
                 tempoInterval.current = newValue;
                 return newValue.toString();
             });
         }
+        // if (tempoInterval.current - step <= minValue) {
+        //     setValue(minValue);
+        //     setUserInputValue(lastValue => minValue.toString());
+        //     tempoInterval.current = minValue;
+        //     if (intervalId.current !== -1) {
+        //         window.clearInterval(intervalId.current);
+        //         intervalId.current = -1;
+        //     }
+        // } else {
+        //     setUserInputValue(lastValue => {
+        //         const newValue = (parseInt(lastValue) - step);
+        //         tempoInterval.current = newValue;
+        //         return newValue.toString();
+        //     });
+        // }
     }
 
     const setCustomValue = () => {

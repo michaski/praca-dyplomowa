@@ -67,6 +67,7 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
     }
 
     const handleBeatsPerBarChange = (newBeatsPerBar: number) => {
+        toggleMetronome();
         let newAccentMap: boolean[] = [];
         if (newBeatsPerBar < accentMap.length) {
             newAccentMap = accentMap.slice(0, beatsPerBar - 1);
@@ -80,6 +81,7 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
         setBeatsPerBar(newBeatsPerBar);
         metronomeSettingsActions.setBeatsPerBar(newBeatsPerBar);
         metronome.current.setAccentsFromAccentMap(newAccentMap);
+        toggleMetronome();
     }
 
     const handleMetreRhythmicUnitChange = (newRhythmicUnit: number) => {
@@ -131,7 +133,7 @@ const Metronome: React.FC<MetronomeProps> = ({settings, playlistId, onSettingsAd
                 <Col lg="6" className="mt-2">
                     <h2>Metrum</h2>
                     <NumericInput value={metronomeSettings.metre.beatsPerBar} minValue={1} maxValue={32} step={1} onValueChange={handleBeatsPerBarChange} />
-                    <NumericInput value={metronomeSettings.metre.rhythmicUnit} minValue={4} maxValue={16} step={4} onValueChange={handleMetreRhythmicUnitChange} />
+                    <NumericInput value={metronomeSettings.metre.rhythmicUnit} minValue={4} maxValue={16} step={2} multiply onValueChange={handleMetreRhythmicUnitChange} />
                 </Col>
                 <Col lg="6" className="mt-2">
                     <h2>Akcenty</h2>
