@@ -29,6 +29,9 @@ const EditableMemberList: React.FC<EditableMemberListProps> = ({members, band, h
             {
                 leaders && leaders.length > 0 &&
                 leaders.map((leader, index) => {
+                    if (!leader.member) {
+                        return <></>;
+                    }
                     return (
                     <ListGroup.Item key={index} as="li" className="d-flex justify-content-between align-items-start p-3">
                         <div className="ms-2 me-auto">
@@ -49,8 +52,11 @@ const EditableMemberList: React.FC<EditableMemberListProps> = ({members, band, h
                 })
             }
             {
-                membersList &&
+                membersList && membersList.length > 0 &&
                 membersList.map((member, index) => {
+                    if (!member.member) {
+                        return <></>;
+                    }
                     return (
                     <ListGroup.Item key={index} as="li" className="d-flex justify-content-between align-items-start">
                         <div className="ms-2 me-auto">
