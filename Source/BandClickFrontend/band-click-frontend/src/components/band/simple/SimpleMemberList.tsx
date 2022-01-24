@@ -23,7 +23,7 @@ const SimpleMemberList: React.FC<SimpleMemberListProps> = ({members}) => {
     return (
     <>
     <ListGroup as="ol" numbered>{
-                leaders &&
+                leaders && leaders.length > 0 &&
                 leaders.map((leader, index) => {
                     return (
                     <ListGroup.Item key={index} as="li" className="d-flex justify-content-between align-items-start p-3">
@@ -39,7 +39,7 @@ const SimpleMemberList: React.FC<SimpleMemberListProps> = ({members}) => {
                 })
             }
             {
-                membersList &&
+                membersList && membersList.length > 0 &&
                 membersList.map((member, index) => {
                     return (
                     <ListGroup.Item key={index} as="li" className="d-flex justify-content-between align-items-start">
