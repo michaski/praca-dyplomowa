@@ -16,6 +16,9 @@ export class PlaylistStoreService {
     deletePlaylist(playlist: Playlist) {
         store.dispatch(playlistAction.deletePlaylist(playlist));
     }
+    deleteAllPlaylists() {
+        store.dispatch(playlistAction.deleteAllPlaylists());
+    }
     addSettingToPlaylist(playlist: Playlist, setting: MetronomeSettings) {
         store.dispatch(playlistAction.addSettingToPlaylist(playlist, setting));
     }

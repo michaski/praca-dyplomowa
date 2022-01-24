@@ -42,6 +42,11 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
     }
 
     const addSettingsToPlaylist = () => {
+        if (!selectedPlaylist || !selectedPlaylist.id) {
+            alert('Nie wybrano playlisty');
+            handleClose();
+            return;
+        }
         metronomeSettingsActions.setName(settingsName);
         metronomeSettingsActions.setType(settingsTypes.find(t => t.id === selectedTypeId.current) || settingsTypes[0]);
         MetronomeSettingsService.create({

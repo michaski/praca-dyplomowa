@@ -1,3 +1,5 @@
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Button, Col, Form, FormGroup, Modal, Row } from "react-bootstrap";
 import PlaylistService from "../../services/playlists/playlistService";
@@ -29,7 +31,9 @@ const AddPlaylist: React.FC<AddPlaylistProps> = ({onPlaylistCreated}) => {
 
     return (
     <>
-    <Button variant="success" onClick={() => {setShowModal(true);}}>&#10010;</Button>
+    <Button variant="success" onClick={() => {setShowModal(true);}}>
+        <FontAwesomeIcon icon={faPlus} />
+    </Button>
     <Modal
         show={showModal}
         onHide={onHide}

@@ -11,7 +11,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({onSearchPhraseChanged}) => {
 
     return (
     <>
-    <FormGroup as={Row}>
+    <FormGroup as={Row} className="mt-2">
             <Form.Control className="col-md-8" type="text" placeholder="Szukaj..." onChange={e => {
                 setSearchPhrase(e.target.value);
                 onSearchPhraseChanged(e.target.value);

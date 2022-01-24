@@ -18,7 +18,7 @@ interface SharedSectionFiltersProps {
 
 const SharedSectionFilters: React.FC<SharedSectionFiltersProps> = ({onSelectedItemTypeChange, onSelectedMetronomeSettingsTypeChange, onSearchPhraseChanged, onOrderByValueChange, onOrderByDirectionChanged}) => {
 
-    const [isMetronomeSettingsTypeFilterVisible, setIsMetronomeSettingsTypeFilterVisible] = useState(false);
+    const [isMetronomeSettingsTypeFilterVisible, setIsMetronomeSettingsTypeFilterVisible] = useState(true);
 
     const handleSelectedItemTypeChanged = (itemType: string) => {
         if (itemType === 'metronomeSettings') {
@@ -47,7 +47,7 @@ const SharedSectionFilters: React.FC<SharedSectionFiltersProps> = ({onSelectedIt
 
     return (
     <>
-    <div className="row justify-content-between text-start mb-4">
+    <div className="row justify-content-md-between justify-content-sm-center text-start mb-4">
             <div className="col-md-4 filter">
                 <ItemTypeFilter onSelectedItemTypeChange={handleSelectedItemTypeChanged} />
                 {
@@ -55,7 +55,7 @@ const SharedSectionFilters: React.FC<SharedSectionFiltersProps> = ({onSelectedIt
                     <MetronomeSettingsTypeFilter onSelectedMetronomeSettingsTypeChange={handleSelectedMetronomeSettingsTypeChanged} />
                 }
             </div>
-            <div className="col-md-4 filter">
+            <div className="col-md-4 col-sm-8 filter">
                 <SearchFilter onSearchPhraseChanged={handleSearchPhraseChanged} />
             </div>
             <div className="col-md-4 filter">

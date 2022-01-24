@@ -11,7 +11,7 @@ const MetronomeSettingsTypeFilter: React.FC<MetronomeSettingsTypeFilterProps> = 
 
     return (
     <>
-    <FormGroup as={Row} className="mt-2">
+    <FormGroup as={Row} className="my-2">
         <Form.Label column sm="5" className="mx-0 px-0">
             Typ ustawień
         </Form.Label>

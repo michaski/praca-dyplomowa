@@ -6,6 +6,7 @@ export enum PlaylistStoreActions {
     ADD_PLAYLISTS = 'ADD_PLAYLISTS',
     EDIT_PLAYLIST = 'EDIT_PLAYLIST',
     DELETE_PLAYLIST = 'DELETE_PLAYLIST',
+    DELETE_ALL_PLAYLISTS = 'DELETE_ALL_PLAYLISTS',
     ADD_SETTING_TO_PLAYLIST = 'ADD_SETTING_TO_PLAYLIST',
     REMOVE_SETTING_FROM_PLAYLIST = 'REMOVE_SETTING_FROM_PLAYLIST',
     CHANGE_SETTING_POSITION_IN_PLAYLIST = 'CHANGE_SETTING_POSITION_IN_PLAYLIST',
@@ -30,6 +31,10 @@ export interface EditPlaylistAction {
 export interface DeletePlaylistAction {
     type: PlaylistStoreActions.DELETE_PLAYLIST,
     playlist: Playlist
+} 
+
+export interface DeleteAllPlaylistsAction {
+    type: PlaylistStoreActions.DELETE_ALL_PLAYLISTS
 } 
 
 export interface AddSettingToPlaylistAction {
@@ -61,6 +66,7 @@ export type PlaylistActions =
     AddPlaylistsAction |
     EditPlaylistAction | 
     DeletePlaylistAction | 
+    DeleteAllPlaylistsAction | 
     AddSettingToPlaylistAction | 
     RemoveSettingFromPlaylistAction | 
     ChangeSettingPositionInPlaylistAction |
@@ -82,6 +88,9 @@ export const playlistAction = {
     deletePlaylist: (playlist: Playlist): DeletePlaylistAction => ({
         type: PlaylistStoreActions.DELETE_PLAYLIST,
         playlist: playlist
+    }),
+    deleteAllPlaylists: (): DeleteAllPlaylistsAction => ({
+        type: PlaylistStoreActions.DELETE_ALL_PLAYLISTS
     }),
     addSettingToPlaylist: (playlist: Playlist, metronomeSettings: MetronomeSettings): AddSettingToPlaylistAction => ({
         type: PlaylistStoreActions.ADD_SETTING_TO_PLAYLIST,

@@ -1,3 +1,5 @@
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, ButtonGroup, Col, Container, Dropdown, Form, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -36,7 +38,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
     }, []);
 
     const getPlaylists = () => {
-        if (!selectedPlaylist) {
+        if (!selectedPlaylist.id) {
             PlaylistService.getAll()
             .then(result => {
                 if(result && result.length > 0) {
@@ -127,7 +129,9 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
                 <ButtonGroup size="sm">
                     <AddPlaylist onPlaylistCreated={handlePlaylistCreated} />
                     <EditPlaylist playlist={selectedPlaylist} onPlaylistModified={handlePlaylistEdit} />
-                    <Button className="" variant="danger" onClick={deletePlaylist}>&#10006;</Button>
+                    <Button className="" variant="danger" onClick={deletePlaylist}>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </Button>
                 </ButtonGroup>
             </Container>
             <PlaylistComponent 
@@ -142,7 +146,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({forcePlaylistRefresh, on
             </>
             }
             {
-                selectedPlaylist && selectedPlaylist.id &&
+                (!playlists || playlists.length === 0) && selectedPlaylist && selectedPlaylist.id &&
                 <>
                 <Container className="d-flex justify-content-center border py-2">
                     <Form.Select className="ms-3 me-2" name="playlists" id="playlist-select" value={selectedPlaylist.id}>

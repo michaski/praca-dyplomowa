@@ -1,3 +1,5 @@
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSettings";
@@ -24,8 +26,12 @@ const PositionSwitch: React.FC<PositionSwitchProps> = ({ playlist, metronomeSett
     return (
         <>
             <ButtonGroup className="me-1" vertical size="sm">
-                <Button className="mb-1" onClick={e => moveUp()}>&#9650;</Button>
-                <Button onClick={e => moveDown()}>&#9660;</Button>
+                <Button className="mb-1" onClick={e => moveUp()}>
+                    <FontAwesomeIcon icon={faChevronUp} />
+                </Button>
+                <Button onClick={e => moveDown()}>
+                    <FontAwesomeIcon icon={faChevronDown} />
+                </Button>
             </ButtonGroup>
         </>
     );

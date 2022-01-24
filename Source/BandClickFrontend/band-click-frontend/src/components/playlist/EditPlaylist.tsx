@@ -1,3 +1,5 @@
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, FormGroup, Modal, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -52,7 +54,9 @@ const EditPlaylist: React.FC<EditPlaylistProps> = ({playlist, onPlaylistModified
 
     return (
     <>
-    <Button className="mx-1" variant="warning" size="sm" onClick={openModal}>&#9998;</Button>
+    <Button className="mx-1" variant="warning" size="sm" onClick={openModal}>
+        <FontAwesomeIcon icon={faPen} />
+    </Button>
     <Modal
         show={showModal}
         onHide={onHide}

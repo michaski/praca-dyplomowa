@@ -42,6 +42,12 @@ export const playlistsStoreReducer: Reducer<PlaylistList, PlaylistActions> =
                 ]
             };
         }
+        if (actions.type === PlaylistStoreActions.DELETE_ALL_PLAYLISTS) {
+            return {
+                playlists: [],
+                selectedPlaylist: playlistIninialState
+            };
+        }
         let playlistState: Playlist | undefined = undefined;
         if (actions.type as PlaylistStoreActions && actions.playlist){
             playlistState = state.playlists.find(p => p.id === actions.playlist.id);

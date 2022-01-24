@@ -1,6 +1,10 @@
 @media screen and (min-width: 992px) {
-    .user-dropdown .dropdown-menu {
-        left: -100% !important;
+    .homepage-nav-items {
+        padding-left: 6em !important;
+    }
+    
+    .app-nav-items {
+        padding-left: 0.5em !important;
     }
 }
 
@@ -12,14 +16,6 @@
 .app-header * {
     color: #fff !important;
     background-color: #ae5a41 !important;
-}
-
-.homepage-nav-items {
-    padding-left: 6em !important;
-}
-
-.app-nav-items {
-    padding-left: 0.5em !important;
 }
 
 .nav-items div {

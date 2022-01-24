@@ -12,7 +12,7 @@ const ManagedBands = () => {
     const [selectedBand, setSelectedBand] = useState({} as Band);
 
     useEffect(() => {
-        BandService.getAll()
+        BandService.getAllManaged()
         .then(results => {
             if (results && results.length > 0) {
                 setBands(results);
@@ -39,10 +39,10 @@ const ManagedBands = () => {
     <>
     <LoggedInHeader />
     <Container fluid className="mt-4">
-        <AddBand onBandCreated={handleBandCreated} />
         {
         bands && bands.length > 0 && selectedBand && selectedBand.id &&
         <>
+        <AddBand onBandCreated={handleBandCreated} />
         <span className="mb-1 ms-3">lub wybierz z listy:</span>
         <Row className="mt-0">
             <Col md={12}>

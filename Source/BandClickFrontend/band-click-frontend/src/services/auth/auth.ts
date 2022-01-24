@@ -2,6 +2,9 @@ import { RegisterUser } from "../../models/Auth/RegisterUser";
 import { User } from "../../models/Auth/User";
 import store from "../../store";
 import { authAction } from "../../store/actions/auth.actions";
+import { metronomeSettingsAction } from "../../store/actions/metronomeSettings.actions";
+import { playlistAction } from "../../store/actions/playlists.actions";
+import { metronomeSettingsInitialState } from "../../store/reducers/metronomeSettings.reducer";
 import UserService from "../user/userService";
 import LoginService from "./loginService";
 
@@ -18,6 +21,8 @@ const auth = {
     logout: async () => {
         await LoginService.logout();
         store.dispatch(authAction.removeUser());
+        store.dispatch(playlistAction.deleteAllPlaylists());
+        store.dispatch(metronomeSettingsAction.loadSettings(metronomeSettingsInitialState));
     },
 
     register: async (userInfo: RegisterUser) => {

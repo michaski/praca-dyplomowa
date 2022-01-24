@@ -7,6 +7,8 @@ import MetronomeSettingsService from "../../services/metronomeSettings/metronome
 import { mapAccentMapToAccentedBeats } from "../../utils/metronomeSettings/mapAccents";
 import { useSelector } from "react-redux";
 import metronomeSettingsSelector from "../../store/selectors/metronomeSettings.selector";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 
 interface MetronomeSettingsOptionsProps {
     settings: MetronomeSettings,
@@ -55,7 +57,9 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
 
     return (
         <>
-        <Button className="me-1" variant="warning" size="sm" onClick={openModal}>&#9998;</Button>
+        <Button className="me-1" variant="warning" size="sm" onClick={openModal}>
+            <FontAwesomeIcon icon={faPen} />
+        </Button>
         {
             settings.type &&
             <Modal

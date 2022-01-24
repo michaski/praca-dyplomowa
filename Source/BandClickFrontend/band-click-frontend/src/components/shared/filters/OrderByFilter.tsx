@@ -25,7 +25,7 @@ const OrderByFilter: React.FC<OrderByFilterProps> = ({onOrderByValueChange}) => 
 
     return (
     <>
-    <FormGroup as={Row}>
+    <FormGroup as={Row} className="mt-2">
         <Form.Label column sm="4">
             Sortuj
         </Form.Label>

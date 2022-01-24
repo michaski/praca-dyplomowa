@@ -1,3 +1,5 @@
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux";
 import { useAction } from "../../hooks/useAction";
@@ -173,7 +175,9 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({id, refreshPlaylis
                                         <MetronomeSettingsOptions settings={selectedMetronomeSettings} onSettingsChanged={forceRefresh} />
                                         <button className="btn btn-sm btn-danger" onClick={() => {
                                             removeSettingFromPlaylist(setting);
-                                        }}>&#10006;</button>
+                                        }}>
+                                            <FontAwesomeIcon icon={faTimes} />
+                                        </button>
                                 </div>
                             </li>
                         );

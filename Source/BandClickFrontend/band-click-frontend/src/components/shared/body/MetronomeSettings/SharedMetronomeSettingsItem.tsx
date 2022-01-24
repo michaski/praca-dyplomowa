@@ -55,7 +55,7 @@ const SharedMetronomeSettingsItem: React.FC<SharedMetronomeSettingsItemProps> = 
                     <Button onClick={loadMetronomeSettings}>Wczytaj</Button>
                     {
                         user && user.systemRole === 'Admin' &&
-                        <Button variant="danger" onClick={deleteItem}>Usuń</Button>
+                        <Button className="mx-2" variant="danger" onClick={deleteItem}>Usuń</Button>
                     }
                 </ButtonGroup>
             </Col>

@@ -4,6 +4,11 @@
     font-family: "Roboto", sans-serif;
 }
 
+*::selection {
+    background-color: #58C2DB;
+    color: #fff;
+}
+
 .App {
     text-align: center;
 }
