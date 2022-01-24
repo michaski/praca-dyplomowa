@@ -27,6 +27,7 @@ const AddPlaylistToBand: React.FC<AddPlaylistToBandProps> = ({band, onPlaylistAd
             .then(result => {
                 if (result && result.length > 0) {
                     playlistActions.addPlaylists(result);
+                    setSelectedPlaylist(userPlaylists[0]);
                 }
             });
         }

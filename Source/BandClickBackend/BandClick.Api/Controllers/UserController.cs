@@ -28,7 +28,7 @@ namespace BandClickBackend.Api.Controllers
             var result = await _service.GetUserByEmailAsync(email);
             if (result is null)
             {
-                return NotFound();
+                return NotFound("Nie znaleziono użytkownika o podanym adresie email.");
             }
             return Ok(result);
         }
@@ -40,7 +40,7 @@ namespace BandClickBackend.Api.Controllers
             var result = await _service.GetUserByUsernameAsync(username);
             if (result is null)
             {
-                return NotFound();
+                return NotFound("Nie znaleziono użytkownika o podanej nazwie.");
             }
             return Ok(result);
         }
@@ -52,7 +52,7 @@ namespace BandClickBackend.Api.Controllers
             var result = await _service.GetUserByIdAsync(id);
             if (result is null)
             {
-                return NotFound();
+                return NotFound("Nie znaleziono użytkownika o podanym id.");
             }
             return Ok(result);
         }

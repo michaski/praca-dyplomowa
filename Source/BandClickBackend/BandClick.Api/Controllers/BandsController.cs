@@ -5,6 +5,7 @@ using BandClickBackend.Application.Dtos.Band;
 using BandClickBackend.Application.Dtos.User;
 using BandClickBackend.Application.Dtos.UserInBands;
 using BandClickBackend.Application.Interfaces;
+using BandClickBackend.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,10 +30,6 @@ namespace BandClickBackend.Api.Controllers
         public async Task<IActionResult> GetAllBandsWhichUserBelongsToAsync()
         {
             var result = await _service.GetAllBandsWhichUserBelongsToAsync();
-            if (!result.Any())
-            {
-                return NotFound();
-            }
             return Ok(result);
         }
 
@@ -41,10 +38,6 @@ namespace BandClickBackend.Api.Controllers
         public async Task<IActionResult> GetBandsWhereUserIsLeaderAsync()
         {
             var result = await _service.GetBandsWhereUserIsLeaderAsync();
-            if (!result.Any())
-            {
-                return NotFound();
-            }
             return Ok(result);
         }
 
@@ -67,7 +60,7 @@ namespace BandClickBackend.Api.Controllers
             var result = await _service.CreateAsync(name);
             if (result is null)
             {
-                return BadRequest();
+                return BadRequest("Nie udało się utworzyć zespołu.");
             }
             return Created($"{result.Id}", result);
         }
@@ -78,7 +71,7 @@ namespace BandClickBackend.Api.Controllers
         {
             if (!await _service.IsUserBandLeaderAsync(dto.Id))
             {
-                return Forbid();
+                throw new UserNotAllowedException("Dane zespołu mogą być aktualizowane tylko przez jego lidera.");
             }
             await _service.UpdateAsync(dto);
             return NoContent();
@@ -90,7 +83,7 @@ namespace BandClickBackend.Api.Controllers
         {
             if (!await _service.IsUserBandLeaderAsync(dto.BandId))
             {
-                return Forbid();
+                throw new UserNotAllowedException("Tylko lider może zarządzać składem zespołu.");
             }
             await _service.AddMemberAsync(dto);
             return NoContent();
@@ -102,7 +95,7 @@ namespace BandClickBackend.Api.Controllers
         {
             if (!await _service.IsUserBandLeaderAsync(dto.BandId))
             {
-                return Forbid();
+                throw new UserNotAllowedException("Tylko lider może zarządzać składem zespołu.");
             }
             await _service.PromoteMemberAsync(dto);
             return NoContent();
@@ -114,7 +107,7 @@ namespace BandClickBackend.Api.Controllers
         {
             if (!await _service.IsUserBandLeaderAsync(dto.BandId))
             {
-                return Forbid();
+                throw new UserNotAllowedException("Tylko lider może zarządzać składem zespołu.");
             }
             await _service.DemoteLeaderAsync(dto);
             return NoContent();
@@ -126,7 +119,7 @@ namespace BandClickBackend.Api.Controllers
         {
             if (!await _service.IsUserBandLeaderAsync(dto.BandId))
             {
-                return Forbid();
+                throw new UserNotAllowedException("Tylko lider może zarządzać składem zespołu.");
             }
             await _service.RemoveUserFromBandAsync(dto);
             return NoContent();
@@ -138,7 +131,7 @@ namespace BandClickBackend.Api.Controllers
         {
             if (!await _service.IsUserBandLeaderAsync(id))
             {
-                return Forbid();
+                throw new UserNotAllowedException("Dane zespołu mogą być aktualizowane tylko przez jego lidera.");
             }
             await _service.DeleteAsync(id);
             return NoContent();

@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { Col, FloatingLabel, Form, Row } from "react-bootstrap";
 import { useHistory } from "react-router";
+import { showAlert } from "../../components/alerts/Alert";
 import Header from "../../components/header/Header";
 import auth from "../../services/auth/auth";
+import LoginService from "../../services/auth/loginService";
 import './login.css';
 
 const Login = (props: any) => {

@@ -32,10 +32,6 @@ namespace BandClickBackend.Api.Controllers
         public async Task<IActionResult> GetAllForUser()
         {
             var result = await _metronomeSettingsService.GetAllSettingsForUserAsync();
-            if (!result.Any())
-            {
-                return NotFound();
-            }
             return Ok(result);
         }
 
@@ -84,7 +80,7 @@ namespace BandClickBackend.Api.Controllers
             var result = await _metronomeSettingsService.AddAsync(dto);
             if (result is null)
             {
-                return BadRequest();
+                return BadRequest("Nie udało się utworzyć pozycji.");
             }
             return Created($"{result.Id}", result);
         }
@@ -96,7 +92,7 @@ namespace BandClickBackend.Api.Controllers
             var comment = await _metronomeSettingsService.AddCommentAsync(dto);
             if (comment is null)
             {
-                return BadRequest();
+                return BadRequest("Nie udało się dodać komentarza.");
             }
             return Created($"comments/{comment.Id}", comment);
         }

@@ -1,8 +1,8 @@
 class RequestError {
     statusCode: number;
-    message: string;
+    message: any;
 
-    constructor(statusCode: number, message: string) {
+    constructor(statusCode: number, message: any) {
         this.statusCode = statusCode;
         this.message = message;
     }

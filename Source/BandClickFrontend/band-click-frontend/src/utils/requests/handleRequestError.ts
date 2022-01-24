@@ -1,3 +1,4 @@
+import { showAlert } from "../../components/alerts/Alert";
 import RequestError from "./requestError";
 import { RequestErrorStatusCodes } from "./statusCodes";
 
@@ -7,30 +8,38 @@ const handleRequestError = (error: any, navigateTo: Function) => {
         alert("Wystąpił błąd w komunikacji z serwerem.\nSprawdź wiadomość w konsoli.");
     }
     else if (error instanceof RequestError) {
+        let message = '';
         switch (error.statusCode) {
             case RequestErrorStatusCodes.BAD_REQUEST:
-                alert("Błąd zapytania (400 Bad Request).\nSprawdź wiadomość w konsoli.")
+                // alert(`Błąd zapytania (400 Bad Request).\nSprawdź wiadomość w konsoli.\n${message}`);
+                message = "Błąd.\n";
                 break;
             case RequestErrorStatusCodes.UNAUTHORIZED:
-                alert("Musisz być zalogowany.");
+                message = "Musisz być zalogowany.\n";
                 navigateTo("/login");
                 break;
             case RequestErrorStatusCodes.FORBIDDEN:
-                alert("Nie masz odpowiednich uprawnień.");
+                message = "Nie masz odpowiednich uprawnień.\n";
                 break;
             case RequestErrorStatusCodes.NOT_FOUND:
-                alert("Nie znaleziono");
+                message = "Nie znaleziono.\n";
                 navigateTo("/404");
                 break;
             case RequestErrorStatusCodes.SERVER_ERROR:
-                alert("Błąd serwera");
+                message = "Błąd serwera.\n";
                 navigateTo("/500");
                 break;
             default:
-                alert("Wystąpił nieznany błąd.\nSprawdź wiadomość w konsoli.");
+                message = "Wystąpił nieznany błąd.\n";
                 break;
         }
-        console.error(error.message);
+        let errors: any[] = error.message.errors;
+        let k: keyof typeof errors;
+        for (k in errors) {
+            message += `\n${k.toString()}:\n${errors[k].join('\n')}\n`;
+        } 
+        showAlert(message);
+        // console.error(error.message);
     }
 }
 

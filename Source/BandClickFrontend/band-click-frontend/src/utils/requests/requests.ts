@@ -6,15 +6,17 @@ const requests = {
     get: async (url: string, authToken: string = '', filters?: QueryFilters, onError?: Function, redirectCallback?: Function) => {
         try {
             const response = await http.get(url, filters, authToken) as any;
-            if (response) {
+            if (!response.errors) {
                 return response;
             }
         } catch (error) {
             if (onError) {
-                onError();
+                onError(error);
             } else {
                 handleRequestError(error, redirectCallback ? redirectCallback : (path: string) => {});
             }
+            // alert(error);
+            return error;
         }
     },
 
@@ -26,7 +28,7 @@ const requests = {
             }
         } catch (error) {
             if (onError) {
-                onError();
+                onError(error);
             } else {
                 handleRequestError(error, redirectCallback ? redirectCallback : (path: string) => {});
             }
@@ -41,7 +43,7 @@ const requests = {
             }
         } catch (error) {
             if (onError) {
-                onError();
+                onError(error);
             } else {
                 handleRequestError(error, redirectCallback ? redirectCallback : (path: string) => {});
             }
@@ -56,7 +58,7 @@ const requests = {
             }
         } catch (error) {
             if (onError) {
-                onError();
+                onError(error);
             } else {
                 handleRequestError(error, redirectCallback ? redirectCallback : (path: string) => {});
             }

@@ -42,7 +42,7 @@ namespace BandClickBackend.Api.Controllers
             var registeredUser = await _service.RegisterUserAsync(user);
             if (registeredUser is null)
             {
-                return BadRequest();
+                return BadRequest("Nie udało się utworzyć konta.");
             }
             return Created($"/api/users/{registeredUser.Id}", registeredUser);
         }

@@ -50,7 +50,7 @@ const MemberActionButtons: React.FC<MemberActionButtonsProps> = ({memberInfo, ba
         {
         memberInfo.bandRole !== 'Leader' &&
         <ButtonGroup size="sm">
-            <Button variant={"success"} onClick={handlePromoteMember}>Awansuj na lidera</Button>
+            <Button className="me-2" variant={"success"} onClick={handlePromoteMember}>Awansuj na lidera</Button>
             <Button variant={"danger"} onClick={handleMemberDelete}>Usuń z zespołu</Button>
         </ButtonGroup>
         }

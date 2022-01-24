@@ -1,0 +1,19 @@
+.alert-error {
+    position: fixed !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    margin: 0 2rem 1rem 0 !important;
+    z-index: 10000;
+    transition-duration: 300ms;
+    width: 35%;
+    height: 30%;
+}
+
+.alert-error p {
+    height: 80%;
+    overflow-y: scroll;
+}
+
+#error-alert-toggle {
+    visibility: none !important;
+}

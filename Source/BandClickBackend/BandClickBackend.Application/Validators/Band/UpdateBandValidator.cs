@@ -15,7 +15,8 @@ namespace BandClickBackend.Application.Validators.Band
         {
             RuleFor(dto => dto.Id)
                 .MustAsync(async (id, token) =>
-                    await repository.GetBandByIdAsync(id) is not null);
+                    await repository.GetBandByIdAsync(id) is not null)
+                .WithMessage("Nie znaleziono zespołu.");
             RuleFor(dto => dto.Name)
                 .NotEmpty()
                 .MinimumLength(1)

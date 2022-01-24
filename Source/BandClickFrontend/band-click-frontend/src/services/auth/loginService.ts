@@ -4,10 +4,10 @@ import requests from "../../utils/requests/requests";
 import { RegisterUser } from "../../models/Auth/RegisterUser";
 
 const LoginService = {
-    login: async (email: string, password: string) => {
-        const response = await requests.post(AUTH_LOGIN, {email: email, password: password}) as Token;
+    login: async (email: string, password: string, onError?: Function) => {
+        const response = await requests.post(AUTH_LOGIN, {email: email, password: password}, '', onError) as Token;
         if (response == null) {
-            alert("Login failed");
+            // alert("Login failed");
             return false;
         }
         localStorage.setItem('jwt', response.token);
@@ -21,7 +21,7 @@ const LoginService = {
     register: async (userInfo: RegisterUser) => {
         const response = await requests.post(AUTH_REGISTER, userInfo);
         if (response == null) {
-            alert("Register failed");
+            // alert("Register failed");
             return false;
         }
         return true;

@@ -28,7 +28,7 @@ namespace BandClickBackend.Application.Validators.User
                     if (userId != userContextService.UserId && 
                         user.SystemRole != systemRoleRepository.Admin)
                     {
-                        throw new UserNotAllowedException("Brak uprawnień.");
+                        throw new UserNotAllowedException("Dane użytkownika może modyfikować tylko właściciel konta lub administrator.");
                     }
                 });
             RuleFor(dto => dto.Username)

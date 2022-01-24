@@ -19,7 +19,7 @@ namespace BandClickBackend.Application.Validators.MetronomeSettings
             RuleFor(dto => dto.Tempo)
                 .NotEmpty()
                 .GreaterThan(20)
-                .LessThan(500);
+                .LessThan(300);
             RuleFor(dto => dto.PlaylistId)
                 .NotEmpty();
             RuleFor(dto => dto.TypeId)

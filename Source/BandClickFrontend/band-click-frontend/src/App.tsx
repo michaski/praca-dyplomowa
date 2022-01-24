@@ -14,6 +14,7 @@ import SharedItemDetailsPage from './views/shared/details/SharedItemDetailsPage'
 import EditAccount from './views/account/EditAccount';
 import './bootstrap.min.css';
 import './main.css';
+import ErrorAlert from './components/alerts/Alert';
 
 function App() {
   return (
@@ -33,6 +34,9 @@ function App() {
           </Switch>
         </Provider>
       </BrowserRouter>
+      <div id="alert-container">
+        {/* <ErrorAlert visible={false} text='' /> */}
+      </div>
     </div>
   );
 }

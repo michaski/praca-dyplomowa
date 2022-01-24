@@ -5,6 +5,7 @@ using BandClickBackend.Application.Dtos.Playlist;
 using BandClickBackend.Application.Dtos.PlaylistComment;
 using BandClickBackend.Application.Interfaces;
 using BandClickBackend.Domain.Common;
+using BandClickBackend.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,10 +32,6 @@ namespace BandClickBackend.Api.Controllers
         public async Task<IActionResult> GetAllPlaylistsForUserAsync()
         {
             var result = await _service.GetAllPlaylistsForUserAsync();
-            if (!result.Any())
-            {
-                return NotFound();
-            }
             return Ok(result);
         }
 
@@ -76,7 +73,7 @@ namespace BandClickBackend.Api.Controllers
             var result = await _service.AddPlaylistAsync(dto);
             if (result is null)
             {
-                return BadRequest();
+                return BadRequest("Nie udało się utworzyć playlisty.");
             }
             return Ok(result);
         }
@@ -88,7 +85,7 @@ namespace BandClickBackend.Api.Controllers
             var comment = await _service.AddCommentAsync(dto);
             if (comment is null)
             {
-                return BadRequest();
+                return BadRequest("Nie udało się dodać komentarza.");
             }
             return Created($"comments/{comment.Id}", comment);
         }
@@ -147,7 +144,7 @@ namespace BandClickBackend.Api.Controllers
         {
             if (!await _bandService.IsUserBandLeaderAsync(bandId))
             {
-                return Forbid();
+                throw new UserNotAllowedException("Playlistami w zespole może zarządzać tylko jego lider.");
             }
             await _service.ShareInBandAsync(playlistId, bandId);
             return NoContent();
@@ -159,7 +156,7 @@ namespace BandClickBackend.Api.Controllers
         {
             if (!await _bandService.IsUserBandLeaderAsync(bandId))
             {
-                return Forbid();
+                throw new UserNotAllowedException("Playlistami w zespole może zarządzać tylko jego lider.");
             }
             await _service.RemoveFromBandAsync(playlistId, bandId);
             return NoContent();
