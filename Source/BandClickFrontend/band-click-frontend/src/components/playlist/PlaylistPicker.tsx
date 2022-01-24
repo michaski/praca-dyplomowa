@@ -8,6 +8,7 @@ import { MetronomeSettings } from "../../models/MetronomeSettings/MetronomeSetti
 import { Playlist } from "../../models/Playlists/Playlist";
 import PlaylistService from "../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../services/playlists/playlistStoreService";
+import { playlistAction } from "../../store/actions/playlists.actions";
 import playlistSelector from "../../store/selectors/playlist.selector";
 import AddPlaylist from "./AddPlaylist";
 import EditPlaylist from "./EditPlaylist";
@@ -48,22 +49,43 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
     }, []);
 
     const getPlaylists = () => {
-        if (!selectedPlaylist.id) {
-            PlaylistService.getAll()
+        PlaylistService.getAll()
             .then(result => {
+                if (selectedPlaylist.id) {
+                    fetchPlaylistInfo(selectedPlaylist.id);
+                    // setSelectedPlaylistId(selectedPlaylist.id);
+                } 
                 if(result && result.length > 0) {
                     setPlaylists(result);
                     playlistActions.addPlaylists(result);
-                    fetchPlaylistInfo(result[playlistIndex.current].id);
-                    setSelectedPlaylistId(result[playlistIndex.current].id);
+                    if (!selectedPlaylist.id || selectedPlaylist.id === '') {
+                        fetchPlaylistInfo(result[playlistIndex.current].id);
+                    }
+                    // setSelectedPlaylistId(result[playlistIndex.current].id);
                 }
+                if (playlistId) {
+                    fetchPlaylistInfo(playlistId);
+                    // setSelectedPlaylistId(playlistId);
+                }
+                playlistIndex.current = playlistsStore.indexOf(selectedPlaylist);
+                onSelectedPlaylistChange(selectedPlaylist.id);
             });
-        } else {
-            fetchPlaylistInfo(selectedPlaylist.id);
-            setSelectedPlaylistId(selectedPlaylist.id);
-            playlistIndex.current = playlistsStore.indexOf(selectedPlaylist);
-            onSelectedPlaylistChange(selectedPlaylist.id);
-        }
+        // if (!selectedPlaylist.id) {
+        //     PlaylistService.getAll()
+        //     .then(result => {
+        //         if(result && result.length > 0) {
+        //             setPlaylists(result);
+        //             playlistActions.addPlaylists(result);
+        //             fetchPlaylistInfo(result[playlistIndex.current].id);
+        //             setSelectedPlaylistId(result[playlistIndex.current].id);
+        //         }
+        //     });
+        // } else {
+        //     fetchPlaylistInfo(selectedPlaylist.id);
+        //     setSelectedPlaylistId(selectedPlaylist.id);
+        //     playlistIndex.current = playlistsStore.indexOf(selectedPlaylist);
+        //     onSelectedPlaylistChange(selectedPlaylist.id);
+        // }
     }
 
     const handleSelectedSettingsChanged = (settings: MetronomeSettings) => {
@@ -73,8 +95,20 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
     const fetchPlaylistInfo = (playlistId: string) => {
         PlaylistService.getById(playlistId)
             .then(playlistInfo => {
-                playlistActions.editPlaylist(playlistInfo);
-                playlistActions.setSelectedPlaylist(playlistInfo);
+                if (playlistInfo && playlistInfo.id) {
+                    if (playlistsStore.find(p => p.id === playlistInfo.id)) {
+                        playlistActions.editPlaylist(playlistInfo);
+                    } else {
+                        playlistActions.addPlaylist(playlistInfo);
+                    }
+                    playlistActions.setSelectedPlaylist(playlistInfo);
+                    setPlaylists(previous => {
+                        let filtered = previous.filter(p => p.id !== playlistInfo.id);
+                        filtered.push(playlistInfo);
+                        return filtered;
+                    });
+                    setSelectedPlaylistId(playlistInfo.id);
+                }
             });
     }
 
@@ -98,14 +132,16 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
 
     const deletePlaylist = () => {
         PlaylistService.delete(selectedPlaylistId)
-        .then(_ => {
-            const deletedPlaylist = playlistsStore.find(p => p.id === selectedPlaylistId);
-            if (deletedPlaylist) {
-                playlistActions.deletePlaylist(deletedPlaylist);
-                setPlaylists(playlists.filter(p => p.id !== selectedPlaylistId));
-                playlistActions.setSelectedPlaylist(playlistsStore[0]);
-                setSelectedPlaylistId(playlists[0].id);
-                playlistIndex.current = 0;
+        .then(response => {
+            if (response !== null) {
+                const deletedPlaylist = playlistsStore.find(p => p.id === selectedPlaylistId);
+                if (deletedPlaylist) {
+                    playlistActions.deletePlaylist(deletedPlaylist);
+                    setPlaylists(playlists.filter(p => p.id !== selectedPlaylistId));
+                    playlistActions.setSelectedPlaylist(playlistsStore[0]);
+                    setSelectedPlaylistId(playlists[0].id);
+                    playlistIndex.current = 0;
+                }
             }
         });
     }

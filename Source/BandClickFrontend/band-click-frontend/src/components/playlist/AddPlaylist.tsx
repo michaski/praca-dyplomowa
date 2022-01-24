@@ -24,7 +24,9 @@ const AddPlaylist: React.FC<AddPlaylistProps> = ({onPlaylistCreated}) => {
         PlaylistService.create({
             name: name
         }).then(result => {
-            onPlaylistCreated(result);
+            if (result && result.id) {
+                onPlaylistCreated(result);
+            }
         });
         setShowModal(false);
     }

@@ -36,7 +36,7 @@ const EditablePlaylistList: React.FC<EditablePlaylistListProps> = ({playlists, b
                                     onPlaylistDeleted={handleBandInfoChanged} />
                             </Accordion.Header>
                             <Accordion.Body>
-                                <ListGroup as="ol" numbered>
+                                <ListGroup as="ol" numbered className="text-start">
                                     {
                                         playlists[parentIndex].metronomeSettings &&
                                         playlists[parentIndex].metronomeSettings.map((settings, childIndex) => {

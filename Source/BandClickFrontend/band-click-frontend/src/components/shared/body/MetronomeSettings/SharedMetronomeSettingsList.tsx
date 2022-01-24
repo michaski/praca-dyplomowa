@@ -38,7 +38,7 @@ const SharedMetronomeSettingsList: React.FC<SharedMetronomeSettingsListProps> = 
             pageSize: pageSize
         })
         .then(result => {
-            if (result && result.items.length >= 0) {
+            if (result && result.items && result.items.length >= 0) {
                 setSettings(result);
                 onPaginationDataCollected(result.totalPages, result.itemsFrom, result.itemsTo, result.totalItemsCount);
             }

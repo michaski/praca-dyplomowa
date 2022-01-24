@@ -33,8 +33,10 @@ const SharedMetronomeSettingsItem: React.FC<SharedMetronomeSettingsItemProps> = 
 
     const deleteItem = () => {
         MetronomeSettingsService.removeFromSharedInApp(metronomeSettings.id)
-        .then(_ => {
-            onItemDeleted();
+        .then(response => {
+            if (response !== null) {
+                onItemDeleted();
+            }
         });
     }
 

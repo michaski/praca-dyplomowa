@@ -5,7 +5,7 @@ import auth from "../auth/auth";
 
 const MetreService = {
     updateMetre: async (metre: Metre) => {
-        await requests.put(METRE_CONTROLLER, metre, auth.getToken());
+        return await requests.put(METRE_CONTROLLER, metre, auth.getToken());
     }
 }
 

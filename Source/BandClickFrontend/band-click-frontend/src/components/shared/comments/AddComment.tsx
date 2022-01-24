@@ -18,15 +18,21 @@ const AddComment: React.FC<AddCommentProps> = ({subject, subjectId, onCommentAdd
             MetronomeSettingsService.addComment({
                 metronomeSettingsId: subjectId,
                 text: commentText
-            }).then(_ => {
-                onCommentAdded();
+            }).then(comment => {
+                if (comment && comment.id) {
+                    onCommentAdded();
+                    setCommentText('');
+                }
             });
         } else if (subject === 'playlist') {
             PlaylistService.addComment({
                 playlistId: subjectId,
                 text: commentText
-            }).then(_ => {
-                onCommentAdded();
+            }).then(comment => {
+                if (comment && comment.id) {
+                    onCommentAdded();
+                    setCommentText('');
+                }
             });
         }
     }
@@ -35,7 +41,7 @@ const AddComment: React.FC<AddCommentProps> = ({subject, subjectId, onCommentAdd
     <>
     <Form.Group className="mb-3 mt-4" controlId="exampleForm.ControlTextarea1">
         <Form.Label className="d-flex">Dodaj komentarz</Form.Label>
-        <Form.Control className="mb-2" as="textarea" placeholder="Treść komentarza..." onChange={e => {
+        <Form.Control className="mb-2" as="textarea" placeholder="Treść komentarza..." value={commentText} onChange={e => {
             setCommentText(e.target.value);
         }} />
         <Button onClick={addComment}>Dodaj</Button>

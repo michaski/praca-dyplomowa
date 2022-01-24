@@ -51,17 +51,21 @@ const RaitingButtons: React.FC<RaitingButtonsProps> = ({subject, subjectId, posi
     const removeRaiting = () => {
         if (subject === 'metronomeSettings') {
             MetronomeSettingsService.removeUserRaiting(subjectId)
-            .then(_ => {
-                setUserHasGivenRaiting(false)
-                setIsUserRaitingPositive(undefined);
-                onUserHasGivenRaiting();
+            .then(response => {
+                if (response !== null) {
+                    setUserHasGivenRaiting(false)
+                    setIsUserRaitingPositive(undefined);
+                    onUserHasGivenRaiting();
+                }
             });
         } else if (subject === 'playlist') {
             PlaylistService.removeUserRaiting(subjectId)
-            .then(_ => {
-                setUserHasGivenRaiting(false)
-                setIsUserRaitingPositive(undefined);
-                onUserHasGivenRaiting();
+            .then(response => {
+                if (response !== null) {
+                    setUserHasGivenRaiting(false)
+                    setIsUserRaitingPositive(undefined);
+                    onUserHasGivenRaiting();
+                }
             });
         }
     }
@@ -70,33 +74,41 @@ const RaitingButtons: React.FC<RaitingButtonsProps> = ({subject, subjectId, posi
         if (subject === 'metronomeSettings') {
             if (isPositive) {
                 MetronomeSettingsService.addPositiveRaiting(subjectId)
-                .then(_ => {
-                    setUserHasGivenRaiting(true);
-                    setIsUserRaitingPositive(true);
-                    onUserHasGivenRaiting();
+                .then(response => {
+                    if (response !== null) {
+                        setUserHasGivenRaiting(true);
+                        setIsUserRaitingPositive(true);
+                        onUserHasGivenRaiting();
+                    }
                 });
             } else {
                 MetronomeSettingsService.addNegativeRaiting(subjectId)
-                .then(_ => {
-                    setUserHasGivenRaiting(true);
-                    setIsUserRaitingPositive(false);
-                    onUserHasGivenRaiting();
+                .then(response => {
+                    if (response !== null) {
+                        setUserHasGivenRaiting(true);
+                        setIsUserRaitingPositive(false);
+                        onUserHasGivenRaiting();
+                    }
                 });
             }
         } else if (subject === 'playlist') {
             if (isPositive) {
                 PlaylistService.addPositiveRaiting(subjectId)
-                .then(_ => {
-                    setUserHasGivenRaiting(true);
-                    setIsUserRaitingPositive(true);
-                    onUserHasGivenRaiting();
+                .then(response => {
+                    if (response !== null) {
+                        setUserHasGivenRaiting(true);
+                        setIsUserRaitingPositive(true);
+                        onUserHasGivenRaiting();
+                    }
                 });
             } else {
                 PlaylistService.addNegativeRaiting(subjectId)
-                .then(_ => {
-                    setUserHasGivenRaiting(true);
-                    setIsUserRaitingPositive(false);
-                    onUserHasGivenRaiting();
+                .then(response => {
+                    if (response !== null) {
+                        setUserHasGivenRaiting(true);
+                        setIsUserRaitingPositive(false);
+                        onUserHasGivenRaiting();
+                    }
                 });
             }
         }

@@ -35,7 +35,7 @@ function App() {
         </Provider>
       </BrowserRouter>
       <div id="alert-container">
-        {/* <ErrorAlert visible={false} text='' /> */}
+        <ErrorAlert visible={false} text='' />
       </div>
     </div>
   );

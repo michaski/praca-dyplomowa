@@ -25,7 +25,7 @@ const AddPlaylistToBand: React.FC<AddPlaylistToBandProps> = ({band, onPlaylistAd
         if ((band && band.id) && !userPlaylists || userPlaylists.length === 0) {
             PlaylistService.getAll()
             .then(result => {
-                if (result && result.length > 0) {
+                if (result && result.length > 0 && result[0].id) {
                     playlistActions.addPlaylists(result);
                     setSelectedPlaylist(userPlaylists[0]);
                 }
@@ -47,15 +47,23 @@ const AddPlaylistToBand: React.FC<AddPlaylistToBandProps> = ({band, onPlaylistAd
             PlaylistService.create({
                 name: name
             }).then(result => {
-                PlaylistService.shareInBand(result.id, band.id)
-                .then(_ => {
-                    onPlaylistAdded();
-                });
+                if (result && result.id) {
+                    PlaylistService.shareInBand(result.id, band.id)
+                    .then(response => {
+                        if (response !== null) {
+                            onPlaylistAdded();
+                        }
+                    });
+                }
+                
             });
         } else {
             PlaylistService.shareInBand(selectedPlaylist.id, band.id)
-            .then(_ => {
-                onPlaylistAdded();
+            .then(response => {
+                console.log(response);
+                if (response !== null) {
+                    onPlaylistAdded();
+                }
             });
         }
         setShowModal(false);

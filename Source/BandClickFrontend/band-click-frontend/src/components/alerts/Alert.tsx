@@ -28,7 +28,7 @@ const ErrorAlert: React.FC<ErrorAlertProps> = ({visible, text}) => {
     // }, [visible]);
         return (
         <Alert id="error-alert" className={`alert-error text-start d-none`} variant="danger" dismissible onClose={e => {
-            document.querySelector("#error-alert")?.classList.toggle('d-none');
+            document.querySelector("#error-alert")?.classList.add('d-none');
             setShow(false);
         }}>
             <Alert.Heading>Błąd</Alert.Heading>
@@ -43,10 +43,6 @@ const ErrorAlert: React.FC<ErrorAlertProps> = ({visible, text}) => {
 export default ErrorAlert;
 
 export const showAlert = (message: string) => {
-    ReactDOM.render(
-        <ErrorAlert visible={true} text={message} />,
-        document.querySelector('#alert-container')
-    );
     (document.querySelector('#error-alert-text') as HTMLParagraphElement).innerText = message;
-    document.querySelector("#error-alert")?.classList.toggle('d-none');
+    (document.querySelector("#error-alert") as HTMLDivElement).classList.remove('d-none');
 };

@@ -47,7 +47,10 @@ const requestFunction = <R>(url: string,
             } else {
                 reject(new RequestError(res.status, data));
             }
-        }))
+        }).catch(error => {
+            return undefined;
+        })
+        )
         .then(json => resolve(json))
         .catch(err => reject(err));
     });

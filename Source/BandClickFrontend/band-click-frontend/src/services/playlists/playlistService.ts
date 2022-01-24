@@ -35,37 +35,37 @@ const PlaylistService = {
         return result;
     },
     update: async (playlistData: UpdatePlaylist) => {
-        await requests.put(PLAYLISTS_CONTROLLER, playlistData, auth.getToken());
+        return await requests.put(PLAYLISTS_CONTROLLER, playlistData, auth.getToken());
     },
     addPositiveRaiting: async (playlistId: string) => {
-        await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/raitings/positive/add`, null, auth.getToken());
+        return await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/raitings/positive/add`, null, auth.getToken());
     },
     addNegativeRaiting: async (playlistId: string) => {
-        await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/raitings/negative/add`, null, auth.getToken());
+        return await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/raitings/negative/add`, null, auth.getToken());
     },
     removeUserRaiting: async (playlistId: string) => {
-        await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/raitings/remove`, null, auth.getToken());
+        return await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/raitings/remove`, null, auth.getToken());
     },
     shareInBand: async (playlistId: string, bandId: string) => {
-        await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/shareInBand/${bandId}`, null, auth.getToken());
+        return await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/shareInBand/${bandId}`, null, auth.getToken());
     },
     removeFromBand: async (playlistId: string, bandId: string) => {
-        await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/removeFromBand/${bandId}`, null, auth.getToken());
+        return await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/removeFromBand/${bandId}`, null, auth.getToken());
     },
     shareInApp: async (playlistId: string) => {
-        await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/shareInApp`, null, auth.getToken());
+        return await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/shareInApp`, null, auth.getToken());
     },
     removeFromSharedInApp: async (playlistId: string) => {
-        await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/removeFromSharedInApp`, null, auth.getToken());
+        return await requests.put(`${PLAYLISTS_CONTROLLER}/${playlistId}/removeFromSharedInApp`, null, auth.getToken());
     },
     editComment: async (commentData: CommentTransfer) => {
-        await requests.put(`${PLAYLISTS_CONTROLLER}/comments/edit`, commentData, auth.getToken());
+        return await requests.put(`${PLAYLISTS_CONTROLLER}/comments/edit`, commentData, auth.getToken());
     },
     delete: async (id: string) => {
-        await requests.delete(`${PLAYLISTS_CONTROLLER}/${id}`, null, auth.getToken());
+        return await requests.delete(`${PLAYLISTS_CONTROLLER}/${id}`, null, auth.getToken());
     },
     deleteComment: async (commentId: string) => {
-        await requests.delete(`${PLAYLISTS_CONTROLLER}/comments/delete/${commentId}`, null, auth.getToken());
+        return await requests.delete(`${PLAYLISTS_CONTROLLER}/comments/delete/${commentId}`, null, auth.getToken());
     }
 }
 

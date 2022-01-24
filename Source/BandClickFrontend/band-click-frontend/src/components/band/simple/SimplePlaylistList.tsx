@@ -31,7 +31,7 @@ const SimplePlaylistList: React.FC<SimplePlaylistListProps> = ({playlists, onPla
                                 <Button size="sm" className="ms-3" onClick={() => handlePlaylistLoad(playlist)}>Wczytaj</Button>
                             </Accordion.Header>
                             <Accordion.Body>
-                                <ListGroup as="ol" numbered>
+                                <ListGroup as="ol" numbered className="text-start">
                                     {
                                         playlists[parentIndex].metronomeSettings &&
                                         playlists[parentIndex].metronomeSettings.map((settings, childIndex) => {

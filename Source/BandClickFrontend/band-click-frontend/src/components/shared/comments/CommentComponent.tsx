@@ -33,16 +33,20 @@ const CommentComponent: React.FC<CommentComponentProps> = ({comment, subject, on
                 id: comment.id,
                 text: commentText
             })
-            .then(_ => {
-                onCommentDeleted();
+            .then(response => {
+                if (response !== null) {
+                    onCommentDeleted();
+                }
             });
         } else if (subject === 'playlist') {
             PlaylistService.editComment({
                 id: comment.id,
                 text: commentText
             })
-            .then(_ => {
-                onCommentDeleted();
+            .then(response => {
+                if (response !== null) {
+                    onCommentDeleted();
+                }
             });
         }
         setShowModal(false);
@@ -51,13 +55,17 @@ const CommentComponent: React.FC<CommentComponentProps> = ({comment, subject, on
     const deleteComment = () => {
         if (subject === 'metronomeSettings') {
             MetronomeSettingsService.deleteComment(comment.id)
-            .then(_ => {
-                onCommentDeleted();
+            .then(response => {
+                if (response !== null) {
+                    onCommentDeleted();
+                }
             });
         } else if (subject === 'playlist') {
             PlaylistService.deleteComment(comment.id)
-            .then(_ => {
-                onCommentDeleted();
+            .then(response => {
+                if (response !== null) {
+                    onCommentDeleted();
+                }
             });
         }
     }

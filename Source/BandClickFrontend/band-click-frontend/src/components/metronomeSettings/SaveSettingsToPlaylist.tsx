@@ -10,6 +10,7 @@ import MetronomeSettingsService from "../../services/metronomeSettings/metronome
 import metronomeSettingsSelector from "../../store/selectors/metronomeSettings.selector";
 import playlistSelector from "../../store/selectors/playlist.selector";
 import { PlaylistStoreService } from "../../services/playlists/playlistStoreService";
+import { showAlert } from "../alerts/Alert";
 
 interface SaveSettingsToPlaylistProps {
     onSettingsAdded: Function
@@ -29,8 +30,10 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
     useEffect(() => {
         MetronomeSettingsService.getTypes()
             .then(types => {
-                setSettingsTypes(types);
-                selectedTypeId.current = types[0].id;
+                if (types && types[0] && types[0].id) {
+                    setSettingsTypes(types);
+                    selectedTypeId.current = types[0].id;
+                }
             });
     }, [selectedTypeId]);
 
@@ -43,7 +46,7 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
 
     const addSettingsToPlaylist = () => {
         if (!selectedPlaylist || !selectedPlaylist.id) {
-            alert('Nie wybrano playlisty');
+            showAlert('Nie wybrano playlisty');
             handleClose();
             return;
         }
@@ -61,10 +64,12 @@ const SaveSettingsToPlaylist: React.FC<SaveSettingsToPlaylistProps> = ({onSettin
             playlistId: selectedPlaylist.id,
             typeId: selectedTypeId.current
         }).then(createdSetting => {
-            let modifiedPlaylist = selectedPlaylist;
-            modifiedPlaylist.metronomeSettings.push(createdSetting);
-            playlistActions.editPlaylist(modifiedPlaylist);
-            onSettingsAdded();
+            if (createdSetting && createdSetting.id) {
+                let modifiedPlaylist = selectedPlaylist;
+                modifiedPlaylist.metronomeSettings.push(createdSetting);
+                playlistActions.editPlaylist(modifiedPlaylist);
+                onSettingsAdded();
+            }
         });
         handleClose();
     }

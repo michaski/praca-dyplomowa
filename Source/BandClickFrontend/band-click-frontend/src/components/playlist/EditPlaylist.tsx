@@ -46,31 +46,37 @@ const EditPlaylist: React.FC<EditPlaylistProps> = ({playlist, onPlaylistModified
                 id: playlist.id,
                 name: modifiedName
             })
-            .then(_ => {
-                if (isShared !== storeState.isShared) {
-                    PlaylistService.shareInApp(playlist.id)
-                    .then(_ => {
+            .then(result => {
+                if (result !== null) {
+                    if (isShared !== storeState.isShared) {
+                        PlaylistService.shareInApp(playlist.id)
+                        .then(response => {
+                            if (response !== null) {
+                                onPlaylistModified(modifiedPlaylist);
+                            }
+                        });
+                    } else {
                         onPlaylistModified(modifiedPlaylist);
-                    });
-                } else {
-                    onPlaylistModified(modifiedPlaylist);
+                    }
                 }
             });
         } else {
-            await http.put(`${PLAYLISTS_CONTROLLER}/?bandId=${bandId}`, {
+            const result = await http.put(`${PLAYLISTS_CONTROLLER}/?bandId=${bandId}`, {
                 id: playlist.id,
                 name: modifiedName
-            }, auth.getToken()).then(_ => {
-                alert('Api call finished');
+            }, auth.getToken()) as any;
+            if (result !== null) {
                 if (isShared !== storeState.isShared && user.username === playlist.author) {
                     PlaylistService.shareInApp(playlist.id)
-                    .then(_ => {
-                        onPlaylistModified(modifiedPlaylist);
+                    .then(response => {
+                        if (response !== null) {
+                            onPlaylistModified(modifiedPlaylist);
+                        }
                     });
                 } else {
                     onPlaylistModified(modifiedPlaylist);
                 }
-            });
+            }
         }
         setShowModal(false);
     }
@@ -111,7 +117,7 @@ const EditPlaylist: React.FC<EditPlaylistProps> = ({playlist, onPlaylistModified
         </Modal.Body>
         <Modal.Footer>
             <Button className="btn btn-secondary" onClick={onHide}>Anuluj</Button>
-            <Button className="btn btn-primary" onClick={onSave}>Zapisz</Button>
+            <Button className="btn btn-primary" onClick={async (e) => await onSave()}>Zapisz</Button>
         </Modal.Footer>
     </Modal>
     </>    

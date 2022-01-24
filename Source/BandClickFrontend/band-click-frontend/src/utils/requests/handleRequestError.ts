@@ -5,7 +5,7 @@ import { RequestErrorStatusCodes } from "./statusCodes";
 const handleRequestError = (error: any, navigateTo: Function) => {
     if (typeof error === "string") {
         console.error(error);
-        alert("Wystąpił błąd w komunikacji z serwerem.\nSprawdź wiadomość w konsoli.");
+        showAlert("Wystąpił błąd w komunikacji z serwerem.\nSprawdź wiadomość w konsoli.");
     }
     else if (error instanceof RequestError) {
         let message = '';
@@ -15,7 +15,7 @@ const handleRequestError = (error: any, navigateTo: Function) => {
                 message = "Błąd.\n";
                 break;
             case RequestErrorStatusCodes.UNAUTHORIZED:
-                message = "Musisz być zalogowany.\n";
+                message = "Odmowa dostępu.\n";
                 navigateTo("/login");
                 break;
             case RequestErrorStatusCodes.FORBIDDEN:
@@ -33,13 +33,31 @@ const handleRequestError = (error: any, navigateTo: Function) => {
                 message = "Wystąpił nieznany błąd.\n";
                 break;
         }
-        let errors: any[] = error.message.errors;
-        let k: keyof typeof errors;
-        for (k in errors) {
-            message += `\n${k.toString()}:\n${errors[k].join('\n')}\n`;
-        } 
+        let k1: keyof typeof error.message;
+        let errorMessage = error.message;
+        if (typeof errorMessage === 'string') {
+            message += `${errorMessage}\n`;
+        } else {
+            for (k1 in errorMessage) {
+                if (typeof errorMessage[k1] === 'object') {
+                    let errors: any[] = errorMessage[k1];
+                    let k2: keyof typeof errors;
+                    for (k2 in errors) {
+                        if (typeof errors[k2] === 'object') {
+                            console.log(`>> ${k2.toString()}`)
+                            console.log(`>> ${errors[k2]}`)
+                            message += `\n${k2.toString()}:\n${errors[k2].join('\n')}\n`;
+                        }
+                    } 
+                    continue;
+                }
+                else if (typeof errorMessage[k1] === 'string' && (k1.toString() === 'errorMessage' || k1.toString() === 'error')) {
+                    console.log(`<< ${errorMessage[k1]}`)
+                    message += `${errorMessage[k1]}`;
+                }
+            }
+        }
         showAlert(message);
-        // console.error(error.message);
     }
 }
 

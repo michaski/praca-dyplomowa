@@ -32,8 +32,11 @@ const BandActionButtons: React.FC<BandActionButtonsProps> = ({band, onBandUpdate
     }
 
     const deleteBand = () => {
-        BandService.delete(band.id).then(_ => {
-            onBandDeleted(band);
+        BandService.delete(band.id).then(response => {
+            console.log(response);
+            if (response !== null) {
+                onBandDeleted(band);
+            }
         });
     }
 

@@ -32,8 +32,10 @@ const SharedPlaylistItem: React.FC<SharedPlaylistItemProps> = ({playlist, onItem
 
     const deleteItem = () => {
         PlaylistService.removeFromSharedInApp(playlist.id)
-        .then(_ => {
-            onItemDeleted();
+        .then(response => {
+            if (response !== null) {
+                onItemDeleted();
+            }
         });
     }
 

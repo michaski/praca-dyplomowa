@@ -51,8 +51,10 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({
         }
         PlaylistService.getById(id)
             .then(result => {
-                playlistActions.editPlaylist(result);
-                playlistActions.setSelectedPlaylist(result);
+                if (result && result.id) {
+                    playlistActions.editPlaylist(result);
+                    playlistActions.setSelectedPlaylist(result);
+                }
             });
     }
 
@@ -72,12 +74,19 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({
     const removeSettingFromPlaylist = (setting: MetronomeSettings) => {
         MetronomeSettingsService.removeFromPlaylist(setting.id, playlistData.id)
             .then(result => {
-                MetronomeSettingsService.delete(setting.id);
-                let modifiedPlaylist = playlistData;
-                modifiedPlaylist.metronomeSettings = modifiedPlaylist.metronomeSettings.filter(ms => ms.id !== setting.id);
-                playlistActions.editPlaylist(modifiedPlaylist);
-                onSelectedSettingsChanged(metronomeSettingsInitialState);
-                forceRefresh();
+                if (result !== null) {
+                    console.log(result);
+                    MetronomeSettingsService.delete(setting.id)
+                    .then(response => {
+                        if (response !== null) {
+                            let modifiedPlaylist = playlistData;
+                            modifiedPlaylist.metronomeSettings = modifiedPlaylist.metronomeSettings.filter(ms => ms.id !== setting.id);
+                            playlistActions.editPlaylist(modifiedPlaylist);
+                            onSelectedSettingsChanged(metronomeSettingsInitialState);
+                            forceRefresh();
+                        }
+                    });
+                }
             });
     }
 
@@ -86,12 +95,14 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({
         MetronomeSettingsService.moveUpInPlaylist(
             setting.id,
             playlistState.id)
-            .then(_ => {
-                getPlaylistData();
-                forceRefresh();
-                previouslySelectedEmelentIndex.current--;
-                const element = document.querySelector(`#metronome-setting-${previouslySelectedEmelentIndex.current}`);
-                element?.classList.add('selected-setting');
+            .then(response => {
+                if (response !== null) {
+                    getPlaylistData();
+                    forceRefresh();
+                    previouslySelectedEmelentIndex.current--;
+                    const element = document.querySelector(`#metronome-setting-${previouslySelectedEmelentIndex.current}`);
+                    element?.classList.add('selected-setting');
+                }
             });
     }
 
@@ -100,12 +111,14 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({
         MetronomeSettingsService.moveDownInPlaylist(
             setting.id,
             playlistState.id)
-            .then(_ => {
-                getPlaylistData();
-                forceRefresh();
-                previouslySelectedEmelentIndex.current++;
-                const element = document.querySelector(`#metronome-setting-${previouslySelectedEmelentIndex.current}`);
-                element?.classList.add('selected-setting');
+            .then(response => {
+                if (response !== null) {
+                    getPlaylistData();
+                    forceRefresh();
+                    previouslySelectedEmelentIndex.current++;
+                    const element = document.querySelector(`#metronome-setting-${previouslySelectedEmelentIndex.current}`);
+                    element?.classList.add('selected-setting');
+                }
             });
     }
 

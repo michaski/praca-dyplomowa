@@ -44,50 +44,54 @@ const MetronomeSettingsService = {
         return result;
     },
     update: async (metronomeSettingsData: UpdateMetronomeSettings, metreData: Metre) => {
-        await requests.put(METRONOME_SETTINGS_CONTROLLER, metronomeSettingsData, auth.getToken());
-        await MetreService.updateMetre(metreData);
+        const metronomeSettings = await requests.put(METRONOME_SETTINGS_CONTROLLER, metronomeSettingsData, auth.getToken());
+        const metre = await MetreService.updateMetre(metreData);
+        return {
+            metronomeSettings,
+            metre
+        };
     },
     changeType: async (metronomeSettingId: string, typeId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/changeType/${typeId}`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/changeType/${typeId}`, null, auth.getToken());
     },
     addPositiveRaiting: async (metronomeSettingId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/raitings/positive/add`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/raitings/positive/add`, null, auth.getToken());
     },
     addNegativeRaiting: async (metronomeSettingId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/raitings/negative/add`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/raitings/negative/add`, null, auth.getToken());
     },
     removeUserRaiting: async (metronomeSettingId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/raitings/remove`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/raitings/remove`, null, auth.getToken());
     },
     addToPlaylist: async (metronomeSettingId: string, playlistId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/addToPlaylist/${playlistId}`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/addToPlaylist/${playlistId}`, null, auth.getToken());
     },
     removeFromPlaylist: async (metronomeSettingId: string, playlistId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/removeFromPlaylist/${playlistId}`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/removeFromPlaylist/${playlistId}`, null, auth.getToken());
     },
     changePositionInPlaylist: async (metronomeSettingId: string, playlistId: string, newPosition: number) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/changePositionInPlaylist/${playlistId}/${newPosition}`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/changePositionInPlaylist/${playlistId}/${newPosition}`, null, auth.getToken());
     },
     moveUpInPlaylist: async (metronomeSettingId: string, playlistId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/moveUpInPlaylist/${playlistId}`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/moveUpInPlaylist/${playlistId}`, null, auth.getToken());
     },
     moveDownInPlaylist: async (metronomeSettingId: string, playlistId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/moveDownInPlaylist/${playlistId}`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/moveDownInPlaylist/${playlistId}`, null, auth.getToken());
     },
     shareInApp: async (metronomeSettingId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/shareInApp/${metronomeSettingId}`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/shareInApp/${metronomeSettingId}`, null, auth.getToken());
     },
     removeFromSharedInApp: async (metronomeSettingId: string) => {
-        await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/removeFromSharedInApp`, null, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_CONTROLLER}/${metronomeSettingId}/removeFromSharedInApp`, null, auth.getToken());
     },
     editComment: async (commentData: CommentTransfer) => {
-        await requests.put(`${METRONOME_SETTINGS_COMMENTS}/edit`, commentData, auth.getToken());
+        return await requests.put(`${METRONOME_SETTINGS_COMMENTS}/edit`, commentData, auth.getToken());
     },
     delete: async (id: string) => {
-        await requests.delete(`${METRONOME_SETTINGS_CONTROLLER}/${id}`, null, auth.getToken());
+        return await requests.delete(`${METRONOME_SETTINGS_CONTROLLER}/${id}`, null, auth.getToken());
     },
     deleteComment: async (commentId: string) => {
-        await requests.delete(`${METRONOME_SETTINGS_COMMENTS}/delete/${commentId}`, null, auth.getToken());
+        return await requests.delete(`${METRONOME_SETTINGS_COMMENTS}/delete/${commentId}`, null, auth.getToken());
     }
 }
 

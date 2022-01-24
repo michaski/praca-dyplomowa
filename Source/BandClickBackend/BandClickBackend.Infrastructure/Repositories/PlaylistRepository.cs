@@ -38,6 +38,7 @@ namespace BandClickBackend.Infrastructure.Repositories
         {
             var filteredQuery = _context.Playlists
                 .Include(p => p.Comments)
+                .ThenInclude(c => c.CreatedBy)
                 .Include(p => p.CreatedBy)
                 .Where(p => p.IsShared)
                 .Filter(filters);

@@ -28,10 +28,10 @@ const AllBands = () => {
     <>
     <LoggedInHeader />
     <Container fluid className="mt-4">
-        <p className="mb-2">Wybierz zespół:</p>
         {
         bands && bands.length > 0 && selectedBand && selectedBand.id &&
         <>
+        <p className="mb-2">Wybierz zespół:</p>
         <Row className="">
             <BandSelector bands={bands} selectedBand={selectedBand} onSelectedBandChange={(band: Band) => {
                 handleSelectedBandChanged(band);

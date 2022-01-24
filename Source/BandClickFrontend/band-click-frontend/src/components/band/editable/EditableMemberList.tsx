@@ -27,7 +27,7 @@ const EditableMemberList: React.FC<EditableMemberListProps> = ({members, band, h
         <>
         <ListGroup as="ol" numbered>
             {
-                leaders &&
+                leaders && leaders.length > 0 &&
                 leaders.map((leader, index) => {
                     return (
                     <ListGroup.Item key={index} as="li" className="d-flex justify-content-between align-items-start p-3">

@@ -15,8 +15,11 @@ const PlaylistActionButtons: React.FC<PlaylistActionButtonsProps> = ({playlist, 
 
     const handleDeletePlaylist = () => {
         PlaylistService.removeFromBand(playlist.id, band.id)
-        .then(_ => {
-            onPlaylistDeleted();
+        .then(response => {
+            console.log(response);
+            if (response !== null) {
+                onPlaylistDeleted();
+            }
         });
     }
 

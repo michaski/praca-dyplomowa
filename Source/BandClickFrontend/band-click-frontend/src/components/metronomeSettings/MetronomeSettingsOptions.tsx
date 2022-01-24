@@ -54,8 +54,10 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
             typeId: settingsStatus.type.id
         }, settingsStatus.metre) 
             .then(response => {
-                if (storeIsSharedState !== settingsStatus.isShared) {
-                    MetronomeSettingsService.shareInApp(settingsStatus.id);
+                if (response.metre !== null && response.metronomeSettings !== null) {
+                    if (storeIsSharedState !== settingsStatus.isShared) {
+                        MetronomeSettingsService.shareInApp(settingsStatus.id);
+                    }
                 }
             });
         } else {
