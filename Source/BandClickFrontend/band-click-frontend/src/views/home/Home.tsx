@@ -15,11 +15,11 @@ const Home = () => {
             <div className="jumbotron bg-cover mb-4 border-bottom">
                 <div className="container py-5 text-center">
                     <h1 className="display-4 font-weight-bold">Witaj w Band Click</h1>
-                    <p className="mb-0">Ćwicz poczucie rytmu korzystając z naszej aplikacji, dołączaj i twórz swoje zespoły oraz korzystaj z opracowań stworzonych przez społeczność użytkowników</p>
+                    <p className="mb-0">Ćwicz poczucie rytmu korzystając z naszej aplikacji, współpracuj w zespołach oraz korzystaj z opracowań stworzonych przez społeczność naszych użytkowników</p>
                     <p className="mb-1 mt-3">Aby w pełni skorzystać z możliwości aplikacji musisz posiadać konto</p>
-                    <button className="btn btn-primary px-5" onClick={() => history.push('/login')}>Zaloguj się</button>
-                    <span className='mx-3'>lub</span>
-                    <button className="btn btn-success px-5" onClick={() => history.push('/register')}>Stwórz konto</button>
+                    <button className="btn btn-primary px-5 mt-1" onClick={() => history.push('/login')}>Zaloguj się</button>
+                    <span className='mx-3 homepage-or-text mt-1'>lub</span>
+                    <button className="btn btn-success px-5 mt-1" onClick={() => history.push('/register')}>Stwórz konto</button>
                 </div>
             </div>
             <Container>

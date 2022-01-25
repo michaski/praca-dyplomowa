@@ -52,3 +52,9 @@
     border-color: #ae5a41 !important;
 }
 
+
+@media screen and (max-width: 470px) {
+    .homepage-or-text {
+        display: block;
+    }
+}

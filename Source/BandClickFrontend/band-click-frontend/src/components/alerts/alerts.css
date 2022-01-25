@@ -1,3 +1,15 @@
+@media screen and (max-width: 768px) {
+    .alert-error {
+        width: 50% !important;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .alert-error {
+        width: 80% !important;
+    }
+}
+
 .alert-error {
     position: fixed !important;
     bottom: 0 !important;
