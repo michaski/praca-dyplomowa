@@ -25,7 +25,7 @@ const SharedPlaylistList: React.FC<SharedPlaylistListProps> = ({visible, page, p
         if (visible) {
             fetchPlaylists();
         }
-    }, [visible, searchPhrase, orderBy, orderByDirection]);
+    }, [visible, page, searchPhrase, orderBy, orderByDirection]);
 
     const fetchPlaylists = () => {
         PlaylistService.getAllShared({

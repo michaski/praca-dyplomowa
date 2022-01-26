@@ -8,22 +8,20 @@ import requests from "../../utils/requests/requests";
 import auth from "../auth/auth";
 
 const PlaylistService = {
-    getAll: () => {
-        const result = requests.get(PLAYLISTS_CONTROLLER, auth.getToken(), undefined, () => {
-            return [];
-        });
+    getAll: async () => {
+        const result = await requests.get(PLAYLISTS_CONTROLLER, auth.getToken(), undefined, false);
         return result;
     },
     getById: async (id: string) => {
-        const result = await requests.get(`${PLAYLISTS_CONTROLLER}/${id}`, auth.getToken());
+        const result = await requests.get(`${PLAYLISTS_CONTROLLER}/${id}`, auth.getToken(), undefined, false);
         return result;
     },
     getAllShared: async (filters?: QueryFilters) => {
-        const result = await requests.get(`${PLAYLISTS_CONTROLLER}/shared`, auth.getToken(), filters);
+        const result = await requests.get(`${PLAYLISTS_CONTROLLER}/shared`, auth.getToken(), filters, false);
         return result;
     },
     isUserRatingPositive: async (playlistId: string): Promise<number> => {
-        const result = await requests.get(`${PLAYLISTS_CONTROLLER}/${playlistId}/raitings/user`, auth.getToken());
+        const result = await requests.get(`${PLAYLISTS_CONTROLLER}/${playlistId}/raitings/user`, auth.getToken(), undefined, false);
         return result.isPositive;
     },
     create: async (playlist: PostPlaylist) => {

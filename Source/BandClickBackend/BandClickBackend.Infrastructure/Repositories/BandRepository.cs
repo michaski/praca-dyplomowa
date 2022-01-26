@@ -32,6 +32,7 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .ThenInclude(p => p.MetronomeSettings)
                 .ThenInclude(ms => ms.MetronomeSettings)
                 .ThenInclude(ms => ms.Metre)
+                .ThenInclude(m => m.RhythmicUnit)
                 .Include(b => b.Members)
                 .ThenInclude(uib => uib.Member)
                 .SingleOrDefaultAsync(b => b.Id == id);

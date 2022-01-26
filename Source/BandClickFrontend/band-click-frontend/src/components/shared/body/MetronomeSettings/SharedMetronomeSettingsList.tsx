@@ -26,7 +26,7 @@ const SharedMetronomeSettingsList: React.FC<SharedMetronomeSettingsListProps> = 
         if (visible) {
             fetchSettings();
         }
-    }, [visible, searchPhrase, selectedMetronomeSettingsType, orderBy, orderByDirection]);
+    }, [visible, page, searchPhrase, selectedMetronomeSettingsType, orderBy, orderByDirection]);
 
     const fetchSettings = () => {
         MetronomeSettingsService.getAllShared({

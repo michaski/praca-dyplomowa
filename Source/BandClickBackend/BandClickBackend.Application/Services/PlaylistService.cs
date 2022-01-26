@@ -240,9 +240,9 @@ namespace BandClickBackend.Application.Services
         public async Task EditCommentAsync(UpdatePlaylistCommentDto comment)
         {
             var entity = await _playlistCommentRepository.GetByIdAsync(comment.Id);
-            if (!_userContextService.IsEntityCreator(entity) || _userContextService.IsAdmin)
+            if (!_userContextService.IsEntityCreator(entity) && !_userContextService.IsAdmin)
             {
-                throw new UserNotAllowedException("Komentarz może edytować tylko jego twórca.");
+                throw new UserNotAllowedException("Komentarz może edytować tylko jego twórca lub administrator.");
             }
             entity.Text = comment.Text;
             await _playlistCommentRepository.EditCommentAsync(entity);
@@ -251,15 +251,19 @@ namespace BandClickBackend.Application.Services
         public async Task DeleteCommentAsync(Guid commentId)
         {
             var entity = await _playlistCommentRepository.GetByIdAsync(commentId);
-            if (!_userContextService.IsEntityCreator(entity) || _userContextService.IsAdmin)
+            if (!_userContextService.IsEntityCreator(entity) && !_userContextService.IsAdmin)
             {
-                throw new UserNotAllowedException("Komentarz może usunąć tylko jego twórca.");
+                throw new UserNotAllowedException("Komentarz może usunąć tylko jego twórca lub administrator.");
             }
             await _playlistCommentRepository.DeleteCommentAsync(commentId);
         }
 
         private async Task<SinglePlaylistDto> MapPlaylistEntityToSinglePlaylistDto(Playlist entity)
         {
+            if (entity is null)
+            {
+                return null;
+            }
             var mappedComments =
                 _mapper.Map<IEnumerable<PlaylistComment>, IEnumerable<PlaylistCommentDetailsDto>>(entity.Comments);
             var mappedMetronomeSettings = await _metronomeSettingsInPlaylistService.GetAllSettingsInPlaylistAsync(entity.Id);

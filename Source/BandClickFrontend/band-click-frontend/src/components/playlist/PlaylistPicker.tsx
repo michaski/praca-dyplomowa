@@ -9,6 +9,7 @@ import { Playlist } from "../../models/Playlists/Playlist";
 import PlaylistService from "../../services/playlists/playlistService";
 import { PlaylistStoreService } from "../../services/playlists/playlistStoreService";
 import { playlistAction } from "../../store/actions/playlists.actions";
+import { playlistIninialState } from "../../store/reducers/playlist.reducer";
 import playlistSelector from "../../store/selectors/playlist.selector";
 import AddPlaylist from "./AddPlaylist";
 import EditPlaylist from "./EditPlaylist";
@@ -51,7 +52,7 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
     const getPlaylists = () => {
         PlaylistService.getAll()
             .then(result => {
-                if (selectedPlaylist.id) {
+                if (selectedPlaylist.id && selectedPlaylist.id !== '') {
                     fetchPlaylistInfo(selectedPlaylist.id);
                     // setSelectedPlaylistId(selectedPlaylist.id);
                 } 
@@ -59,6 +60,8 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
                     setPlaylists(result);
                     playlistActions.addPlaylists(result);
                     if (!selectedPlaylist.id || selectedPlaylist.id === '') {
+                        console.log(result);
+                        console.log(playlistIndex.current);
                         fetchPlaylistInfo(result[playlistIndex.current].id);
                     }
                     // setSelectedPlaylistId(result[playlistIndex.current].id);
@@ -67,7 +70,8 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
                     fetchPlaylistInfo(playlistId);
                     // setSelectedPlaylistId(playlistId);
                 }
-                playlistIndex.current = playlistsStore.indexOf(selectedPlaylist);
+                const newPlaylistIndex = playlistsStore.indexOf(selectedPlaylist);
+                playlistIndex.current = newPlaylistIndex !== -1 ? newPlaylistIndex : 0;
                 onSelectedPlaylistChange(selectedPlaylist.id);
             });
         // if (!selectedPlaylist.id) {
@@ -93,6 +97,9 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
     }
 
     const fetchPlaylistInfo = (playlistId: string) => {
+        if (playlistId === '') {
+            return;
+        }
         PlaylistService.getById(playlistId)
             .then(playlistInfo => {
                 if (playlistInfo && playlistInfo.id) {
@@ -133,13 +140,20 @@ const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
     const deletePlaylist = () => {
         PlaylistService.delete(selectedPlaylistId)
         .then(response => {
-            if (response !== null) {
+            console.log(response);
+            if (response === null || response === undefined) {
                 const deletedPlaylist = playlistsStore.find(p => p.id === selectedPlaylistId);
                 if (deletedPlaylist) {
                     playlistActions.deletePlaylist(deletedPlaylist);
-                    setPlaylists(playlists.filter(p => p.id !== selectedPlaylistId));
-                    playlistActions.setSelectedPlaylist(playlistsStore[0]);
-                    setSelectedPlaylistId(playlists[0].id);
+                    const remainingPlaylists = playlists.filter(p => p.id !== selectedPlaylistId);
+                    setPlaylists(remainingPlaylists);
+                    if (remainingPlaylists.length > 0) {
+                        playlistActions.setSelectedPlaylist(playlistsStore[0]);
+                        setSelectedPlaylistId(playlistsStore[0].id);
+                    } else {
+                        playlistActions.setSelectedPlaylist(playlistIninialState);
+                        setSelectedPlaylistId('');
+                    }
                     playlistIndex.current = 0;
                 }
             }

@@ -64,7 +64,10 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .ThenInclude(m => m.AccentedBeats)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(p => p.Id == id);
-            entity.Comments = entity.Comments.OrderBy(c => c.Created).ToList();
+            if (entity is not null)
+            {
+                entity.Comments = entity.Comments.OrderBy(c => c.Created).ToList();
+            }
             return entity;
         }
 

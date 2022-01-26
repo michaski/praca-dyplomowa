@@ -187,7 +187,7 @@ namespace BandClickBackend.Application.Services
             entity.Tempo = dto.Tempo;
             if (entity.Type.Id != dto.TypeId)
             {
-                entity.Type = await _metronomeSettingsTypeRepository.GetMetronomeSettingsTypeById(dto.Id);
+                entity.Type = await _metronomeSettingsTypeRepository.GetMetronomeSettingsTypeById(dto.TypeId);
             }
             await _repository.UpdateAsync(entity);
         }
@@ -303,9 +303,9 @@ namespace BandClickBackend.Application.Services
         public async Task EditCommentAsync(UpdateMetronomeSettingsCommentDto comment)
         {
             var entity = await _metronomeSettingsCommentRepository.GetByIdAsync(comment.Id);
-            if (!_userContextService.IsEntityCreator(entity) || _userContextService.IsAdmin)
+            if (!_userContextService.IsEntityCreator(entity) && !_userContextService.IsAdmin)
             {
-                throw new UserNotAllowedException("Komentarz może edytować tylko jego twórca.");
+                throw new UserNotAllowedException("Komentarz może edytować tylko jego twórca lub administrator.");
             }
             entity.Text = comment.Text;
             await _metronomeSettingsCommentRepository.EditCommentAsync(entity);
@@ -314,9 +314,9 @@ namespace BandClickBackend.Application.Services
         public async Task DeleteCommentAsync(Guid id)
         {
             var entity = await _metronomeSettingsCommentRepository.GetByIdAsync(id);
-            if (!_userContextService.IsEntityCreator(entity) || _userContextService.IsAdmin)
+            if (!_userContextService.IsEntityCreator(entity) && !_userContextService.IsAdmin)
             {
-                throw new UserNotAllowedException("Komentarz może usunąć tylko jego twórca.");
+                throw new UserNotAllowedException("Komentarz może usunąć tylko jego twórca lub administrator.");
             }
             await _metronomeSettingsCommentRepository.DeleteCommentAsync(id);
         }

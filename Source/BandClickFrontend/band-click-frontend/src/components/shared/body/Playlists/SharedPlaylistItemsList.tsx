@@ -28,7 +28,7 @@ const SharedPlaylistItemsList: React.FC<SharedPlaylistItemsListProps> = ({metron
             <Accordion.Item eventKey="0">
                 <Accordion.Header className="accordion-flush-header"><h3 className="text-start">Zawartość playlisty:</h3></Accordion.Header>
                 <Accordion.Body>
-                <ListGroup as="ol" numbered>
+                <ListGroup as="ol" className="text-start" numbered>
                     {
                         metronomeSettings.map((setting, index) => {
                             return (

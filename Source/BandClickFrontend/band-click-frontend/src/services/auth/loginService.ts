@@ -5,7 +5,7 @@ import { RegisterUser } from "../../models/Auth/RegisterUser";
 
 const LoginService = {
     login: async (email: string, password: string, onError?: Function) => {
-        const response = await requests.post(AUTH_LOGIN, {email: email, password: password}, '', onError) as Token;
+        const response = await requests.post(AUTH_LOGIN, {email: email, password: password}, '', true, onError) as Token;
         if (response == null) {
             // alert("Login failed");
             return false;

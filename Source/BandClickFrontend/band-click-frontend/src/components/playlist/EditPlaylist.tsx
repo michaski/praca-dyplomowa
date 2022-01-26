@@ -44,14 +44,16 @@ const EditPlaylist: React.FC<EditPlaylistProps> = ({playlist, onPlaylistModified
         if (!bandId) {
             PlaylistService.update({
                 id: playlist.id,
-                name: modifiedName
+                name: modifiedName,
             })
             .then(result => {
                 if (result !== null) {
                     if (isShared !== storeState.isShared) {
                         PlaylistService.shareInApp(playlist.id)
                         .then(response => {
+                            console.log(response);
                             if (response !== null) {
+                                modifiedPlaylist.isShared = isShared;
                                 onPlaylistModified(modifiedPlaylist);
                             }
                         });

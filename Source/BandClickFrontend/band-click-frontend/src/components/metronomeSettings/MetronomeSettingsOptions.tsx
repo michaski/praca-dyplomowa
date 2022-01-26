@@ -135,7 +135,7 @@ const MetronomeSettingsOptions: React.FC<MetronomeSettingsOptionsProps> = ({sett
                             <Col sm="10">
                                 <FormSelect defaultValue={settings.type.id} onChange={e => {
                                             let newSettings = modifiedSettings;
-                                            newSettings.type = settingsTypes.find(t => t.id === e.currentTarget.value) || settingsTypes[0];
+                                            newSettings.type = settingsTypes.find(t => t.id === e.target.value) as MetronomeSettingsType;
                                             setModifiedSettings(newSettings);
                                         }}>
                                     {

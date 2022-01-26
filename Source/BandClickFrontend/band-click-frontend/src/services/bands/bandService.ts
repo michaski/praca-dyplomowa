@@ -6,19 +6,15 @@ import auth from "../auth/auth";
 
 const BandService = {
     getAll: async () => {
-        const result = await requests.get(BANDS_CONTROLLER, auth.getToken(), undefined, () => {
-            return [];
-        });
+        const result = await requests.get(BANDS_CONTROLLER, auth.getToken(), undefined, false);
         return result;
     },
     getAllManaged: async () => {
-        const result = await requests.get(`${BANDS_CONTROLLER}/userIsLeader`, auth.getToken(), undefined, () => {
-            return [];
-        });
+        const result = await requests.get(`${BANDS_CONTROLLER}/userIsLeader`, auth.getToken(), undefined, false);
         return result;
     },
     getById: async (id: string) => {
-        const result = await requests.get(`${BANDS_CONTROLLER}/${id}`, auth.getToken());
+        const result = await requests.get(`${BANDS_CONTROLLER}/${id}`, auth.getToken(), undefined, false);
         return result;
     },
     create: async (bandName: string) => {
@@ -30,19 +26,19 @@ const BandService = {
         return result;
     },
     update: async (data: UpdateBand) => {
-        await requests.put(`${BANDS_CONTROLLER}/editBandInfo`, data, auth.getToken());
+        return await requests.put(`${BANDS_CONTROLLER}/editBandInfo`, data, auth.getToken());
     },
     promoteMember: async (data: BandMemberAction) => {
-        await requests.put(`${BANDS_CONTROLLER}/promoteMember`, data, auth.getToken());
+        return await requests.put(`${BANDS_CONTROLLER}/promoteMember`, data, auth.getToken());
     },
     demoteMember: async (data: BandMemberAction) => {
-        await requests.put(`${BANDS_CONTROLLER}/demoteLeader`, data, auth.getToken());
+        return await requests.put(`${BANDS_CONTROLLER}/demoteLeader`, data, auth.getToken());
     },
     delete: async (id: string) => {
-        await requests.delete(`${BANDS_CONTROLLER}/${id}`, null, auth.getToken());
+        return await requests.delete(`${BANDS_CONTROLLER}/${id}`, null, auth.getToken());
     },
     removeMember: async (data: BandMemberAction) => {
-        await requests.delete(`${BANDS_CONTROLLER}/removeMember`, data, auth.getToken());
+        return await requests.delete(`${BANDS_CONTROLLER}/removeMember`, data, auth.getToken());
     }
 }
 

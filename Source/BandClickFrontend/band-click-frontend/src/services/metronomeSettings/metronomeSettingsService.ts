@@ -14,21 +14,19 @@ import MetreService from "../metre/metreService";
 
 const MetronomeSettingsService = {
     getAllCreatedByUser: async (): Promise<MetronomeSettings[]> => {
-        const result = await requests.get(METRONOME_SETTINGS_CONTROLLER, auth.getToken(), undefined, () => {
-             return []; 
-        }) as MetronomeSettings[];
+        const result = await requests.get(METRONOME_SETTINGS_CONTROLLER, auth.getToken(), undefined, false) as MetronomeSettings[];
         return result;
     },
     getById: async (id: string): Promise<MetronomeSettings> => {
-        const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/${id}`, auth.getToken()) as MetronomeSettings;
+        const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/${id}`, auth.getToken(), undefined, false) as MetronomeSettings;
         return result;
     },
     getAllShared: async (filters?: QueryFilters): Promise<PagedMetronomeSettings> => {
-        const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/shared`, auth.getToken(), filters) as PagedMetronomeSettings;
+        const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/shared`, auth.getToken(), filters, false) as PagedMetronomeSettings;
         return result;
     },
     getTypes: async (): Promise<MetronomeSettingsType[]> => {
-        const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/types`, auth.getToken()) as MetronomeSettingsType[];
+        const result = await requests.get(`${METRONOME_SETTINGS_CONTROLLER}/types`, auth.getToken(), undefined, false) as MetronomeSettingsType[];
         return result;
     },
     isUserRatingPositive: async (metronomeSettingId: string): Promise<number> => {

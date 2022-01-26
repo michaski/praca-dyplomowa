@@ -152,12 +152,13 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({
                                         {setting.numberOfMeasures}
                                         {
                                             setting.numberOfMeasures % 10 === 1 &&
+                                            setting.numberOfMeasures % 100 !== 11 &&
                                             ' takt'
                                         }
                                         {
-                                            (setting.numberOfMeasures % 10 === 2 ||
-                                            setting.numberOfMeasures % 10 === 3 ||
-                                            setting.numberOfMeasures % 10 === 4) &&
+                                            ((setting.numberOfMeasures % 10 === 2 && setting.numberOfMeasures % 100 !== 12) ||
+                                            (setting.numberOfMeasures % 10 === 3 && setting.numberOfMeasures % 100 !== 13) ||
+                                            (setting.numberOfMeasures % 10 === 4 && setting.numberOfMeasures % 100 !== 14) ) &&
                                             ' takty'
                                         }
                                         {
@@ -166,7 +167,11 @@ const PlaylistComponent: React.FC<PlaylistComponentProps> = ({
                                             setting.numberOfMeasures % 10 === 7 ||
                                             setting.numberOfMeasures % 10 === 8 ||
                                             setting.numberOfMeasures % 10 === 9 ||
-                                            setting.numberOfMeasures % 10 === 0) &&
+                                            setting.numberOfMeasures % 10 === 0 ||
+                                            setting.numberOfMeasures % 100 === 11 ||
+                                            setting.numberOfMeasures % 100 === 12 ||
+                                            setting.numberOfMeasures % 100 === 13 ||
+                                            setting.numberOfMeasures % 100 === 14) &&
                                             ' taktów'
                                         }
                                     </span>

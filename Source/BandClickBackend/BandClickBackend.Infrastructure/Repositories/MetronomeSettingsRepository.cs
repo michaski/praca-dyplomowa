@@ -81,7 +81,10 @@ namespace BandClickBackend.Infrastructure.Repositories
                 .Include(ms => ms.Comments)
                 .ThenInclude(c => c.CreatedBy)
                 .SingleOrDefaultAsync(ms => ms.Id == id);
-            setting.Comments = setting.Comments.OrderBy(c => c.Created).ToList();
+            if (setting is not null)
+            {
+                setting.Comments = setting.Comments.OrderBy(c => c.Created).ToList();
+            }
             return setting;
         }
 

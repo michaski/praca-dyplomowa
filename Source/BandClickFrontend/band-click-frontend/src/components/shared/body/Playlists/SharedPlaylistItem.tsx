@@ -43,7 +43,7 @@ const SharedPlaylistItem: React.FC<SharedPlaylistItemProps> = ({playlist, onItem
     <>
     <ListGroup.Item className="shared-item">
         <Row>
-            <Col sm="10">
+            <Col sm="9">
                 <h3>{playlist.name}</h3>
                 <Row>
                     <ul className="item-info">
@@ -55,13 +55,13 @@ const SharedPlaylistItem: React.FC<SharedPlaylistItemProps> = ({playlist, onItem
                     </ul>
                 </Row>
             </Col>
-            <Col sm="2" className="d-flex align-items-center">
+            <Col sm="3" className="d-flex align-items-center">
                 <ButtonGroup size="sm">
                     <Button className="mx-2" variant="secondary" onClick={() => {history.push(`/shared/playlist/${playlist.id}`);}}>Szczegóły</Button>
                     <Button onClick={loadPlaylist}>Wczytaj</Button>
                     {
                         user && user.systemRole === 'Admin' &&
-                        <Button variant="danger" onClick={deleteItem}>Usuń</Button>
+                        <Button className="ms-2" variant="danger" onClick={deleteItem}>Usuń</Button>
                     }
                 </ButtonGroup>
             </Col>
