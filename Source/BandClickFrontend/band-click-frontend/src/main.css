@@ -22,6 +22,10 @@
     background-color: #339900 !important;
 }
 
+.btn-success:hover {
+    background-color: #2B8000 !important;
+}
+
 .btn-warning {
     background-color: #ffcc00 !important;
     color: #000;
@@ -30,10 +34,15 @@
 
 .btn-warning:hover {
     color: #000;
+    background-color: #FFD300 !important;
 }
 
 .btn-danger {
     background-color: #cc3300 !important;
+}
+
+.btn-danger:hover {
+    background-color: #D90B28 !important;
 }
 
 .form-switch .form-check-input {
