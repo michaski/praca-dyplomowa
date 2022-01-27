@@ -18,11 +18,7 @@ namespace BandClickBackend.Api.Installers
                     builder
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .WithOrigins(new [] {
-                            Configuration["AllowedOrigins:0"],
-                            Configuration["AllowedOrigins:1"],
-                            Configuration["AllowedOrigins:2"]
-                        })
+                        .WithOrigins(Configuration["AllowedOrigins"])
                     );
             });
         }

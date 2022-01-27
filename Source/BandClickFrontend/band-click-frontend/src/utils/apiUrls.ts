@@ -1,8 +1,8 @@
 // Base URLs
 // const SERVER_HTTP = "http://localhost:5000";
-// const SERVER_HTTPS = "https://localhost:5001";
+const SERVER_HTTPS = "https://localhost:5001";
 const SERVER_HTTP = "http://localhost:5000";
-const SERVER_HTTPS = "https://bandclickbackendapi20220126205316.azurewebsites.net";
+// const SERVER_HTTPS = "https://bandclickbackendapi20220126205316.azurewebsites.net";
 export const API_HTTP_BASE_URL = `${SERVER_HTTP}/api`;
 export const API_HTTPS_BASE_URL = `${SERVER_HTTPS}/api`;
 // Auth
